@@ -1,5 +1,6 @@
-import 'package:fifteen/favorites_page.dart';
-import 'package:fifteen/generator_page.dart';
+import 'dart:math';
+
+import 'package:fifteen/play_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,52 +11,32 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var selectedIndex = 0;
 
+  Widget getButton(var size) {
+    return TextButton(
+        onPressed: () => {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return PlayPage(n: size.$1, m: size.$2);
+              }))
+            },
+        child: Text("${size.$1}x${size.$2}"));
+  }
+
+  final sizes = [
+    for (var i = 0; i < 49; i++)
+      (Random().nextInt(10) + 2, Random().nextInt(10) + 2),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = GeneratorPage();
-      case 1:
-        page = FavoritesPage();
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
-
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
-        body: Row(
+          body: Center(
+        child: Wrap(
           children: [
-            SafeArea(
-              child: NavigationRail(
-                extended: constraints.maxWidth >= 600, // ← Here.
-                destinations: [
-                  NavigationRailDestination(
-                    icon: Icon(Icons.home),
-                    label: Text('Home'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
-                    label: Text('Favorites'),
-                  ),
-                ],
-                selectedIndex: selectedIndex,
-                onDestinationSelected: (value) {
-                  setState(() {
-                    selectedIndex = value;
-                  });
-                },
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: page,
-              ),
-            ),
+            for (var size in sizes) getButton(size),
           ],
         ),
-      );
+      ));
     });
   }
 }

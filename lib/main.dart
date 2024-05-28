@@ -1,14 +1,13 @@
-import 'package:english_words/english_words.dart';
 import 'package:fifteen/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(FifteenApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FifteenApp extends StatelessWidget {
+  const FifteenApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +26,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+  final boards = [(4, 4), (6, 6), (8, 8), (3, 5)];
+  var _solved = {};
 
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
+  bool isSolved(var name) {
+    return _solved.containsKey(name) ? false : _solved[name];
   }
 
-  var favorites = <WordPair>[];
-
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
+  void setSolved(var name) {
+    _solved[name] = true;
     notifyListeners();
   }
 }
