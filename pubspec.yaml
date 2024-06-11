@@ -23,3 +23,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+   - assets/images/img.png
+   - assets/images/img2.png
+  shaders:
+   - shaders/test_fractal.frag
+   - shaders/image_blur.frag
+  

@@ -78,7 +78,7 @@ Widget getButt(int i, MyAppState state) {
       onPressed: () => {state.tap(i)},
       child: Text(
         "$val",
-        style: new TextStyle(
+        style: TextStyle(
           fontSize: 20.0,
           color: Colors.white,
         ),
