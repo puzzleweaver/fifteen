@@ -30,4 +30,5 @@ flutter:
   shaders:
    - shaders/test_fractal.frag
    - shaders/image_blur.frag
+   - shaders/image_quad.frag
   

@@ -70,29 +70,52 @@ class _HomePageState extends State<HomePage> {
                       ),
                     )
                   },
-                  child: Text("Shader"),
+                  child: Text("test_fractal"),
                 ),
                 TextButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(theme.colorScheme.primary),
-                      foregroundColor:
-                          WidgetStateProperty.all(theme.colorScheme.onPrimary),
-                    ),
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ImageShaderPage(
-                                  imagePath: "assets/images/img.png",
-                                  shaderPath: "shaders/image_blur.frag",
-                                );
-                              },
-                            ),
-                          ),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(theme.colorScheme.primary),
+                    foregroundColor:
+                        WidgetStateProperty.all(theme.colorScheme.onPrimary),
+                  ),
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ImageShaderPage(
+                            imagePath: "assets/images/img.png",
+                            shaderPath: "shaders/image_quad.frag",
+                          );
                         },
-                    child: Text("Shader w/ Image"))
+                      ),
+                    ),
+                  },
+                  child: Text("image_quad"),
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(theme.colorScheme.primary),
+                    foregroundColor:
+                        WidgetStateProperty.all(theme.colorScheme.onPrimary),
+                  ),
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ImageShaderPage(
+                            imagePath: "assets/images/img.png",
+                            shaderPath: "shaders/image_blur.frag",
+                          );
+                        },
+                      ),
+                    ),
+                  },
+                  child: Text("image_blur"),
+                ),
               ],
             ),
           ),
