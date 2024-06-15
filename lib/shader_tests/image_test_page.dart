@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
-import 'package:fifteen/shader_tests/image_painter.dart';
+import 'package:fifteen/shader_tests/image_test_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ImageShaderPage extends StatefulWidget {
-  const ImageShaderPage({
+class ImageTestPage extends StatefulWidget {
+  const ImageTestPage({
     super.key,
     required this.shaderPath,
     required this.imagePath,
@@ -17,10 +17,10 @@ class ImageShaderPage extends StatefulWidget {
   final String imagePath;
 
   @override
-  State<ImageShaderPage> createState() => _ImageShaderPageState();
+  State<ImageTestPage> createState() => _ImageTestPageState();
 }
 
-class _ImageShaderPageState extends State<ImageShaderPage> {
+class _ImageTestPageState extends State<ImageTestPage> {
   late Timer timer;
   double delta = 0;
   FragmentShader? shader;
@@ -65,7 +65,7 @@ class _ImageShaderPageState extends State<ImageShaderPage> {
     if (shader == null) {
       return const Center(child: CircularProgressIndicator());
     } else {
-      return CustomPaint(painter: ImagePainter(shader!, delta, image));
+      return CustomPaint(painter: ImageTestPainter(shader!, delta, image));
     }
   }
 

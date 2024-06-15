@@ -1,9 +1,8 @@
 import 'dart:math';
 
-import 'package:fifteen/shader_tests/general_shader_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/play_page.dart';
-import 'package:fifteen/shader_tests/image_shader_page.dart';
+import 'package:fifteen/shader_tests/image_test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -63,28 +62,7 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return GeneralShaderPage(
-                            shaderPath: "shaders/test_fractal.frag",
-                          );
-                        },
-                      ),
-                    )
-                  },
-                  child: Text("test_fractal"),
-                ),
-                TextButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.all(theme.colorScheme.primary),
-                    foregroundColor:
-                        WidgetStateProperty.all(theme.colorScheme.onPrimary),
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return ImageShaderPage(
+                          return ImageTestPage(
                             imagePath: "assets/images/img.png",
                             shaderPath: "shaders/image_quad.frag",
                           );
@@ -93,28 +71,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   },
                   child: Text("image_quad"),
-                ),
-                TextButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.all(theme.colorScheme.primary),
-                    foregroundColor:
-                        WidgetStateProperty.all(theme.colorScheme.onPrimary),
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return ImageShaderPage(
-                            imagePath: "assets/images/img.png",
-                            shaderPath: "shaders/image_blur.frag",
-                          );
-                        },
-                      ),
-                    ),
-                  },
-                  child: Text("image_blur"),
                 ),
               ],
             ),
