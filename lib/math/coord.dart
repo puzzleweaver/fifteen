@@ -10,20 +10,4 @@ class Coord {
   String toString() {
     return "($a, $hk)";
   }
-
-  bool isEdge() {
-    return hk.isEdge();
-  }
-
-  Coord getCorner(Offsett dir) {
-    return Coord(a, hk.add(Offsett.CORNER.rel(dir)));
-  }
-
-  Coord addHalf(Offsett o) {
-    return Coord(a, hk.addHalf(o));
-  }
-
-  bool isRowLabel() {
-    return hk.x % 2 != 0;
-  }
 }

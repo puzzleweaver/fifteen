@@ -16,10 +16,6 @@ class Side {
     return c1.a == s2.c1.a;
   }
 
-  Coord mid() {
-    return Coord(c1.a, Offsett.midpoint(c1.hk, c2.hk));
-  }
-
   @override
   String toString() {
     return "($c1)--($c2)";

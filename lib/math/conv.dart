@@ -7,7 +7,13 @@ class Conv {
   final Offsett _rot;
   final Offsett _trans;
 
-  Conv(this.fromA, this.toA, this._rot, this._trans);
+  Conv({
+    required this.fromA,
+    required this.toA,
+    required Offsett rot,
+    required Offsett trans,
+  })  : _rot = rot,
+        _trans = trans;
 
   static bool _innerValid(Side s1, Side s2) {
     return s1.colinear() &&
@@ -21,19 +27,22 @@ class Conv {
         _innerValid(Side(s2.c1, s1.c2), Side(s1.c1, s2.c2));
   }
 
-  Coord? get(Coord c) {
-    if (c.a != fromA) {
-      return null;
-    } else {
-      return Coord(toA, c.hk.rel(_rot).add(_trans));
-    }
+  Coord? get(Coord? c) {
+    if (c == null || c.a != fromA) return null;
+    return Coord(toA, c.hk.rel(_rot).add(_trans));
   }
 
   Conv inv() {
-    return Conv(toA, fromA, _rot.inv(), _trans.neg().invrel(_rot));
+    Offsett newRot = _rot.inv();
+    return Conv(
+      fromA: toA,
+      toA: fromA,
+      rot: newRot,
+      trans: _trans.neg().rel(newRot),
+    );
   }
 
-  Offsett gett(Offsett o) {
+  Offsett getDir(Offsett o) {
     return o.rel(_rot);
   }
 
@@ -44,5 +53,10 @@ class Conv {
     } else {
       return null;
     }
+  }
+
+  @override
+  String toString() {
+    return "($fromA -> $toA) * $_rot + $_trans";
   }
 }

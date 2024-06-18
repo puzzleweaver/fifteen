@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fifteen/math/offsett.dart';
 import 'package:flutter/material.dart';
 
 class Quad {
@@ -43,6 +44,14 @@ class Quad {
     );
   }
 
+  Quad rel(Offsett dir) {
+    if (dir.equals(Offsett.UP)) return this;
+    if (dir.equals(Offsett.RIGHT)) return Quad(p4, p1, p2, p3);
+    if (dir.equals(Offsett.DOWN)) return Quad(p3, p4, p1, p2);
+    if (dir.equals(Offsett.LEFT)) return Quad(p2, p3, p4, p1);
+    return this;
+  }
+
   Quad sub(Offset o) {
     return add(-o);
   }
@@ -83,5 +92,62 @@ class Quad {
 
   Quad lerpTo(Quad b, double t) {
     return Quad.lerp(this, b, t);
+  }
+
+  Quad subquad(int i, int j, int n, int m) {
+    double s = 1.0 * i / n,
+        t = 1.0 * j / m,
+        ns = 1.0 * (i + 1) / n,
+        nt = 1.0 * (j + 1) / m;
+    return Quad(
+      Offset.lerp(
+        Offset.lerp(p1, p2, t),
+        Offset.lerp(p4, p3, t),
+        s,
+      )!,
+      Offset.lerp(
+        Offset.lerp(p1, p2, t),
+        Offset.lerp(p4, p3, t),
+        ns,
+      )!,
+      Offset.lerp(
+        Offset.lerp(p1, p2, nt),
+        Offset.lerp(p4, p3, nt),
+        ns,
+      )!,
+      Offset.lerp(
+        Offset.lerp(p1, p2, nt),
+        Offset.lerp(p4, p3, nt),
+        s,
+      )!,
+    );
+  }
+
+  double _wedge(Offset a, Offset b) {
+    return a.dx * b.dy - a.dy * b.dx;
+  }
+
+  double _dot(Offset a, Offset b) {
+    return a.dx * b.dx + a.dy * b.dy;
+  }
+
+  double _isInsideHelperAlpha(
+      Offset x, Offset p0, Offset p1, Offset p2, Offset p3) {
+    x = x - p0;
+    p1 = p1 - p0;
+    p2 = p2 - p0;
+    p3 = p3 - p0;
+    double r2r3 = _wedge(p2, p1) - _wedge(p3, p1),
+        dXd3 = _dot(x, p1) - _dot(p3, p1),
+        d2d3 = _dot(p2, p1) - _dot(p3, p1);
+    double den = r2r3 * dXd3 / d2d3 + _wedge(p3, p1);
+    return _wedge(x, p1) / den;
+  }
+
+  bool isInside(Offset pt) {
+    // calculate alpha01(pt) and alpha12(pt)
+    double alpha01 = _isInsideHelperAlpha(pt, p1, p2, p3, p4);
+    double alpha12 = _isInsideHelperAlpha(pt, p2, p3, p4, p1);
+    return alpha01 >= 0.0 && alpha01 <= 1.0 && alpha12 >= 0.0 && alpha12 <= 1.0;
   }
 }

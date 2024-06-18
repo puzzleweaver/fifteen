@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
-import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:flutter/material.dart';
 
@@ -32,96 +31,42 @@ class ImageTestPainter extends CustomPainter {
     shader.setFloat(1, size.height);
     shader.setFloat(2, time);
 
-    final paint = Paint();
+    final shaderPaint = Paint();
+    shaderPaint.shader = shader;
 
-    paint.shader = shader;
-    // canvas.drawRect(Offset.zero & size, paint);
+    final strokePaint = Paint();
+    strokePaint.style = PaintingStyle.stroke;
+    strokePaint.strokeWidth = 10;
+    strokePaint.color = Colors.white;
 
     // cyclic time
     double ctime = 0.25 * (1.0 + cos(time)) * (1.0 + cos(time));
 
-    // Quadd from = Quadd.unit().lerpTo(
-    //   Quadd.unit()
-    //       .sub(Offset(0.5, 0.5))
-    //       .rot(1.0)
-    //       .mult(0.25)
-    //       .dent(0.5)
-    //       .add(Offset(3 / 8, 3 / 8)),
-    //   ctime,
-    // );
-    // Quadd to =
-    //     Quadd.unit().sub(Offset(0.5, 0.5)).mult(0.5).add(Offset(0.5, 0.5));
+    Random r = Random(((time - 3.141) / 6.282).floor());
+    Quad from = Quad.unit().lerpTo(
+      Quad.unit()
+          .sub(Offset(0.5, 0.5))
+          .rot(r.nextDouble() * 3.141 - 3.141 / 2)
+          .mult(r.nextDouble())
+          .add(Offset(0.5, 0.5))
+          .dent(r.nextDouble()),
+      ctime,
+    );
+    Quad to = Quad.unit();
 
-    final paint2 = Paint();
-    paint2.style = PaintingStyle.stroke;
-    paint2.strokeWidth = 2;
-    paint2.color = Colors.white;
+    setQuad(shader, 2, 6, from);
+    setQuad(
+      shader,
+      10,
+      14,
+      to,
+    );
+    drawQuad(canvas, Quad.unit(), size, shaderPaint);
 
-    Random r = Random(1000);
-
-    int n = 5, m = 5;
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < m; j++) {
-        Quad from =
-            Quad.unit().scale(1.0 / n, 1.0 / m).add(Offset(i / n, j / m));
-        int ni = i + r.nextInt(3) - 1;
-        int nj = j + r.nextInt(3) - 1;
-        if (r.nextDouble() < 0.5) {
-          if (ni != i) {
-            nj = j;
-          }
-        } else {
-          if (nj != j) {
-            ni = i;
-          }
-        }
-        Quad to = from.lerpTo(
-          Quad.unit().scale(1.0 / n, 1.0 / m).add(Offset(ni / n, nj / m)),
-          ctime,
-        );
-        ;
-
-        setQuad(shader, 2, 6, from);
-        setQuad(
-          shader,
-          10,
-          14,
-          to,
-        );
-
-        // drawQuad(canvas, from, size, paint);
-        // drawQuad(canvas, from, size, paint2);
-      }
-    }
-
-    // paint2.color = Colors.red;
-    // drawQuad(canvas, to, size, paint2);
-    // paint2.color = Colors.green;
-    // drawQuad(canvas, from, size, paint2);
-
-    Board board = Board.test();
-
-    paint2.color = Colors.green;
-    paint2.strokeWidth = 10;
-    for (int i = 0; i < board.quads.length; i++) {
-      Quad q = board.quads[i].mult(0.5).add(Offset(0.5, 0.5));
-      Quad from = board.quads[i].mult(0.5).add(Offset(0.5, 0.5)),
-          to = from.lerpTo(
-            board.quads[(i + 1) % board.quads.length]
-                .mult(0.5)
-                .add(Offset(0.5, 0.5)),
-            ctime,
-          );
-      setQuad(shader, 2, 6, from);
-      setQuad(
-        shader,
-        10,
-        14,
-        to,
-      );
-      drawQuad(canvas, q, size, paint);
-      drawQuad(canvas, q, size, paint2);
-    }
+    strokePaint.color = Colors.red;
+    drawQuad(canvas, to, size, strokePaint);
+    strokePaint.color = Colors.green;
+    drawQuad(canvas, from, size, strokePaint);
   }
 
   void drawRect(

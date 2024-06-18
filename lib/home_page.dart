@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:fifteen/main.dart';
-import 'package:fifteen/play_page.dart';
+import 'package:fifteen/math/board.dart';
+import 'package:fifteen/math/game.dart';
+import 'package:fifteen/shader_tests/game_page.dart';
 import 'package:fifteen/shader_tests/image_test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var selectedIndex = 0;
 
-  Widget getButton(var size, MyAppState appState) {
+  Widget getButton(Board board, String label, MyAppState appState) {
     final theme = Theme.of(context);
     return TextButton(
         style: ButtonStyle(
@@ -23,17 +23,16 @@ class _HomePageState extends State<HomePage> {
         ),
         onPressed: () => {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                appState.setPlayDim(size);
-                return PlayPage();
+                appState.setBoard(board);
+                return GamePage(
+                  imagePath: "assets/images/img3.png",
+                  shaderPath: "shaders/image_quad.frag",
+                  appState: appState,
+                );
               }))
             },
-        child: Text("${size.$1}x${size.$2}"));
+        child: Text(label));
   }
-
-  final sizes = [
-    for (var i = 0; i < 49; i++)
-      (Random().nextInt(10) + 2, Random().nextInt(10) + 2),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,10 @@ class _HomePageState extends State<HomePage> {
               runSpacing: 5.0,
               spacing: 5.0,
               children: [
-                for (var size in sizes) getButton(size, appState),
+                getButton(Board.rect(4, 4), "4 x 4", appState),
+                getButton(Board.rect(5, 5), "5 x 5", appState),
+                getButton(Board.rect(20, 20), "20 x 20", appState),
+                getButton(Board.test(), "Cube", appState),
                 TextButton(
                   style: ButtonStyle(
                     backgroundColor:
@@ -70,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   },
-                  child: Text("image_quad"),
+                  child: Text("shader test"),
                 ),
               ],
             ),

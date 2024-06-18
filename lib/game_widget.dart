@@ -18,7 +18,8 @@ class GameWidget extends StatelessWidget {
     return GestureDetector(
       onTapDown: (tapDetails) => onWidgetTap(tapDetails, getSize(context)),
       child: CustomPaint(
-          painter: GamePainter(board: board, boardDim: boardDim, onTap: onTap),
+          painter:
+              GameWidgetPainter(board: board, boardDim: boardDim, onTap: onTap),
           child: Container()),
     );
   }
@@ -46,11 +47,11 @@ class GameWidget extends StatelessWidget {
   }
 }
 
-class GamePainter extends CustomPainter {
+class GameWidgetPainter extends CustomPainter {
   final List<int> board;
   final Function(int, int) onTap;
   final (int, int) boardDim;
-  GamePainter({
+  GameWidgetPainter({
     required this.board,
     required this.boardDim,
     required this.onTap,
@@ -131,7 +132,7 @@ class GamePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant GamePainter oldDelegate) {
+  bool shouldRepaint(covariant GameWidgetPainter oldDelegate) {
     return true;
   }
 }
