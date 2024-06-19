@@ -1,10 +1,8 @@
-import 'dart:math';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/game.dart';
-import 'package:fifteen/math/offsett.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:flutter/material.dart';
 
@@ -28,14 +26,6 @@ class GamePainter extends CustomPainter {
     shader.setFloat(index + 5, quad.p3.dy);
     shader.setFloat(index + 6, quad.p4.dx);
     shader.setFloat(index + 7, quad.p4.dy);
-    // shader.setFloat(xIndex, quad.p1.dx);
-    // shader.setFloat(xIndex + 1, quad.p2.dx);
-    // shader.setFloat(xIndex + 2, quad.p3.dx);
-    // shader.setFloat(xIndex + 3, quad.p4.dx);
-    // shader.setFloat(yIndex, quad.p1.dy);
-    // shader.setFloat(yIndex + 1, quad.p2.dy);
-    // shader.setFloat(yIndex + 2, quad.p3.dy);
-    // shader.setFloat(yIndex + 3, quad.p4.dy);
   }
 
   @override
@@ -60,8 +50,6 @@ class GamePainter extends CustomPainter {
     setQuad(shader, 2, Quad.unit());
     setQuad(shader, 10, Quad.unit());
     canvas.drawRect(Offset.zero & size, shaderPaint);
-
-    double ctime = 0.25 * (1.0 + cos(time)) * (1.0 + cos(time));
 
     strokePaint.color = Colors.black;
     strokePaint.strokeWidth = 2;

@@ -64,7 +64,6 @@ class Board {
     return Board(
       charts: [(2, 2), (2, 2), (2, 2)],
       convs: [
-        // TODO these offsets might should be -4, 0; 0, -4; 0, 6. Recording Just In Case.
         Conv(fromA: 0, toA: 1, trans: Offsett(0, -2), rot: Offsett.UP),
         Conv(fromA: 0, toA: 2, trans: Offsett(-2, 0), rot: Offsett.UP),
         Conv(fromA: 1, toA: 2, trans: Offsett(0, 3), rot: Offsett.RIGHT),
@@ -118,7 +117,6 @@ class Board {
     if (isValid(nc)) return DirCoord(nc, Offsett.UP);
     for (Conv conv in [...convs, ...convs.map((conv) => conv.inv())]) {
       tmp = conv.get(nc);
-      print("$c + $o = $tmp");
       if (isValid(tmp)) return DirCoord(tmp!, conv.getDir(Offsett.UP));
     }
     return null;

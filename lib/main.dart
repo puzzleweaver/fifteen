@@ -37,7 +37,6 @@ class MyAppState extends ChangeNotifier {
   }
 
   void tapAtIndex(int index) {
-    print("tapped $index");
     game = game.tapAtIndex(board, index);
   }
 }

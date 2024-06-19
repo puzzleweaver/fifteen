@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/dir_coord.dart';
@@ -48,13 +46,10 @@ class Game {
   Game tapAtIndex(Board board, int index) {
     final Coord? c = board.getCoord(index);
     if (c == null) {
-      print("not moved");
       return this;
     }
-    print("-------$c-------v");
     for (Offsett dir in Offsett.DIRS) {
       DirCoord? result = board.simpleTransform(c, dir);
-      print("$dir -> ${result?.coord}");
       if (result == null) continue;
       int resultIndex = board.getIndex(result.coord);
       if (isSpace(resultIndex)) {
@@ -64,8 +59,6 @@ class Game {
         newPermutation[resultIndex] = permutation[index];
         newDirs[index] = dirs[resultIndex].rel(result.dir);
         newDirs[resultIndex] = dirs[index].invrel(result.dir);
-        print("SPACE!!! MOVED");
-        print("-------^");
         return Game(
           len: len,
           permutation: newPermutation,
@@ -73,8 +66,6 @@ class Game {
         );
       }
     }
-    print("-------^");
-    print("not moved");
     return this;
   }
 }

@@ -13,15 +13,15 @@ class ImageTestPainter extends CustomPainter {
   ImageTestPainter(FragmentShader fragmentShader, this.time, this.image)
       : shader = fragmentShader;
 
-  void setQuad(FragmentShader shader, xIndex, yIndex, Quad quad) {
-    shader.setFloat(xIndex, quad.p1.dx);
-    shader.setFloat(xIndex + 1, quad.p2.dx);
-    shader.setFloat(xIndex + 2, quad.p3.dx);
-    shader.setFloat(xIndex + 3, quad.p4.dx);
-    shader.setFloat(yIndex, quad.p1.dy);
-    shader.setFloat(yIndex + 1, quad.p2.dy);
-    shader.setFloat(yIndex + 2, quad.p3.dy);
-    shader.setFloat(yIndex + 3, quad.p4.dy);
+  void setQuad(FragmentShader shader, index, Quad quad) {
+    shader.setFloat(index, quad.p1.dx);
+    shader.setFloat(index + 1, quad.p1.dy);
+    shader.setFloat(index + 2, quad.p2.dx);
+    shader.setFloat(index + 3, quad.p2.dy);
+    shader.setFloat(index + 4, quad.p3.dx);
+    shader.setFloat(index + 5, quad.p3.dy);
+    shader.setFloat(index + 6, quad.p4.dx);
+    shader.setFloat(index + 7, quad.p4.dy);
   }
 
   @override
@@ -54,13 +54,8 @@ class ImageTestPainter extends CustomPainter {
     );
     Quad to = Quad.unit();
 
-    setQuad(shader, 2, 6, from);
-    setQuad(
-      shader,
-      10,
-      14,
-      to,
-    );
+    setQuad(shader, 2, from);
+    setQuad(shader, 10, to);
     drawQuad(canvas, Quad.unit(), size, shaderPaint);
 
     strokePaint.color = Colors.red;

@@ -1,5 +1,4 @@
 import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/offsett.dart';
 
 class Side {
   final Coord c1, c2;
