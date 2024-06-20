@@ -5,7 +5,7 @@ import 'dart:ui' as ui;
 
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/quad.dart';
-import 'package:fifteen/shader_tests/game_painter.dart';
+import 'package:fifteen/game_ui/game_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -51,17 +51,36 @@ class _GamePageState extends State<GamePage> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        title: Text("Fifteen :)"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: goToSettings,
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: Center(
-        child: SizedBox.square(
-          dimension: min(size.width, size.width),
-          child: _body(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox.square(
+              dimension: min(size.width, size.width),
+              child: _body(),
+            ),
+            SizedBox.square(dimension: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Image.asset(
+                  "assets/images/img3.png",
+                  width: 100,
+                  height: 100,
+                ),
+                SizedBox.square(dimension: 10),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -84,6 +103,10 @@ class _GamePageState extends State<GamePage> {
         ),
       );
     }
+  }
+
+  void goToSettings() {
+    print("TODO lmao XD");
   }
 
   Size getSize(BuildContext context) {

@@ -1,4 +1,4 @@
-import 'package:fifteen/home_page.dart';
+import 'package:fifteen/home_ui/home_page.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/game.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +18,30 @@ class FifteenApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Fifteen',
         theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-            fontFamily: "Courier"),
+          useMaterial3: false,
+          colorScheme: ColorScheme(
+            primary: const Color.fromARGB(255, 255, 117, 158),
+            onPrimary: Colors.black,
+            secondary: const Color.fromARGB(255, 151, 255, 203),
+            onSecondary: Colors.black,
+            error: Colors.red,
+            onError: const Color.fromARGB(255, 254, 0, 0),
+            surface: const Color.fromARGB(255, 79, 210, 210),
+            onSurface: const Color(0xFF241E30),
+            brightness: Brightness.light,
+            surfaceBright: Colors.green,
+          ),
+          fontFamily: "Courier",
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              shape: WidgetStateProperty.all<OutlinedBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+          ),
+        ),
         home: HomePage(),
       ),
     );

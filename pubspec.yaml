@@ -28,6 +28,7 @@ flutter:
    - assets/images/img.png
    - assets/images/img2.png
    - assets/images/img3.png
+   - assets/images/icon.png
   shaders:
    - shaders/test_fractal.frag
    - shaders/image_blur.frag
