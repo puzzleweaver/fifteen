@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/game_ui/game_painter.dart';
+import 'package:fifteen/shared_ui/game_preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -62,20 +63,23 @@ class _GamePageState extends State<GamePage> {
       extendBodyBehindAppBar: true,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox.square(
-              dimension: min(size.width, size.width),
+              dimension: min(size.width, size.height),
               child: _body(),
             ),
-            SizedBox.square(dimension: 10),
+            SizedBox.square(dimension: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Image.asset(
-                  "assets/images/img3.png",
-                  width: 100,
-                  height: 100,
+                ElevatedButton(
+                  onPressed: () => widget.appState.shuffle(),
+                  child: Text("Gumption"),
+                ),
+                GamePreviewWidget(
+                  imageAsset: widget.imagePath,
+                  board: widget.appState.board,
+                  dimension: 100,
                 ),
                 SizedBox.square(dimension: 10),
               ],
@@ -93,12 +97,11 @@ class _GamePageState extends State<GamePage> {
       return GestureDetector(
         onTapDown: (tapDetails) => onWidgetTap(tapDetails, getSize(context)),
         child: CustomPaint(
-          painter: GamePainter(
-            shader!,
-            delta,
-            image,
-            widget.appState.game,
-            widget.appState.board,
+          painter: GamePlayPainter(
+            shader: shader!,
+            image: image,
+            game: widget.appState.game,
+            board: widget.appState.board,
           ),
         ),
       );

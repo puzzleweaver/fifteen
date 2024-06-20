@@ -60,4 +60,8 @@ class MyAppState extends ChangeNotifier {
   void tapAtIndex(int index) {
     game = game.tapAtIndex(board, index);
   }
+
+  void shuffle() {
+    game = game.shuffle(board);
+  }
 }

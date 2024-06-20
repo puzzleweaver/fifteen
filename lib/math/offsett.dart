@@ -12,17 +12,20 @@ class Offsett {
       LEFT = Offsett(-1, 0, isDir: true),
       DIRS = [UP, RIGHT, DOWN, LEFT];
 
-  static Offsett randomDir(Random r) {
+  static Offsett randomDir(Random r, {Offsett? prev, Offsett? exclude}) {
+    if (prev != null && prev.x != exclude?.x && prev.y != exclude?.y) {
+      return prev;
+    }
     int which = r.nextInt(4);
     switch (which) {
       case 0:
-        return UP;
+        return randomDir(r, prev: UP, exclude: exclude);
       case 1:
-        return RIGHT;
+        return randomDir(r, prev: RIGHT, exclude: exclude);
       case 2:
-        return DOWN;
+        return randomDir(r, prev: DOWN, exclude: exclude);
     }
-    return LEFT;
+    return randomDir(r, prev: LEFT, exclude: exclude);
   }
 
   Offsett rel(Offsett dir) {
