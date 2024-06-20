@@ -63,6 +63,7 @@ class _GamePageState extends State<GamePage> {
       extendBodyBehindAppBar: true,
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox.square(
               dimension: min(size.width, size.height),
