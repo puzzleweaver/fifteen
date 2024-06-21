@@ -21,7 +21,7 @@ class GamePreviewWidget extends StatelessWidget {
           ),
           SizedBox.expand(
             child: CustomPaint(
-              painter: GamePreviewPainter(board: board),
+              painter: BoardPreviewPainter(board: board),
             ),
           ),
         ],

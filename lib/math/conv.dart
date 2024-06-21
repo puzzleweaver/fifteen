@@ -57,6 +57,6 @@ class Conv {
 
   @override
   String toString() {
-    return "($fromA -> $toA) * $_rot + $_trans";
+    return "Conv(from: $fromA, toA: $toA, rot: $_rot, trans: $_trans)";
   }
 }

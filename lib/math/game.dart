@@ -22,7 +22,7 @@ class Game {
     return Game(
       len: len,
       permutation: [for (var i = 0; i < len; i++) i],
-      dirs: [for (var i = 0; i < len; i++) Offsett.UP],
+      dirs: [for (var i = 0; i < len; i++) Offsett.up],
     ).shuffle(board);
   }
 
@@ -61,15 +61,14 @@ class Game {
 
   Game tapAtIndex(Board board, int index) {
     final Coord? c = board.getCoord(index);
-    if (c == null) {
-      return this;
-    }
-    for (Offsett dir in Offsett.DIRS) {
-      DirCoord? result = board.simpleTransform(c, dir);
-      if (result != null) {
-        int resultIndex = board.getIndex(result.coord);
-        if (isSpace(resultIndex)) {
-          return move(index, resultIndex, result.dir);
+    if (c != null) {
+      for (Offsett dir in Offsett.dirs) {
+        DirCoord? result = board.simpleTransform(c, dir);
+        if (result != null) {
+          int resultIndex = board.getIndex(result.coord);
+          if (isSpace(resultIndex)) {
+            return move(index, resultIndex, result.dir);
+          }
         }
       }
     }
@@ -80,11 +79,10 @@ class Game {
   Game shuffle(Board board) {
     Game ret = this;
     int len = board.countSubquads() * 60;
-    Offsett? dir;
     for (int i = 0; i < len; i++) {
       int spaceIndex = ret.getSpace();
       Coord spaceCoord = board.getCoord(spaceIndex)!;
-      dir = Offsett.randomDir(Random(), exclude: dir);
+      Offsett dir = Offsett.randomDir(Random());
       DirCoord? result = board.simpleTransform(spaceCoord, dir);
       if (result != null) {
         int resultIndex = board.getIndex(result.coord);

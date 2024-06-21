@@ -6,6 +6,10 @@ class Coord {
 
   Coord(this.a, this.hk);
 
+  bool equals(Coord? other) {
+    return a == other?.a && hk.equals(other?.hk);
+  }
+
   @override
   String toString() {
     return "($a, $hk)";

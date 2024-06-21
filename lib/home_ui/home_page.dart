@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fifteen/builder_ui/builder_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/game_ui/game_page.dart';
@@ -26,16 +27,17 @@ class _HomePageState extends State<HomePage> {
       getButton(Board.rect(5, 5), "assets/images/img3.png", appState),
       getButton(Board.rect(20, 20), "assets/images/img3.png", appState),
       getButton(Board.test(), "assets/images/img3.png", appState),
+      getButton(Board.test2(), "assets/images/img3.png", appState),
     ];
 
     var testButtons = [
       ElevatedButton(
         onPressed: goToImageTest,
-        child: Text("shader test"),
+        child: Text("Shader Test"),
       ),
       ElevatedButton(
-        onPressed: () => {},
-        child: Text("HI"),
+        onPressed: () => goToBuilder(appState),
+        child: Text("Board Builder"),
       ),
     ];
 
@@ -73,8 +75,10 @@ class _HomePageState extends State<HomePage> {
                   Wrap(
                     runSpacing: 5.0,
                     spacing: 5.0,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      for (int i = 0; i < 10; i++) ...gameButtons,
+                      // for (int i = 0; i < 10; i++)
+                      ...gameButtons,
                       ...testButtons,
                     ],
                   ),
@@ -113,7 +117,7 @@ class _HomePageState extends State<HomePage> {
       MaterialPageRoute(
         builder: (context) {
           return ImageTestPage(
-            imagePath: "assets/images/img.png",
+            imagePath: "assets/images/img2.png",
             shaderPath: "shaders/image_quad.frag",
           );
         },
@@ -123,6 +127,20 @@ class _HomePageState extends State<HomePage> {
 
   void goToSettings() {
     print("TODO LMAO XD");
+  }
+
+  void goToBuilder(MyAppState appState) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          appState.setBoard(Board.createNew());
+          return BuilderPage(
+            appState: appState,
+          );
+        },
+      ),
+    );
   }
 
   void goToGame(Board board, String imgAsset, MyAppState appState) {

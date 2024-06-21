@@ -6,29 +6,27 @@ class Offsett {
 
   Offsett(this.x, this.y, {bool? isDir}) : _isDir = isDir ?? false;
 
-  static final UP = Offsett(0, 1, isDir: true),
-      RIGHT = Offsett(1, 0, isDir: true),
-      DOWN = Offsett(0, -1, isDir: true),
-      LEFT = Offsett(-1, 0, isDir: true),
-      DIRS = [UP, RIGHT, DOWN, LEFT];
+  static final up = Offsett(0, 1, isDir: true),
+      right = Offsett(1, 0, isDir: true),
+      down = Offsett(0, -1, isDir: true),
+      left = Offsett(-1, 0, isDir: true),
+      dirs = [up, right, down, left];
 
-  static Offsett randomDir(Random r, {Offsett? prev, Offsett? exclude}) {
-    if (prev != null && prev.x != exclude?.x && prev.y != exclude?.y) {
-      return prev;
-    }
+  static Offsett randomDir(Random r) {
     int which = r.nextInt(4);
     switch (which) {
       case 0:
-        return randomDir(r, prev: UP, exclude: exclude);
+        return up;
       case 1:
-        return randomDir(r, prev: RIGHT, exclude: exclude);
+        return right;
       case 2:
-        return randomDir(r, prev: DOWN, exclude: exclude);
+        return down;
     }
-    return randomDir(r, prev: LEFT, exclude: exclude);
+    return left;
   }
 
   Offsett rel(Offsett dir) {
+    assert(dir._isDir);
     return Offsett(
       dir.y * x + dir.x * y,
       dir.y * y - dir.x * x,
@@ -37,11 +35,19 @@ class Offsett {
   }
 
   Offsett invrel(Offsett dir) {
-    return Offsett(dir.y * x - dir.x * y, dir.y * y + dir.x * x);
+    assert(dir._isDir);
+    Offsett ret = Offsett(
+      dir.y * x - dir.x * y,
+      dir.y * y + dir.x * x,
+      isDir: dir._isDir && _isDir,
+    );
+    assert(ret.equals(rel(dir.inv())));
+    return ret;
   }
 
   Offsett inv() {
-    return Offsett(-x, y);
+    assert(_isDir);
+    return Offsett(-x, y, isDir: _isDir);
   }
 
   Offsett add(Offsett o) {
@@ -84,8 +90,7 @@ class Offsett {
     return (x * dir.y - y * dir.x);
   }
 
-  // TODO: overwrite operator?
-  bool equals(Offsett o) {
-    return o.x == x && o.y == y;
+  bool equals(Offsett? o) {
+    return x == o?.x && y == o?.y;
   }
 }

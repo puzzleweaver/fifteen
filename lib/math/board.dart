@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fifteen/math/conv.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/dir_coord.dart';
@@ -12,10 +14,35 @@ class Board {
 
   Board({required this.charts, required this.convs, required this.quads});
 
+  static Board createNew() {
+    return Board(
+      charts: [],
+      convs: [],
+      quads: [],
+    );
+  }
+
+  Board add() {
+    Random r = Random();
+    return Board(
+      charts: [...charts, (1, 1)],
+      convs: convs,
+      quads: [
+        ...quads,
+        Quad.unit().mult(0.1).add(
+              Offset(
+                r.nextDouble() * 0.9,
+                r.nextDouble() * 0.9,
+              ),
+            ),
+      ],
+    );
+  }
+
   List<Quad> getSubquads() {
     List<Quad> ret = [];
     for (int a = 0; a < charts.length; a++) {
-      int n = charts[a].$1, m = charts[a].$2;
+      var (n, m) = charts[a];
       for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
           ret.add(quads[a].subquad(i, j, n, m));
@@ -23,6 +50,27 @@ class Board {
       }
     }
     assert(ret.length == countSubquads());
+    return ret;
+  }
+
+  List<Offset> getVertices() {
+    List<Offset> ret = [];
+    var total = 0;
+    for (int a = 0; a < charts.length; a++) {
+      var (n, m) = charts[a];
+      for (int i = 0; i < n; i++) {
+        double s = i / n;
+        ret.add(Offset.lerp(quads[a].p1, quads[a].p2, s)!);
+        ret.add(Offset.lerp(quads[a].p3, quads[a].p4, s)!);
+      }
+      for (int j = 0; j < m; j++) {
+        double s = j / m;
+        ret.add(Offset.lerp(quads[a].p2, quads[a].p3, s)!);
+        ret.add(Offset.lerp(quads[a].p4, quads[a].p1, s)!);
+      }
+      total += 2 * (n + m);
+    }
+    assert(ret.length == total);
     return ret;
   }
 
@@ -46,9 +94,8 @@ class Board {
       int n = charts[a].$1, m = charts[a].$2;
       ret += n * m;
     }
-    ret += c.hk.y + c.hk.x * charts[c.a].$2;
-    Coord nc = getCoord(ret)!;
-    assert(nc.a == c.a && nc.hk.x == c.hk.x && nc.hk.y == c.hk.y);
+    ret += (c.hk.y + c.hk.x * charts[c.a].$2).toInt();
+    assert(c.equals(getCoord(ret)!));
     return ret;
   }
 
@@ -64,9 +111,9 @@ class Board {
     return Board(
       charts: [(2, 2), (2, 2), (2, 2)],
       convs: [
-        Conv(fromA: 0, toA: 1, trans: Offsett(0, -2), rot: Offsett.UP),
-        Conv(fromA: 0, toA: 2, trans: Offsett(-2, 0), rot: Offsett.UP),
-        Conv(fromA: 1, toA: 2, trans: Offsett(0, 3), rot: Offsett.RIGHT),
+        Conv(fromA: 0, toA: 1, trans: Offsett(0, -2), rot: Offsett.up),
+        Conv(fromA: 0, toA: 2, trans: Offsett(-2, 0), rot: Offsett.up),
+        Conv(fromA: 1, toA: 2, trans: Offsett(0, 3), rot: Offsett.right),
       ],
       quads: [
         Quad(
@@ -89,6 +136,10 @@ class Board {
         ).mult(0.5).add(Offset(0.5, 0.5)),
       ],
     );
+  }
+
+  static Board test2() {
+    return Board.createNew();
   }
 
   static Board rect(int n, int m) {
@@ -114,11 +165,16 @@ class Board {
 
   DirCoord? simpleTransform(Coord c, Offsett o) {
     Coord? nc = Coord(c.a, c.hk.add(o)), tmp;
-    if (isValid(nc)) return DirCoord(nc, Offsett.UP);
+    if (isValid(nc)) return DirCoord(nc, Offsett.up);
     for (Conv conv in [...convs, ...convs.map((conv) => conv.inv())]) {
       tmp = conv.get(nc);
-      if (isValid(tmp)) return DirCoord(tmp!, conv.getDir(Offsett.UP));
+      if (isValid(tmp)) return DirCoord(tmp!, conv.getDir(Offsett.up));
     }
     return null;
+  }
+
+  @override
+  String toString() {
+    return "Board(charts: $charts, convs: $convs, quads: $quads)";
   }
 }

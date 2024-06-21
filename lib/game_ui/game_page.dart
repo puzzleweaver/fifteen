@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
+import 'package:fifteen/builder_ui/builder_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/game_ui/game_painter.dart';
@@ -27,8 +28,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  late Timer timer;
-  double delta = 0;
   FragmentShader? shader;
   ui.Image? image;
 
@@ -38,12 +37,6 @@ class _GamePageState extends State<GamePage> {
       _loadShader();
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 
   @override
@@ -71,18 +64,26 @@ class _GamePageState extends State<GamePage> {
             ),
             SizedBox.square(dimension: 8.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
               children: [
+                Text(""),
                 ElevatedButton(
-                  onPressed: () => widget.appState.shuffle(),
-                  child: Text("Gumption"),
+                  onPressed: () {
+                    widget.appState.shuffle();
+                    setState(() {}); // trigger repaint
+                  },
+                  child: Text("Shuffle"),
+                ),
+                ElevatedButton(
+                  onPressed: goToBuilder,
+                  child: Text("Build"),
                 ),
                 GamePreviewWidget(
                   imageAsset: widget.imagePath,
                   board: widget.appState.board,
                   dimension: 100,
                 ),
-                SizedBox.square(dimension: 10),
               ],
             ),
           ],
@@ -98,7 +99,7 @@ class _GamePageState extends State<GamePage> {
       return GestureDetector(
         onTapDown: (tapDetails) => onWidgetTap(tapDetails, getSize(context)),
         child: CustomPaint(
-          painter: GamePlayPainter(
+          painter: GamePainter(
             shader: shader!,
             image: image,
             game: widget.appState.game,
@@ -127,6 +128,7 @@ class _GamePageState extends State<GamePage> {
     for (int i = 0; i < quads.length; i++) {
       if (quads[i].isInside(pos)) {
         widget.appState.tapAtIndex(i);
+        setState(() {}); // trigger repaint
       }
     }
   }
@@ -137,15 +139,19 @@ class _GamePageState extends State<GamePage> {
 
     final program = await FragmentProgram.fromAsset(widget.shaderPath);
     shader = program.fragmentShader();
-    setState(() {
-      //trigger a repaint
-    });
+    setState(() {}); // trigger a repaint
+  }
 
-    timer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
-      if (!mounted) return;
-      setState(() {
-        delta += 1 / 60;
-      });
-    });
+  void goToBuilder() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return BuilderPage(
+            appState: widget.appState,
+          );
+        },
+      ),
+    );
   }
 }

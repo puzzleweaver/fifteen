@@ -45,10 +45,10 @@ class Quad {
   }
 
   Quad rel(Offsett dir) {
-    if (dir.equals(Offsett.UP)) return this;
-    if (dir.equals(Offsett.RIGHT)) return Quad(p4, p1, p2, p3);
-    if (dir.equals(Offsett.DOWN)) return Quad(p3, p4, p1, p2);
-    if (dir.equals(Offsett.LEFT)) return Quad(p2, p3, p4, p1);
+    if (dir.equals(Offsett.up)) return this;
+    if (dir.equals(Offsett.right)) return Quad(p4, p1, p2, p3);
+    if (dir.equals(Offsett.down)) return Quad(p3, p4, p1, p2);
+    if (dir.equals(Offsett.left)) return Quad(p2, p3, p4, p1);
     return this;
   }
 
@@ -149,5 +149,10 @@ class Quad {
     double alpha01 = _isInsideHelperAlpha(pt, p1, p2, p3, p4);
     double alpha12 = _isInsideHelperAlpha(pt, p2, p3, p4, p1);
     return alpha01 >= 0.0 && alpha01 <= 1.0 && alpha12 >= 0.0 && alpha12 <= 1.0;
+  }
+
+  @override
+  String toString() {
+    return "Quad($p1, $p2, $p3, $p4,)";
   }
 }
