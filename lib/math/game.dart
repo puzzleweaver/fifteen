@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/dir_coord.dart';
-import 'package:fifteen/math/offsett.dart';
+import 'package:fifteen/math/int_point.dart';
 import 'package:fifteen/math/quad.dart';
 
 class Game {
   final int len;
   final List<int> permutation;
-  final List<Offsett> rotation;
+  final List<IntPoint> rotation;
 
   Game({
     required this.len,
@@ -22,12 +22,12 @@ class Game {
     return Game(
       len: len,
       permutation: [for (var i = 0; i < len; i++) i],
-      rotation: [for (var i = 0; i < len; i++) Offsett.up],
+      rotation: [for (var i = 0; i < len; i++) IntPoint.up],
     ); //.shuffle(board);
   }
 
   bool isSolved(int index) {
-    return permutation[index] == index && rotation[index] == Offsett.up;
+    return permutation[index] == index && rotation[index] == IntPoint.up;
   }
 
   Quad getQuad(List<Quad> subquads, int index) {
@@ -49,9 +49,9 @@ class Game {
     return -1; // ERROR!
   }
 
-  Game move(int i, int j, Offsett dir) {
+  Game move(int i, int j, IntPoint dir) {
     List<int> newPermutation = permutation.toList();
-    List<Offsett> newDirs = rotation.toList();
+    List<IntPoint> newDirs = rotation.toList();
     newPermutation[i] = permutation[j];
     newPermutation[j] = permutation[i];
     newDirs[i] = rotation[j] * dir;
@@ -66,7 +66,7 @@ class Game {
   Game tapAtIndex(Board board, int index) {
     final Coord? c = board.getCoord(index);
     if (c != null) {
-      for (Offsett dir in Offsett.dirs) {
+      for (IntPoint dir in IntPoint.dirs) {
         DirCoord? result = board.step(c, dir);
         if (result != null) {
           int resultIndex = board.getIndex(result.coord);
@@ -86,7 +86,7 @@ class Game {
     for (int i = 0; i < len; i++) {
       int spaceIndex = ret.getSpace();
       Coord spaceCoord = board.getCoord(spaceIndex)!;
-      Offsett dir = Offsett.randomDir(Random());
+      IntPoint dir = IntPoint.randomDir(Random());
       DirCoord? result = board.step(spaceCoord, dir);
       if (result != null) {
         int resultIndex = board.getIndex(result.coord);

@@ -4,7 +4,7 @@ import 'package:fifteen/math/constraint.dart';
 import 'package:fifteen/math/conv.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/dir_coord.dart';
-import 'package:fifteen/math/offsett.dart';
+import 'package:fifteen/math/int_point.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:flutter/material.dart';
 
@@ -68,12 +68,12 @@ class Board {
     for (int a = 0; a < charts.length; a++) {
       var (n, m) = charts[a];
       for (int i = 0; i < n; i++) {
-        ret.add(Coord(a, Offsett(i * 2 - 1, -1)));
-        ret.add(Coord(a, Offsett(i * 2 + 1, 2 * n - 1)));
+        ret.add(Coord(a, IntPoint(i * 2 - 1, -1)));
+        ret.add(Coord(a, IntPoint(i * 2 + 1, 2 * n - 1)));
       }
       for (int j = 0; j < m; j++) {
-        ret.add(Coord(a, Offsett(-1, j * 2 + 1)));
-        ret.add(Coord(a, Offsett(2 * m - 1, j * 2 - 1)));
+        ret.add(Coord(a, IntPoint(-1, j * 2 + 1)));
+        ret.add(Coord(a, IntPoint(2 * m - 1, j * 2 - 1)));
       }
       total += 2 * (n + m);
     }
@@ -98,7 +98,7 @@ class Board {
       int n = charts[a].$1, m = charts[a].$2;
       for (int h = 0; h < n; h++) {
         for (int k = 0; k < m; k++) {
-          if (index == i) return Coord(a, Offsett(2 * h, 2 * k));
+          if (index == i) return Coord(a, IntPoint(2 * h, 2 * k));
           index++;
         }
       }
@@ -131,12 +131,12 @@ class Board {
     return c.hk.x >= 0 && c.hk.y >= 0 && c.hk.x < 2 * w && c.hk.y < 2 * h;
   }
 
-  DirCoord? step(Coord c, Offsett o) {
+  DirCoord? step(Coord c, IntPoint o) {
     Coord? nc = Coord(c.a, c.hk + o), tmp;
-    if (_isValid(nc)) return DirCoord(nc, Offsett.up);
+    if (_isValid(nc)) return DirCoord(nc, IntPoint.up);
     for (Conv conv in [...convs, ...convs.map((conv) => conv.inv())]) {
       tmp = conv.get(nc);
-      if (_isValid(tmp)) return DirCoord(tmp!, conv.getDir(Offsett.up));
+      if (_isValid(tmp)) return DirCoord(tmp!, conv.getDir(IntPoint.up));
     }
     return null;
   }

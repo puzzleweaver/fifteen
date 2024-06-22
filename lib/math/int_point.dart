@@ -1,17 +1,17 @@
 import 'dart:math';
 
-class Offsett {
+class IntPoint {
   final int x, y;
 
-  Offsett(this.x, this.y);
+  IntPoint(this.x, this.y);
 
-  static final up = Offsett(0, 2),
-      right = Offsett(2, 0),
-      down = Offsett(0, -2),
-      left = Offsett(-2, 0),
+  static final up = IntPoint(0, 2),
+      right = IntPoint(2, 0),
+      down = IntPoint(0, -2),
+      left = IntPoint(-2, 0),
       dirs = [up, right, down, left];
 
-  static Offsett randomDir(Random r) {
+  static IntPoint randomDir(Random r) {
     int which = r.nextInt(4);
     switch (which) {
       case 0:
@@ -24,8 +24,8 @@ class Offsett {
     return left;
   }
 
-  Offsett invrel(Offsett dir) {
-    Offsett ret = Offsett(
+  IntPoint invrel(IntPoint dir) {
+    IntPoint ret = IntPoint(
       (dir.y * x - dir.x * y) ~/ 2,
       (dir.y * y + dir.x * x) ~/ 2,
     );
@@ -33,23 +33,23 @@ class Offsett {
     return ret;
   }
 
-  Offsett inv() {
-    return Offsett(-x, y);
+  IntPoint inv() {
+    return IntPoint(-x, y);
   }
 
-  Offsett operator +(Offsett o) {
-    return Offsett(x + o.x, y + o.y);
+  IntPoint operator +(IntPoint o) {
+    return IntPoint(x + o.x, y + o.y);
   }
 
-  Offsett operator -(Offsett o) {
-    return Offsett(x - o.x, y - o.y);
+  IntPoint operator -(IntPoint o) {
+    return IntPoint(x - o.x, y - o.y);
   }
 
-  Offsett operator *(Object other) {
+  IntPoint operator *(Object other) {
     if (other is int) {
-      return Offsett(x * other, y * other);
-    } else if (other is Offsett) {
-      return Offsett(
+      return IntPoint(x * other, y * other);
+    } else if (other is IntPoint) {
+      return IntPoint(
         (other.y * x + other.x * y) ~/ 2,
         (other.y * y - other.x * x) ~/ 2,
       );
@@ -57,13 +57,13 @@ class Offsett {
     throw UnimplementedError("Offsett Operator *");
   }
 
-  Offsett operator -() {
-    return Offsett(-x, -y);
+  IntPoint operator -() {
+    return IntPoint(-x, -y);
   }
 
   @override
   String toString() {
-    return "Offsett($x, $y)";
+    return "IntPoint($x, $y)";
   }
 
   int taxi() {
@@ -72,15 +72,15 @@ class Offsett {
 
   @override
   bool operator ==(Object other) {
-    if (other is! Offsett) return false;
+    if (other is! IntPoint) return false;
     return x == other.x && y == other.y;
   }
 
   @override
-  int get hashCode => x * 10 + y;
+  int get hashCode => Object.hash(x, y);
 
-  Offsett asDir() {
-    Offsett ret = Offsett(
+  IntPoint asDir() {
+    IntPoint ret = IntPoint(
       2 * (x < 0 ? -1 : (x > 0 ? 1 : 0)),
       2 * (y < 0 ? -1 : (y > 0 ? 1 : 0)),
     );

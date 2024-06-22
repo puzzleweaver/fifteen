@@ -1,17 +1,17 @@
 import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/offsett.dart';
+import 'package:fifteen/math/int_point.dart';
 import 'package:fifteen/math/side.dart';
 
 class Conv {
   final int fromA, toA;
-  final Offsett _rot;
-  final Offsett _trans;
+  final IntPoint _rot;
+  final IntPoint _trans;
 
   Conv({
     required this.fromA,
     required this.toA,
-    required Offsett rot,
-    required Offsett trans,
+    required IntPoint rot,
+    required IntPoint trans,
   })  : _rot = rot,
         _trans = trans;
 
@@ -21,7 +21,7 @@ class Conv {
   }
 
   Conv inv() {
-    Offsett newRot = _rot.inv();
+    IntPoint newRot = _rot.inv();
     return Conv(
       fromA: toA,
       toA: fromA,
@@ -30,7 +30,7 @@ class Conv {
     );
   }
 
-  Offsett getDir(Offsett o) {
+  IntPoint getDir(IntPoint o) {
     return o * _rot;
   }
 

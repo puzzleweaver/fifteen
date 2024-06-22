@@ -1,13 +1,13 @@
 import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/offsett.dart';
+import 'package:fifteen/math/int_point.dart';
 
 class DirCoord {
   final Coord coord;
-  final Offsett dir;
+  final IntPoint dir;
 
   DirCoord(this.coord, this.dir);
 
-  Offsett rel(Offsett offset) {
+  IntPoint rel(IntPoint offset) {
     return offset * dir;
   }
 

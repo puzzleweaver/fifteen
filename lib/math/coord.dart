@@ -1,14 +1,14 @@
-import 'package:fifteen/math/offsett.dart';
+import 'package:fifteen/math/int_point.dart';
 
 class Coord {
   final int a;
-  final Offsett hk;
+  final IntPoint hk;
   final bool isVertex;
 
   Coord(this.a, this.hk) : isVertex = hk.x % 2 != 0 && hk.y % 2 != 0;
 
   @override
-  int get hashCode => a * 100 + hk.hashCode;
+  int get hashCode => Object.hash(a, hk);
 
   @override
   bool operator ==(Object other) {

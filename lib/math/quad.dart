@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:fifteen/math/offsett.dart';
+import 'package:fifteen/math/int_point.dart';
 import 'package:flutter/material.dart';
 
 class Quad {
@@ -44,11 +44,11 @@ class Quad {
     );
   }
 
-  Quad rel(Offsett dir) {
-    if (dir == Offsett.up) return this;
-    if (dir == Offsett.right) return Quad(p4, p1, p2, p3);
-    if (dir == Offsett.down) return Quad(p3, p4, p1, p2);
-    if (dir == Offsett.left) return Quad(p2, p3, p4, p1);
+  Quad rel(IntPoint dir) {
+    if (dir == IntPoint.up) return this;
+    if (dir == IntPoint.right) return Quad(p4, p1, p2, p3);
+    if (dir == IntPoint.down) return Quad(p3, p4, p1, p2);
+    if (dir == IntPoint.left) return Quad(p2, p3, p4, p1);
     return this;
   }
 

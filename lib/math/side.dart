@@ -27,8 +27,8 @@ class Side {
 
   @override
   int get hashCode => min(
-        c1.hashCode * 100 + c2.hashCode,
-        c2.hashCode * 100 + c1.hashCode,
+        Object.hash(c1, c2),
+        Object.hash(c2, c1),
       );
 
   @override
