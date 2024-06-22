@@ -27,6 +27,11 @@ class _BuilderPageState extends State<BuilderPage> {
   Coord? prevPrevSelectedCoord;
   Coord? prevPrevPrevSelectedCoord;
 
+  List<Board> history = [];
+
+  Board get board => widget.appState.board;
+  MyAppState get appState => widget.appState;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -56,7 +61,7 @@ class _BuilderPageState extends State<BuilderPage> {
                       onWidgetTap(tapDetails, getSize(context)),
                   child: CustomPaint(
                     painter: BuilderPainter(
-                      board: widget.appState.board,
+                      board: board,
                       selected: selectedCoord,
                       prevSelected: prevSelectedCoord,
                       prevPrevSelected: prevPrevSelectedCoord,
@@ -127,6 +132,11 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
+                  onPressed: history.isEmpty ? null : undo,
+                  child: Icon(Icons.undo),
+                ),
+                SizedBox.square(dimension: 8.0),
+                ElevatedButton(
                   onPressed: goToGamePage,
                   child: Icon(Icons.science),
                 ),
@@ -158,7 +168,6 @@ class _BuilderPageState extends State<BuilderPage> {
     var pos = tapDetails.localPosition;
     pos = Offset(pos.dx / size.width, pos.dy / size.height);
 
-    Board board = widget.appState.board;
     List<Coord> edgeCoords = board.getEdgeCoords();
     for (int i = 0; i < edgeCoords.length; i++) {}
     List<Quad> quads = board.getSubquads();
@@ -199,13 +208,11 @@ class _BuilderPageState extends State<BuilderPage> {
   void tapNothing(Offset where) {
     if (selectedCoord != null) {
       if (selectedCoord?.isVertex == false) {
-        Board board = widget.appState.board;
-        widget.appState.setBoard(
+        setBoard(
           mapBoard(board, (o) => (o - board.getVertex(selectedCoord!) + where)),
         );
       } else {
-        Board board = widget.appState.board;
-        widget.appState.setBoard(
+        setBoard(
           board.setCoordLocation(selectedCoord!, where),
         );
       }
@@ -215,17 +222,13 @@ class _BuilderPageState extends State<BuilderPage> {
 
   void delete() {
     if (selectedCoord?.isVertex == false) {
-      widget.appState
-          .setBoard(widget.appState.board.withoutChart(selectedCoord!.a));
+      setBoard(widget.appState.board.withoutChart(selectedCoord!.a));
       resetSelection();
     }
   }
 
   void add() {
-    widget.appState.setBoard(
-      widget.appState.board.add(),
-    );
-    setState(() {}); // repaint
+    setBoard(board.add());
   }
 
   Board mapBoard(Board board, Offset Function(Offset) map) {
@@ -266,18 +269,13 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void scale(double scale) {
-    Board board = widget.appState.board;
     Offset center = getSelectionCenter(board);
-    widget.appState.setBoard(
-      mapBoard(board, (o) => (o - center) * scale + center),
-    );
-    setState(() {});
+    setBoard(mapBoard(board, (o) => (o - center) * scale + center));
   }
 
   void rotateBy(double amt) {
-    Board board = widget.appState.board;
     Offset center = getSelectionCenter(board);
-    widget.appState.setBoard(
+    setBoard(
       mapBoard(
         board,
         (o) {
@@ -291,8 +289,7 @@ class _BuilderPageState extends State<BuilderPage> {
 
   void linkCoords() {
     print("Coincident Constraint Attempted.");
-    Board board = widget.appState.board;
-    widget.appState.setBoard(
+    setBoard(
       Board(
         charts: board.charts,
         convs: board.convs,
@@ -313,9 +310,7 @@ class _BuilderPageState extends State<BuilderPage> {
         prevSelectedCoord == null ||
         prevPrevSelectedCoord == null ||
         prevPrevPrevSelectedCoord == null) return;
-    print("Equidistant Constraint Attempted.");
-    Board board = widget.appState.board;
-    widget.appState.setBoard(
+    setBoard(
       Board(
         charts: board.charts,
         convs: board.convs,
@@ -332,14 +327,17 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void solve() {
-    print("Solve Attempt?");
-    Board board = widget.appState.board;
-    widget.appState.setBoard(board.constraints.solve(board));
+    Board newBoard = Board(
+      charts: board.charts,
+      convs: board.constraints.generateConvs(board),
+      constraints: board.constraints,
+      quads: board.quads,
+    );
+    setBoard(newBoard.constraints.solve(newBoard));
     resetSelection();
   }
 
   void recenter() {
-    Board board = widget.appState.board;
     var edgePoints = board.getEdgeCoords().map((c) => board.getVertex(c));
     Offset lo = edgePoints.reduce(
           (Offset val, o) => Offset(
@@ -355,26 +353,13 @@ class _BuilderPageState extends State<BuilderPage> {
         );
     Offset diff = (lo + hi) / 2, half = Offset(0.5, 0.5);
     double scale = 1.0 / max(hi.dx - lo.dx, hi.dy - lo.dy);
-    widget.appState.setBoard(
-      mapBoard(board, (o) => (o - diff) * scale + half),
-    );
-    setState(() {});
+    setBoard(mapBoard(board, (o) => (o - diff) * scale + half));
   }
 
   void submit() {
-    Board board = widget.appState.board,
-        nboard = Board(
-          charts: board.charts,
-          convs: board.constraints.generateConvs(board),
-          constraints: board.constraints,
-          quads: board.quads,
-        );
-    widget.appState.setBoard(
-      nboard,
-    );
-    print([for (int i = 0; i < 20; i++) "-"].join(""));
-    dev.log("Board: $nboard");
-    print([for (int i = 0; i < 20; i++) "-"].join(""));
+    print("------------------------");
+    dev.log("$board");
+    print("------------------------");
   }
 
   void goToGamePage() {
@@ -385,10 +370,25 @@ class _BuilderPageState extends State<BuilderPage> {
           return GamePage(
             imagePath: "assets/images/img4.png",
             shaderPath: "shaders/image_quad.frag",
-            appState: widget.appState,
+            appState: appState,
           );
         },
       ),
     );
+  }
+
+  void setBoard(Board newBoard) {
+    setState(() {
+      history = [...history, board];
+    });
+    appState.setBoard(newBoard);
+  }
+
+  void undo() {
+    if (history.isEmpty) return;
+    appState.setBoard(history.last);
+    setState(() {
+      history = [for (int i = 0; i < history.length - 1; i++) history[i]];
+    });
   }
 }

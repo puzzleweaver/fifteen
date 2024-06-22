@@ -125,7 +125,7 @@ class Board {
     return ret;
   }
 
-  bool isValid(Coord? c) {
+  bool _isValid(Coord? c) {
     if (c == null) return false;
     int w = charts[c.a].$1, h = charts[c.a].$2;
     return c.hk.x >= 0 && c.hk.y >= 0 && c.hk.x < 2 * w && c.hk.y < 2 * h;
@@ -133,10 +133,10 @@ class Board {
 
   DirCoord? step(Coord c, Offsett o) {
     Coord? nc = Coord(c.a, c.hk + o), tmp;
-    if (isValid(nc)) return DirCoord(nc, Offsett.up);
+    if (_isValid(nc)) return DirCoord(nc, Offsett.up);
     for (Conv conv in [...convs, ...convs.map((conv) => conv.inv())]) {
       tmp = conv.get(nc);
-      if (isValid(tmp)) return DirCoord(tmp!, conv.getDir(Offsett.up));
+      if (_isValid(tmp)) return DirCoord(tmp!, conv.getDir(Offsett.up));
     }
     return null;
   }

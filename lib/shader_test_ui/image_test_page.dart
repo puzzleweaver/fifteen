@@ -25,6 +25,7 @@ class _ImageTestPageState extends State<ImageTestPage> {
   double delta = 0;
   FragmentShader? shader;
   ui.Image? image;
+  bool quadTo = false;
 
   @override
   void initState() {
@@ -46,13 +47,15 @@ class _ImageTestPageState extends State<ImageTestPage> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.transparent,
         elevation: 0.0,
+        title: Text("Quad Shader Test Page"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: () => setState(() => quadTo = !quadTo),
+          )
+        ],
       ),
-      extendBodyBehindAppBar: true,
       body: SizedBox(
         width: size.width,
         height: size.height,
@@ -67,9 +70,10 @@ class _ImageTestPageState extends State<ImageTestPage> {
     } else {
       return CustomPaint(
           painter: ImageTestPainter(
-        shader!,
-        delta,
-        image,
+        shader: shader!,
+        time: delta,
+        image: image,
+        quadTo: quadTo,
       ));
     }
   }

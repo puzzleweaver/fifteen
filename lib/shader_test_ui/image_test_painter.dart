@@ -9,9 +9,14 @@ class ImageTestPainter extends CustomPainter {
   final FragmentShader shader;
   final double time; // time
   final ui.Image? image;
+  final bool quadTo;
 
-  ImageTestPainter(FragmentShader fragmentShader, this.time, this.image)
-      : shader = fragmentShader;
+  ImageTestPainter({
+    required this.shader,
+    required this.time,
+    required this.image,
+    required this.quadTo,
+  });
 
   void setQuad(FragmentShader shader, index, Quad quad) {
     shader.setFloat(index, quad.p1.dx);
@@ -49,10 +54,10 @@ class ImageTestPainter extends CustomPainter {
           .rot(r.nextDouble() * 3.141 - 3.141 / 2)
           .mult(r.nextDouble())
           .add(Offset(0.5, 0.5))
-          .dent(r.nextDouble()),
+          .dent(0.8 + 0.2 * r.nextDouble()),
       ctime,
     );
-    Quad to = Quad.unit();
+    Quad to = quadTo ? from : Quad.unit();
 
     setQuad(shader, 2, from);
     setQuad(shader, 10, to);
