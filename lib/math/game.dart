@@ -9,12 +9,12 @@ import 'package:fifteen/math/quad.dart';
 class Game {
   final int len;
   final List<int> permutation;
-  final List<Offsett> dirs;
+  final List<Offsett> rotation;
 
   Game({
     required this.len,
     required this.permutation,
-    required this.dirs,
+    required this.rotation,
   });
 
   static Game fromBoard(Board board) {
@@ -22,12 +22,16 @@ class Game {
     return Game(
       len: len,
       permutation: [for (var i = 0; i < len; i++) i],
-      dirs: [for (var i = 0; i < len; i++) Offsett.up],
+      rotation: [for (var i = 0; i < len; i++) Offsett.up],
     ); //.shuffle(board);
   }
 
+  bool isSolved(int index) {
+    return permutation[index] == index && rotation[index] == Offsett.up;
+  }
+
   Quad getQuad(List<Quad> subquads, int index) {
-    return subquads[permutation[index]].rel(dirs[index]);
+    return subquads[permutation[index]].rel(rotation[index]);
   }
 
   Quad getQuadRelless(List<Quad> subquads, int index) {
@@ -47,15 +51,15 @@ class Game {
 
   Game move(int i, int j, Offsett dir) {
     List<int> newPermutation = permutation.toList();
-    List<Offsett> newDirs = dirs.toList();
+    List<Offsett> newDirs = rotation.toList();
     newPermutation[i] = permutation[j];
     newPermutation[j] = permutation[i];
-    newDirs[i] = dirs[j] * dir;
-    newDirs[j] = dirs[i].invrel(dir);
+    newDirs[i] = rotation[j] * dir;
+    newDirs[j] = rotation[i].invrel(dir);
     return Game(
       len: len,
       permutation: newPermutation,
-      dirs: newDirs,
+      rotation: newDirs,
     );
   }
 

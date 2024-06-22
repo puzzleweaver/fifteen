@@ -18,6 +18,6 @@ class Coord {
 
   @override
   String toString() {
-    return "Coord($a, $hk),";
+    return "Coord($a, $hk)";
   }
 }

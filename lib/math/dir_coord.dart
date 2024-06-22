@@ -17,6 +17,6 @@ class DirCoord {
 
   @override
   String toString() {
-    return "DirCoord($coord, $dir),";
+    return "DirCoord($coord, $dir)";
   }
 }

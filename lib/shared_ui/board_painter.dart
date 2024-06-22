@@ -38,15 +38,15 @@ abstract class BoardPainter extends CustomPainter {
     Paint paint,
   ) {
     quad = quad.scale(size.width, size.height);
-    for (int i = 0; i <= chart.$1; i++) {
-      double s = i / chart.$1;
+    for (int i = 0; i <= chart.$2; i++) {
+      double s = i / chart.$2;
       canvas.drawLine(
         Offset.lerp(quad.p1, quad.p2, s)!,
         Offset.lerp(quad.p4, quad.p3, s)!,
         paint,
       );
     }
-    for (int j = 0; j <= chart.$2; j++) {
+    for (int j = 0; j <= chart.$1; j++) {
       double s = j / chart.$1;
       canvas.drawLine(
         Offset.lerp(quad.p2, quad.p3, s)!,

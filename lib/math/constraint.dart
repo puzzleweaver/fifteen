@@ -238,7 +238,7 @@ class CoincidentBoardConstraint {
 
   @override
   String toString() {
-    return "Coincident(coords: $coords)";
+    return "CoincidentBoardConstraint(coords: $coords,)";
   }
 
   Coord coordWithA(int a) {
@@ -311,6 +311,6 @@ class EquidistantBoardConstraint {
 
   @override
   String toString() {
-    return "Equidistant(sides: $sides)";
+    return "EquidistantBoardConstraint(sides: $sides,)";
   }
 }
