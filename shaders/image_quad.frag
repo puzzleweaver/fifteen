@@ -10,9 +10,6 @@ uniform vec2 X0, X1, X2, X3; // to
 
 uniform sampler2D image;
 
-float dot(vec2 a, vec2 b) {
-    return a.x*b.x + a.y*b.y;
-}
 float wedge(vec2 a, vec2 b) {
     return a.x*b.y - a.y*b.x;
 }

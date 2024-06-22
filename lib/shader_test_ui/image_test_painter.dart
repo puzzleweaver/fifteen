@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:flutter/material.dart';
 
@@ -19,14 +20,14 @@ class ImageTestPainter extends CustomPainter {
   });
 
   void setQuad(FragmentShader shader, index, Quad quad) {
-    shader.setFloat(index, quad.p1.dx);
-    shader.setFloat(index + 1, quad.p1.dy);
-    shader.setFloat(index + 2, quad.p2.dx);
-    shader.setFloat(index + 3, quad.p2.dy);
-    shader.setFloat(index + 4, quad.p3.dx);
-    shader.setFloat(index + 5, quad.p3.dy);
-    shader.setFloat(index + 6, quad.p4.dx);
-    shader.setFloat(index + 7, quad.p4.dy);
+    shader.setFloat(index, quad.p1.x);
+    shader.setFloat(index + 1, quad.p1.y);
+    shader.setFloat(index + 2, quad.p2.x);
+    shader.setFloat(index + 3, quad.p2.y);
+    shader.setFloat(index + 4, quad.p3.x);
+    shader.setFloat(index + 5, quad.p3.y);
+    shader.setFloat(index + 6, quad.p4.x);
+    shader.setFloat(index + 7, quad.p4.y);
   }
 
   @override
@@ -50,10 +51,10 @@ class ImageTestPainter extends CustomPainter {
     Random r = Random(((time - 3.141) / 6.282).floor());
     Quad from = Quad.unit().lerpTo(
       Quad.unit()
-          .sub(Offset(0.5, 0.5))
+          .sub(DoublePoint(0.5, 0.5))
           .rot(r.nextDouble() * 3.141 - 3.141 / 2)
           .mult(0.7 + 0.1 * r.nextDouble())
-          .add(Offset(0.5, 0.5))
+          .add(DoublePoint(0.5, 0.5))
           .dent(0.8 + 0.2 * r.nextDouble()),
       ctime,
     );
@@ -84,8 +85,8 @@ class ImageTestPainter extends CustomPainter {
     Quad quad = quad0.scale(size.width, size.height);
     drawPoly(
       canvas,
-      [quad.p1.dx, quad.p2.dx, quad.p3.dx, quad.p4.dx, quad.p1.dx],
-      [quad.p1.dy, quad.p2.dy, quad.p3.dy, quad.p4.dy, quad.p1.dy],
+      [quad.p1.x, quad.p2.x, quad.p3.x, quad.p4.x, quad.p1.x],
+      [quad.p1.y, quad.p2.y, quad.p3.y, quad.p4.y, quad.p1.y],
       paint,
     );
   }

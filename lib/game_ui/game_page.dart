@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 
 import 'package:fifteen/builder_ui/builder_page.dart';
 import 'package:fifteen/main.dart';
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/game_ui/game_painter.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
@@ -121,8 +122,8 @@ class _GamePageState extends State<GamePage> {
   }
 
   void onWidgetTap(TapDownDetails tapDetails, Size size) {
-    var pos = tapDetails.localPosition;
-    pos = Offset(pos.dx / size.width, pos.dy / size.height);
+    DoublePoint pos = DoublePoint.fromOffset(tapDetails.localPosition);
+    pos = DoublePoint(pos.x / size.width, pos.y / size.height);
 
     List<Quad> quads = widget.appState.board.getSubquads();
     for (int i = 0; i < quads.length; i++) {

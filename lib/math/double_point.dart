@@ -9,24 +9,32 @@ class DoublePoint {
 
   double get distance => sqrt(x * x + y * y);
 
-  operator +(DoublePoint p) {
+  DoublePoint normal() {
+    return DoublePoint(-y, x);
+  }
+
+  DoublePoint operator +(DoublePoint p) {
     return DoublePoint(p.x + x, p.y + y);
   }
 
-  operator -(DoublePoint p) {
+  DoublePoint operator -(DoublePoint p) {
     return DoublePoint(x - p.x, y - p.y);
   }
 
-  operator -() {
+  DoublePoint operator -() {
     return DoublePoint(-x, -y);
   }
 
-  operator *(double d) {
+  DoublePoint operator *(double d) {
     return DoublePoint(x * d, y * d);
   }
 
+  DoublePoint operator /(double d) {
+    return DoublePoint(x / d, y / d);
+  }
+
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (other is! DoublePoint) {
       return false;
     } else {
@@ -37,12 +45,20 @@ class DoublePoint {
   @override
   int get hashCode => Object.hash(x, y);
 
-  Offset asOffset() {
+  Offset toOffset() {
     return Offset(x, y);
+  }
+
+  static DoublePoint fromOffset(Offset o) {
+    return DoublePoint(o.dx, o.dy);
   }
 
   @override
   String toString() {
-    return "(${x.toStringAsPrecision(3)}, ${y.toStringAsPrecision(3)})";
+    return "DoublePoint(${x.toStringAsPrecision(3)}, ${y.toStringAsPrecision(3)})";
+  }
+
+  static DoublePoint lerp(DoublePoint p1, DoublePoint p2, double t) {
+    return p1 * (1.0 - t) + p2 * t;
   }
 }

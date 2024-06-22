@@ -54,7 +54,7 @@ class IntPoint {
         (other.y * y - other.x * x) ~/ 2,
       );
     }
-    throw UnimplementedError("Offsett Operator *");
+    throw UnimplementedError("IntPoint Operator *");
   }
 
   IntPoint operator -() {

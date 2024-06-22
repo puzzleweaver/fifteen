@@ -1,8 +1,8 @@
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/conv.dart';
 import 'package:fifteen/math/coord.dart';
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/side.dart';
-import 'package:flutter/material.dart';
 
 class ConstraintSet {
   final List<CoincidentBoardConstraint> coincidents;
@@ -200,7 +200,7 @@ class CoincidentBoardConstraint {
   Board solve(Board board) {
     Board ret = board;
     // get the average point
-    Offset avg = Offset(0, 0);
+    DoublePoint avg = DoublePoint(0, 0);
     for (var c in coords) {
       avg = avg + ret.getVertex(c);
     }
@@ -212,7 +212,7 @@ class CoincidentBoardConstraint {
     return ret;
   }
 
-  void set(Board board, Offset o) {
+  void set(Board board, DoublePoint o) {
     for (Coord c in coords) {
       board.setCoordLocation(c, o);
     }
@@ -268,7 +268,7 @@ class EquidistantBoardConstraint {
   Board solve(Board board) {
     Board ret = board;
     double avg = 0.0;
-    Offset p1, p2, mid, v;
+    DoublePoint p1, p2, mid, v;
     for (Side s in sides) {
       p1 = ret.getVertex(s.c1);
       p2 = ret.getVertex(s.c2);
@@ -279,7 +279,7 @@ class EquidistantBoardConstraint {
     for (Side s in sides) {
       p1 = ret.getVertex(s.c1);
       p2 = ret.getVertex(s.c2);
-      mid = (p1 + p2) / 2;
+      mid = (p1 + p2) / 2.0;
       v = p1 - mid;
       v = v * 0.5 * avg / v.distance;
       ret = ret.setCoordLocation(s.c1, mid + v);

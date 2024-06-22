@@ -6,6 +6,7 @@ import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/constraint.dart';
 import 'package:fifteen/math/coord.dart';
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/math/side.dart';
 import 'package:flutter/material.dart';
@@ -165,8 +166,8 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void onWidgetTap(TapDownDetails tapDetails, Size size) {
-    var pos = tapDetails.localPosition;
-    pos = Offset(pos.dx / size.width, pos.dy / size.height);
+    var pos = DoublePoint.fromOffset(tapDetails.localPosition);
+    pos = DoublePoint(pos.x / size.width, pos.y / size.height);
 
     List<Coord> edgeCoords = board.getEdgeCoords();
     for (int i = 0; i < edgeCoords.length; i++) {}
@@ -202,7 +203,7 @@ class _BuilderPageState extends State<BuilderPage> {
     }
   }
 
-  void tapNothing(Offset where) {
+  void tapNothing(DoublePoint where) {
     if (selectedCoord != null) {
       if (selectedCoord?.isVertex == false) {
         setBoard(
@@ -228,7 +229,7 @@ class _BuilderPageState extends State<BuilderPage> {
     setBoard(board.add());
   }
 
-  Board mapBoard(Board board, Offset Function(Offset) map) {
+  Board mapBoard(Board board, DoublePoint Function(DoublePoint) map) {
     return Board(
       convs: board.convs,
       quads: [
@@ -247,17 +248,37 @@ class _BuilderPageState extends State<BuilderPage> {
     );
   }
 
+  Iterable<CoincidentBoardConstraint> getCoincidentsWithA(int a) {
+    return board.constraints.coincidents.where((conv) => conv.hasA(a));
+  }
+
+  List<int> getConnectedAs(int a) {
+    Set<int> ret = {}, fringe = {a};
+    while (fringe.isNotEmpty) {
+      int currentA = fringe.first;
+      fringe.remove(currentA);
+      if (ret.contains(currentA)) continue;
+      for (var coin in getCoincidentsWithA(currentA)) {
+        for (var newA in coin.coords.map((c) => c.a)) {
+          if (!ret.contains(newA)) fringe.add(newA);
+        }
+      }
+      ret.add(currentA);
+    }
+    return ret.toList();
+  }
+
   bool isSelected(int a) {
-    return selectedCoord == null ||
-        selectedCoord?.a == a ||
-        prevSelectedCoord?.a == a;
+    Coord? coord = selectedCoord;
+    if (coord == null) return true;
+    return selectedCoord == null || getConnectedAs(coord.a).contains(a);
   }
 
-  Offset getQuadCenter(Quad q) {
-    return (q.p1 + q.p2 + q.p3 + q.p4) / 4;
+  DoublePoint getQuadCenter(Quad q) {
+    return (q.p1 + q.p2 + q.p3 + q.p4) / 4.0;
   }
 
-  Offset getSelectionCenter(Board board) {
+  DoublePoint getSelectionCenter(Board board) {
     var list = [
       for (int i = 0; i < board.quads.length; i++)
         if (isSelected(i)) getQuadCenter(board.quads[i])
@@ -266,18 +287,18 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void scale(double scale) {
-    Offset center = getSelectionCenter(board);
+    DoublePoint center = getSelectionCenter(board);
     setBoard(mapBoard(board, (o) => (o - center) * scale + center));
   }
 
   void rotateBy(double amt) {
-    Offset center = getSelectionCenter(board);
+    DoublePoint center = getSelectionCenter(board);
     setBoard(
       mapBoard(
         board,
         (o) {
-          Offset op = o - center;
-          return op * cos(amt) + Offset(op.dy, -op.dx) * sin(amt) + center;
+          DoublePoint op = o - center;
+          return op * cos(amt) + op.normal() * sin(amt) + center;
         },
       ),
     );
@@ -335,20 +356,20 @@ class _BuilderPageState extends State<BuilderPage> {
 
   void recenter() {
     var edgePoints = board.getEdgeCoords().map((c) => board.getVertex(c));
-    Offset lo = edgePoints.reduce(
-          (Offset val, o) => Offset(
-            min(val.dx, o.dx),
-            min(val.dy, o.dy),
+    DoublePoint lo = edgePoints.reduce(
+          (DoublePoint val, o) => DoublePoint(
+            min(val.x, o.x),
+            min(val.y, o.y),
           ),
         ),
         hi = edgePoints.reduce(
-          (Offset val, o) => Offset(
-            max(val.dx, o.dx),
-            max(val.dy, o.dy),
+          (DoublePoint val, o) => DoublePoint(
+            max(val.x, o.x),
+            max(val.y, o.y),
           ),
         );
-    Offset diff = (lo + hi) / 2, half = Offset(0.5, 0.5);
-    double scale = 1.0 / max(hi.dx - lo.dx, hi.dy - lo.dy);
+    DoublePoint diff = (lo + hi) / 2.0, half = DoublePoint(0.5, 0.5);
+    double scale = 1.0 / max(hi.x - lo.x, hi.y - lo.y);
     setBoard(mapBoard(board, (o) => (o - diff) * scale + half));
   }
 

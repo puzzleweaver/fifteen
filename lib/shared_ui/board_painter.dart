@@ -1,4 +1,5 @@
 import 'package:fifteen/math/board.dart';
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:flutter/material.dart';
 
@@ -24,8 +25,8 @@ abstract class BoardPainter extends CustomPainter {
     quad = quad.scale(size.width, size.height);
     drawPoly(
       canvas,
-      [quad.p1.dx, quad.p2.dx, quad.p3.dx, quad.p4.dx, quad.p1.dx],
-      [quad.p1.dy, quad.p2.dy, quad.p3.dy, quad.p4.dy, quad.p1.dy],
+      [quad.p1.x, quad.p2.x, quad.p3.x, quad.p4.x, quad.p1.x],
+      [quad.p1.y, quad.p2.y, quad.p3.y, quad.p4.y, quad.p1.y],
       paint,
     );
   }
@@ -41,16 +42,16 @@ abstract class BoardPainter extends CustomPainter {
     for (int i = 0; i <= chart.$2; i++) {
       double s = i / chart.$2;
       canvas.drawLine(
-        Offset.lerp(quad.p1, quad.p2, s)!,
-        Offset.lerp(quad.p4, quad.p3, s)!,
+        DoublePoint.lerp(quad.p1, quad.p2, s).toOffset(),
+        DoublePoint.lerp(quad.p4, quad.p3, s).toOffset(),
         paint,
       );
     }
     for (int j = 0; j <= chart.$1; j++) {
       double s = j / chart.$1;
       canvas.drawLine(
-        Offset.lerp(quad.p2, quad.p3, s)!,
-        Offset.lerp(quad.p1, quad.p4, s)!,
+        DoublePoint.lerp(quad.p2, quad.p3, s).toOffset(),
+        DoublePoint.lerp(quad.p1, quad.p4, s).toOffset(),
         paint,
       );
     }

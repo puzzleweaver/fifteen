@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:ui' as ui;
 
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/game.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/shared_ui/board_painter.dart';
@@ -18,9 +19,9 @@ class GamePainter extends BoardPainter {
     required super.board,
   });
 
-  void _setFloats(int index, Offset o) {
-    shader.setFloat(index, o.dx);
-    shader.setFloat(index + 1, o.dy);
+  void _setFloats(int index, DoublePoint o) {
+    shader.setFloat(index, o.x);
+    shader.setFloat(index + 1, o.y);
   }
 
   void _setQuad(int index, Quad q) {

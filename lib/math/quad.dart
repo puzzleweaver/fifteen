@@ -1,19 +1,19 @@
 import 'dart:math';
 
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/int_point.dart';
-import 'package:flutter/material.dart';
 
 class Quad {
-  final Offset p1, p2, p3, p4;
+  final DoublePoint p1, p2, p3, p4;
 
   Quad(this.p1, this.p2, this.p3, this.p4);
 
   static Quad unit() {
     return Quad(
-      Offset(0.0, 0.0),
-      Offset(0.0, 1.0),
-      Offset(1.0, 1.0),
-      Offset(1.0, 0.0),
+      DoublePoint(0.0, 0.0),
+      DoublePoint(0.0, 1.0),
+      DoublePoint(1.0, 1.0),
+      DoublePoint(1.0, 0.0),
     );
   }
 
@@ -28,20 +28,15 @@ class Quad {
 
   Quad scale(double kx, double ky) {
     return Quad(
-      Offset(p1.dx * kx, p1.dy * ky),
-      Offset(p2.dx * kx, p2.dy * ky),
-      Offset(p3.dx * kx, p3.dy * ky),
-      Offset(p4.dx * kx, p4.dy * ky),
+      DoublePoint(p1.x * kx, p1.y * ky),
+      DoublePoint(p2.x * kx, p2.y * ky),
+      DoublePoint(p3.x * kx, p3.y * ky),
+      DoublePoint(p4.x * kx, p4.y * ky),
     );
   }
 
-  Quad add(Offset o) {
-    return Quad(
-      p1 + o,
-      p2 + o,
-      p3 + o,
-      p4 + o,
-    );
+  Quad add(DoublePoint o) {
+    return Quad(p1 + o, p2 + o, p3 + o, p4 + o);
   }
 
   Quad rel(IntPoint dir) {
@@ -52,15 +47,12 @@ class Quad {
     return this;
   }
 
-  Quad sub(Offset o) {
-    return add(-o);
+  Quad sub(DoublePoint offset) {
+    return add(-offset);
   }
 
-  Offset _rot(Offset o, double theta) {
-    return Offset(
-      o.dx * cos(theta) + o.dy * sin(theta),
-      o.dy * cos(theta) - o.dx * sin(theta),
-    );
+  DoublePoint _rot(DoublePoint o, double theta) {
+    return o * cos(theta) + o.normal() * sin(theta);
   }
 
   Quad rot(double theta) {
@@ -83,10 +75,10 @@ class Quad {
 
   static Quad lerp(Quad a, Quad b, double t) {
     return Quad(
-      Offset.lerp(a.p1, b.p1, t)!,
-      Offset.lerp(a.p2, b.p2, t)!,
-      Offset.lerp(a.p3, b.p3, t)!,
-      Offset.lerp(a.p4, b.p4, t)!,
+      DoublePoint.lerp(a.p1, b.p1, t),
+      DoublePoint.lerp(a.p2, b.p2, t),
+      DoublePoint.lerp(a.p3, b.p3, t),
+      DoublePoint.lerp(a.p4, b.p4, t),
     );
   }
 
@@ -100,39 +92,44 @@ class Quad {
         ns = 1.0 * (i + 1) / n,
         nt = 1.0 * (j + 1) / m;
     return Quad(
-      Offset.lerp(
-        Offset.lerp(p1, p2, t),
-        Offset.lerp(p4, p3, t),
+      DoublePoint.lerp(
+        DoublePoint.lerp(p1, p2, t),
+        DoublePoint.lerp(p4, p3, t),
         s,
-      )!,
-      Offset.lerp(
-        Offset.lerp(p1, p2, t),
-        Offset.lerp(p4, p3, t),
+      ),
+      DoublePoint.lerp(
+        DoublePoint.lerp(p1, p2, t),
+        DoublePoint.lerp(p4, p3, t),
         ns,
-      )!,
-      Offset.lerp(
-        Offset.lerp(p1, p2, nt),
-        Offset.lerp(p4, p3, nt),
+      ),
+      DoublePoint.lerp(
+        DoublePoint.lerp(p1, p2, nt),
+        DoublePoint.lerp(p4, p3, nt),
         ns,
-      )!,
-      Offset.lerp(
-        Offset.lerp(p1, p2, nt),
-        Offset.lerp(p4, p3, nt),
+      ),
+      DoublePoint.lerp(
+        DoublePoint.lerp(p1, p2, nt),
+        DoublePoint.lerp(p4, p3, nt),
         s,
-      )!,
+      ),
     );
   }
 
-  double _wedge(Offset a, Offset b) {
-    return a.dx * b.dy - a.dy * b.dx;
+  double _wedge(DoublePoint a, DoublePoint b) {
+    return a.x * b.y - a.y * b.x;
   }
 
-  double _dot(Offset a, Offset b) {
-    return a.dx * b.dx + a.dy * b.dy;
+  double _dot(DoublePoint a, DoublePoint b) {
+    return a.x * b.x + a.y * b.y;
   }
 
   double _isInsideHelperAlpha(
-      Offset x, Offset p0, Offset p1, Offset p2, Offset p3) {
+    DoublePoint x,
+    DoublePoint p0,
+    DoublePoint p1,
+    DoublePoint p2,
+    DoublePoint p3,
+  ) {
     x = x - p0;
     p1 = p1 - p0;
     p2 = p2 - p0;
@@ -144,7 +141,7 @@ class Quad {
     return _wedge(x, p1) / den;
   }
 
-  bool isInside(Offset pt) {
+  bool isInside(DoublePoint pt) {
     // calculate alpha01(pt) and alpha12(pt)
     double alpha01 = _isInsideHelperAlpha(pt, p1, p2, p3, p4);
     double alpha12 = _isInsideHelperAlpha(pt, p2, p3, p4, p1);

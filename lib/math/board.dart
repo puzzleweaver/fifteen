@@ -4,9 +4,9 @@ import 'package:fifteen/math/constraint.dart';
 import 'package:fifteen/math/conv.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/dir_coord.dart';
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/int_point.dart';
 import 'package:fifteen/math/quad.dart';
-import 'package:flutter/material.dart';
 
 class Board {
   final List<(int, int)> charts;
@@ -37,12 +37,10 @@ class Board {
       convs: convs,
       quads: [
         ...quads,
-        Quad.unit().mult(0.1).add(
-              Offset(
-                r.nextDouble() * 0.9,
-                r.nextDouble() * 0.9,
-              ),
-            ),
+        Quad.unit().mult(0.1).add(DoublePoint(
+              r.nextDouble() * 0.9,
+              r.nextDouble() * 0.9,
+            )),
       ],
       constraints: constraints,
     );
@@ -81,15 +79,15 @@ class Board {
     return ret;
   }
 
-  Offset getVertex(Coord c) {
+  DoublePoint getVertex(Coord c) {
     Quad quad = quads[c.a];
     var (n, m) = charts[c.a];
     double s = (c.hk.x + 1) / (n) / 2, t = (c.hk.y + 1) / (m) / 2;
-    return Offset.lerp(
-      Offset.lerp(quad.p1, quad.p2, t)!,
-      Offset.lerp(quad.p4, quad.p3, t)!,
+    return DoublePoint.lerp(
+      DoublePoint.lerp(quad.p1, quad.p2, t),
+      DoublePoint.lerp(quad.p4, quad.p3, t),
       s,
-    )!;
+    );
   }
 
   Coord? getCoord(int i) {
@@ -156,11 +154,11 @@ class Board {
     );
   }
 
-  Board setCoordLocation(Coord c, Offset o) {
+  Board setCoordLocation(Coord c, DoublePoint to) {
     Quad quad = quads[c.a];
     var (n, m) = charts[c.a];
     double x = 0.5 * (c.hk.x + 1) / n, y = 0.5 * (c.hk.y + 1) / m;
-    Offset dif = o - getVertex(c);
+    DoublePoint dif = to - getVertex(c);
     Quad newQuad = Quad(
       quad.p1 + dif * (1 - x) * (1 - y),
       quad.p2 + dif * (1 - x) * y,

@@ -1,4 +1,5 @@
 import 'package:fifteen/math/coord.dart';
+import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/shared_ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,12 @@ class BuilderPainter extends BoardPainter {
       fillPaint.color = c == selected || c == prevSelected
           ? Colors.transparent
           : Color(0x8822e8f0);
-      drawVertex(canvas, board.getVertex(c), 1.0 / 25, size);
+      drawVertex(
+        canvas,
+        board.getVertex(c),
+        1.0 / 25,
+        size,
+      );
     }
 
     fillPaint.color = Color(0x88f0e822);
@@ -37,9 +43,17 @@ class BuilderPainter extends BoardPainter {
       if (prevSelected != null) {
         if (prevPrevSelected != null && prevPrevPrevSelected != null) {
           drawVertex(
-              canvas, board.getVertex(prevPrevSelected!), 1.0 / 25, size);
+            canvas,
+            board.getVertex(prevPrevSelected!),
+            1.0 / 25,
+            size,
+          );
           drawVertex(
-              canvas, board.getVertex(prevPrevPrevSelected!), 1.0 / 25, size);
+            canvas,
+            board.getVertex(prevPrevPrevSelected!),
+            1.0 / 25,
+            size,
+          );
           drawLine(
             canvas,
             board.getVertex(prevPrevSelected!),
@@ -47,7 +61,12 @@ class BuilderPainter extends BoardPainter {
             size,
           );
         }
-        drawVertex(canvas, board.getVertex(prevSelected!), 1.0 / 25, size);
+        drawVertex(
+          canvas,
+          board.getVertex(prevSelected!),
+          1.0 / 25,
+          size,
+        );
         drawLine(
           canvas,
           board.getVertex(selected!),
@@ -55,7 +74,12 @@ class BuilderPainter extends BoardPainter {
           size,
         );
       }
-      drawVertex(canvas, board.getVertex(selected!), 1.0 / 25, size);
+      drawVertex(
+        canvas,
+        board.getVertex(selected!),
+        1.0 / 25,
+        size,
+      );
     }
 
     var eqs = board.constraints.equidistants;
@@ -64,7 +88,12 @@ class BuilderPainter extends BoardPainter {
       strokePaint.color =
           HSLColor.fromAHSL(1.0, 360.0 * i / eqs.length, 1.0, 0.5).toColor();
       for (var s in eqs[i].sides) {
-        drawLine(canvas, board.getVertex(s.c1), board.getVertex(s.c2), size);
+        drawLine(
+          canvas,
+          board.getVertex(s.c1),
+          board.getVertex(s.c2),
+          size,
+        );
       }
     }
 
@@ -85,24 +114,24 @@ class BuilderPainter extends BoardPainter {
     }
   }
 
-  void drawLine(Canvas canvas, Offset? o, Offset? p, Size size) {
+  void drawLine(Canvas canvas, DoublePoint? o, DoublePoint? p, Size size) {
     if (o == null || p == null) return;
     canvas.drawLine(
-      o.scale(size.width, size.height),
-      p.scale(size.width, size.height),
+      Offset(o.x * size.width, o.y * size.height),
+      Offset(p.x * size.width, p.y * size.height),
       strokePaint,
     );
   }
 
-  void drawVertex(Canvas canvas, Offset? o, double radius, Size size) {
+  void drawVertex(Canvas canvas, DoublePoint? o, double radius, Size size) {
     if (o == null) return;
     canvas.drawCircle(
-      o.scale(size.width, size.height),
+      Offset(o.x * size.width, o.y * size.height),
       size.width * radius,
       fillPaint,
     );
     canvas.drawCircle(
-      o.scale(size.width, size.height),
+      Offset(o.x * size.width, o.y * size.height),
       size.width * radius,
       strokePaint,
     );
