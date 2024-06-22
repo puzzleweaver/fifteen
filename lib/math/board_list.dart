@@ -39,6 +39,466 @@ class BoardList {
         (1, 1),
         (1, 1),
         (1, 1),
+        (1, 1),
+        (1, 1),
+        (1, 1),
+        (1, 1)
+      ],
+      convs: [
+        Conv(
+          fromA: 0,
+          toA: 1,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(0, -2),
+        ),
+        Conv(
+          fromA: 0,
+          toA: 3,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(-2, 0),
+        ),
+        Conv(
+          fromA: 1,
+          toA: 2,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(-2, 0),
+        ),
+        Conv(
+          fromA: 1,
+          toA: 8,
+          rot: IntPoint(-2, 0),
+          trans: IntPoint(2, 0),
+        ),
+        Conv(
+          fromA: 2,
+          toA: 3,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(0, 2),
+        ),
+        Conv(
+          fromA: 2,
+          toA: 4,
+          rot: IntPoint(-2, 0),
+          trans: IntPoint(0, -2),
+        ),
+        Conv(
+          fromA: 2,
+          toA: 9,
+          rot: IntPoint(-2, 0),
+          trans: IntPoint(2, 0),
+        ),
+        Conv(
+          fromA: 3,
+          toA: 7,
+          rot: IntPoint(-2, 0),
+          trans: IntPoint(0, -2),
+        ),
+        Conv(
+          fromA: 4,
+          toA: 6,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(0, -2),
+        ),
+        Conv(
+          fromA: 4,
+          toA: 7,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(-2, 0),
+        ),
+        Conv(
+          fromA: 4,
+          toA: 9,
+          rot: IntPoint(-2, 0),
+          trans: IntPoint(0, 2),
+        ),
+        Conv(
+          fromA: 5,
+          toA: 6,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(2, 0),
+        ),
+        Conv(
+          fromA: 5,
+          toA: 7,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(0, 2),
+        ),
+        Conv(
+          fromA: 6,
+          toA: 11,
+          rot: IntPoint(-2, 0),
+          trans: IntPoint(0, 2),
+        ),
+        Conv(
+          fromA: 8,
+          toA: 9,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(0, -2),
+        ),
+        Conv(
+          fromA: 8,
+          toA: 10,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(2, 0),
+        ),
+        Conv(
+          fromA: 9,
+          toA: 11,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(2, 0),
+        ),
+        Conv(
+          fromA: 10,
+          toA: 11,
+          rot: IntPoint(0, 2),
+          trans: IntPoint(0, -2),
+        )
+      ],
+      quads: [
+        Quad(
+          DoublePoint(0.500, 0.0455),
+          DoublePoint(0.303, 0.159),
+          DoublePoint(0.500, 0.273),
+          DoublePoint(0.697, 0.159),
+        ),
+        Quad(
+          DoublePoint(0.303, 0.159),
+          DoublePoint(0.106, 0.273),
+          DoublePoint(0.303, 0.386),
+          DoublePoint(0.500, 0.273),
+        ),
+        Quad(
+          DoublePoint(0.500, 0.273),
+          DoublePoint(0.303, 0.386),
+          DoublePoint(0.500, 0.500),
+          DoublePoint(0.697, 0.386),
+        ),
+        Quad(
+          DoublePoint(0.697, 0.159),
+          DoublePoint(0.500, 0.273),
+          DoublePoint(0.697, 0.386),
+          DoublePoint(0.894, 0.273),
+        ),
+        Quad(
+          DoublePoint(0.500, 0.500),
+          DoublePoint(0.500, 0.727),
+          DoublePoint(0.697, 0.614),
+          DoublePoint(0.697, 0.386),
+        ),
+        Quad(
+          DoublePoint(0.697, 0.614),
+          DoublePoint(0.697, 0.841),
+          DoublePoint(0.894, 0.727),
+          DoublePoint(0.894, 0.500),
+        ),
+        Quad(
+          DoublePoint(0.500, 0.727),
+          DoublePoint(0.500, 0.955),
+          DoublePoint(0.697, 0.841),
+          DoublePoint(0.697, 0.614),
+        ),
+        Quad(
+          DoublePoint(0.697, 0.386),
+          DoublePoint(0.697, 0.614),
+          DoublePoint(0.894, 0.500),
+          DoublePoint(0.894, 0.273),
+        ),
+        Quad(
+          DoublePoint(0.106, 0.500),
+          DoublePoint(0.303, 0.614),
+          DoublePoint(0.303, 0.386),
+          DoublePoint(0.106, 0.273),
+        ),
+        Quad(
+          DoublePoint(0.303, 0.614),
+          DoublePoint(0.500, 0.727),
+          DoublePoint(0.500, 0.500),
+          DoublePoint(0.303, 0.386),
+        ),
+        Quad(
+          DoublePoint(0.106, 0.727),
+          DoublePoint(0.303, 0.841),
+          DoublePoint(0.303, 0.614),
+          DoublePoint(0.106, 0.500),
+        ),
+        Quad(
+          DoublePoint(0.303, 0.841),
+          DoublePoint(0.500, 0.955),
+          DoublePoint(0.500, 0.727),
+          DoublePoint(0.303, 0.614),
+        )
+      ],
+      constraints: ConstraintSet(
+        coincidents: [
+          CoincidentBoardConstraint(
+            coords: {Coord(11, IntPoint(-1, 1)), Coord(6, IntPoint(-1, 1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {
+              Coord(9, IntPoint(-1, 1)),
+              Coord(4, IntPoint(-1, 1)),
+              Coord(11, IntPoint(1, 1)),
+              Coord(6, IntPoint(-1, -1))
+            },
+          ),
+          CoincidentBoardConstraint(
+            coords: {
+              Coord(9, IntPoint(1, 1)),
+              Coord(2, IntPoint(1, 1)),
+              Coord(4, IntPoint(-1, -1))
+            },
+          ),
+          CoincidentBoardConstraint(
+            coords: {
+              Coord(8, IntPoint(1, 1)),
+              Coord(1, IntPoint(1, 1)),
+              Coord(9, IntPoint(1, -1)),
+              Coord(2, IntPoint(-1, 1))
+            },
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(8, IntPoint(1, -1)), Coord(1, IntPoint(-1, 1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(10, IntPoint(-1, 1)), Coord(11, IntPoint(-1, -1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {
+              Coord(8, IntPoint(-1, 1)),
+              Coord(10, IntPoint(1, 1)),
+              Coord(9, IntPoint(-1, -1)),
+              Coord(11, IntPoint(1, -1))
+            },
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(8, IntPoint(-1, -1)), Coord(10, IntPoint(1, -1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(7, IntPoint(1, -1)), Coord(3, IntPoint(1, -1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {
+              Coord(4, IntPoint(1, -1)),
+              Coord(2, IntPoint(1, -1)),
+              Coord(7, IntPoint(-1, -1)),
+              Coord(3, IntPoint(1, 1))
+            },
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(5, IntPoint(-1, 1)), Coord(6, IntPoint(1, 1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(5, IntPoint(1, -1)), Coord(7, IntPoint(1, 1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {
+              Coord(5, IntPoint(-1, -1)),
+              Coord(4, IntPoint(1, 1)),
+              Coord(6, IntPoint(1, -1)),
+              Coord(7, IntPoint(-1, 1))
+            },
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(3, IntPoint(-1, -1)), Coord(0, IntPoint(1, -1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {Coord(0, IntPoint(-1, 1)), Coord(1, IntPoint(-1, -1))},
+          ),
+          CoincidentBoardConstraint(
+            coords: {
+              Coord(2, IntPoint(-1, -1)),
+              Coord(0, IntPoint(1, 1)),
+              Coord(1, IntPoint(1, -1)),
+              Coord(3, IntPoint(-1, 1))
+            },
+          )
+        ],
+        equidistants: [
+          EquidistantBoardConstraint(
+            sides: {
+              Side(
+                Coord(5, IntPoint(-1, 1)),
+                Coord(4, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(6, IntPoint(-1, 1)),
+                Coord(10, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(-1, 1)),
+                Coord(10, IntPoint(-1, -1)),
+              ),
+              Side(
+                Coord(9, IntPoint(-1, 1)),
+                Coord(11, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(9, IntPoint(-1, 1)),
+                Coord(10, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(9, IntPoint(1, 1)),
+                Coord(8, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(-1, -1)),
+                Coord(8, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(1, -1)),
+                Coord(8, IntPoint(-1, -1)),
+              ),
+              Side(
+                Coord(8, IntPoint(-1, -1)),
+                Coord(10, IntPoint(-1, -1)),
+              ),
+              Side(
+                Coord(8, IntPoint(1, -1)),
+                Coord(8, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(-1, -1)),
+                Coord(8, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(10, IntPoint(-1, -1)),
+                Coord(10, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(-1, 1)),
+                Coord(10, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(1, 1)),
+                Coord(8, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(-1, 1)),
+                Coord(9, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(8, IntPoint(1, 1)),
+                Coord(9, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(9, IntPoint(-1, 1)),
+                Coord(9, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(7, IntPoint(1, -1)),
+                Coord(4, IntPoint(1, -1)),
+              ),
+              Side(
+                Coord(5, IntPoint(1, -1)),
+                Coord(5, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(5, IntPoint(1, 1)),
+                Coord(4, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(4, IntPoint(-1, -1)),
+                Coord(4, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(4, IntPoint(1, -1)),
+                Coord(5, IntPoint(1, -1)),
+              ),
+              Side(
+                Coord(4, IntPoint(1, -1)),
+                Coord(4, IntPoint(-1, -1)),
+              ),
+              Side(
+                Coord(4, IntPoint(1, 1)),
+                Coord(4, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(5, IntPoint(1, -1)),
+                Coord(4, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(4, IntPoint(1, 1)),
+                Coord(5, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(4, IntPoint(1, -1)),
+                Coord(4, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(5, IntPoint(1, -1)),
+                Coord(7, IntPoint(1, -1)),
+              ),
+              Side(
+                Coord(5, IntPoint(-1, 1)),
+                Coord(6, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(5, IntPoint(-1, 1)),
+                Coord(5, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(1, -1)),
+                Coord(3, IntPoint(1, -1)),
+              ),
+              Side(
+                Coord(2, IntPoint(1, 1)),
+                Coord(0, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(1, 1)),
+                Coord(2, IntPoint(1, -1)),
+              ),
+              Side(
+                Coord(0, IntPoint(-1, -1)),
+                Coord(0, IntPoint(1, -1)),
+              ),
+              Side(
+                Coord(0, IntPoint(1, -1)),
+                Coord(0, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(1, -1)),
+                Coord(2, IntPoint(1, -1)),
+              ),
+              Side(
+                Coord(0, IntPoint(1, 1)),
+                Coord(0, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(-1, -1)),
+                Coord(0, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(-1, 1)),
+                Coord(1, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(-1, -1)),
+                Coord(0, IntPoint(1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(-1, 1)),
+                Coord(1, IntPoint(-1, 1)),
+              ),
+              Side(
+                Coord(0, IntPoint(1, 1)),
+                Coord(1, IntPoint(1, 1)),
+              )
+            },
+          )
+        ],
+      ),
+    ),
+    Board(
+      charts: [
+        (1, 1),
+        (1, 1),
+        (1, 1),
+        (1, 1),
+        (1, 1),
+        (1, 1),
+        (1, 1),
+        (1, 1),
         (1, 1)
       ],
       convs: [
@@ -633,124 +1093,124 @@ class BoardList {
       ],
       quads: [
         Quad(
-          DoublePoint(0.0541, 0.299),
-          DoublePoint(0.276, 0.363),
-          DoublePoint(0.491, 0.281),
-          DoublePoint(0.270, 0.217),
+          DoublePoint(0.0457, 0.273),
+          DoublePoint(0.273, 0.348),
+          DoublePoint(0.500, 0.273),
+          DoublePoint(0.273, 0.197),
         ),
         Quad(
-          DoublePoint(0.0541, 0.299),
-          DoublePoint(0.0627, 0.517),
-          DoublePoint(0.281, 0.509),
-          DoublePoint(0.276, 0.363),
+          DoublePoint(0.0457, 0.273),
+          DoublePoint(0.0456, 0.500),
+          DoublePoint(0.273, 0.500),
+          DoublePoint(0.273, 0.348),
         ),
         Quad(
-          DoublePoint(0.276, 0.363),
-          DoublePoint(0.281, 0.509),
+          DoublePoint(0.273, 0.348),
+          DoublePoint(0.273, 0.500),
           DoublePoint(0.500, 0.500),
-          DoublePoint(0.491, 0.281),
+          DoublePoint(0.500, 0.273),
         ),
         Quad(
-          DoublePoint(0.264, 0.0714),
-          DoublePoint(0.270, 0.217),
-          DoublePoint(0.491, 0.281),
-          DoublePoint(0.483, 0.0627),
+          DoublePoint(0.273, 0.0455),
+          DoublePoint(0.273, 0.197),
+          DoublePoint(0.500, 0.273),
+          DoublePoint(0.500, 0.0456),
         ),
         Quad(
-          DoublePoint(0.0455, 0.0800),
-          DoublePoint(0.0541, 0.299),
-          DoublePoint(0.270, 0.217),
-          DoublePoint(0.264, 0.0714),
+          DoublePoint(0.0458, 0.0455),
+          DoublePoint(0.0457, 0.273),
+          DoublePoint(0.273, 0.197),
+          DoublePoint(0.273, 0.0455),
         ),
         Quad(
-          DoublePoint(0.491, 0.281),
+          DoublePoint(0.500, 0.273),
           DoublePoint(0.500, 0.500),
-          DoublePoint(0.719, 0.491),
-          DoublePoint(0.637, 0.276),
+          DoublePoint(0.727, 0.500),
+          DoublePoint(0.652, 0.273),
         ),
         Quad(
-          DoublePoint(0.483, 0.0627),
-          DoublePoint(0.491, 0.281),
-          DoublePoint(0.637, 0.276),
-          DoublePoint(0.701, 0.0541),
+          DoublePoint(0.500, 0.0456),
+          DoublePoint(0.500, 0.273),
+          DoublePoint(0.652, 0.273),
+          DoublePoint(0.727, 0.0457),
         ),
         Quad(
-          DoublePoint(0.701, 0.0541),
-          DoublePoint(0.637, 0.276),
-          DoublePoint(0.719, 0.491),
-          DoublePoint(0.783, 0.270),
+          DoublePoint(0.727, 0.0457),
+          DoublePoint(0.652, 0.273),
+          DoublePoint(0.727, 0.500),
+          DoublePoint(0.803, 0.273),
         ),
         Quad(
-          DoublePoint(0.783, 0.270),
-          DoublePoint(0.719, 0.491),
-          DoublePoint(0.937, 0.483),
-          DoublePoint(0.929, 0.264),
+          DoublePoint(0.803, 0.273),
+          DoublePoint(0.727, 0.500),
+          DoublePoint(0.954, 0.500),
+          DoublePoint(0.954, 0.273),
         ),
         Quad(
-          DoublePoint(0.701, 0.0541),
-          DoublePoint(0.783, 0.270),
-          DoublePoint(0.929, 0.264),
-          DoublePoint(0.920, 0.0455),
+          DoublePoint(0.727, 0.0457),
+          DoublePoint(0.803, 0.273),
+          DoublePoint(0.954, 0.273),
+          DoublePoint(0.955, 0.0458),
         ),
         Quad(
-          DoublePoint(0.0627, 0.517),
-          DoublePoint(0.0714, 0.736),
-          DoublePoint(0.217, 0.730),
-          DoublePoint(0.281, 0.509),
+          DoublePoint(0.0456, 0.500),
+          DoublePoint(0.0455, 0.727),
+          DoublePoint(0.197, 0.727),
+          DoublePoint(0.273, 0.500),
         ),
         Quad(
-          DoublePoint(0.281, 0.509),
-          DoublePoint(0.363, 0.724),
-          DoublePoint(0.509, 0.719),
+          DoublePoint(0.273, 0.500),
+          DoublePoint(0.348, 0.727),
+          DoublePoint(0.500, 0.727),
           DoublePoint(0.500, 0.500),
         ),
         Quad(
-          DoublePoint(0.281, 0.509),
-          DoublePoint(0.217, 0.730),
-          DoublePoint(0.299, 0.946),
-          DoublePoint(0.363, 0.724),
+          DoublePoint(0.273, 0.500),
+          DoublePoint(0.197, 0.727),
+          DoublePoint(0.273, 0.954),
+          DoublePoint(0.348, 0.727),
         ),
         Quad(
-          DoublePoint(0.0714, 0.736),
-          DoublePoint(0.0800, 0.955),
-          DoublePoint(0.299, 0.946),
-          DoublePoint(0.217, 0.730),
+          DoublePoint(0.0455, 0.727),
+          DoublePoint(0.0455, 0.954),
+          DoublePoint(0.273, 0.954),
+          DoublePoint(0.197, 0.727),
         ),
         Quad(
-          DoublePoint(0.363, 0.724),
-          DoublePoint(0.299, 0.946),
-          DoublePoint(0.517, 0.937),
-          DoublePoint(0.509, 0.719),
+          DoublePoint(0.348, 0.727),
+          DoublePoint(0.273, 0.954),
+          DoublePoint(0.500, 0.954),
+          DoublePoint(0.500, 0.727),
         ),
         Quad(
           DoublePoint(0.500, 0.500),
-          DoublePoint(0.509, 0.719),
-          DoublePoint(0.724, 0.637),
-          DoublePoint(0.719, 0.491),
+          DoublePoint(0.500, 0.727),
+          DoublePoint(0.727, 0.652),
+          DoublePoint(0.727, 0.500),
         ),
         Quad(
-          DoublePoint(0.719, 0.491),
-          DoublePoint(0.724, 0.637),
-          DoublePoint(0.946, 0.701),
-          DoublePoint(0.937, 0.483),
+          DoublePoint(0.727, 0.500),
+          DoublePoint(0.727, 0.652),
+          DoublePoint(0.954, 0.727),
+          DoublePoint(0.954, 0.500),
         ),
         Quad(
-          DoublePoint(0.509, 0.719),
-          DoublePoint(0.517, 0.937),
-          DoublePoint(0.736, 0.929),
-          DoublePoint(0.730, 0.783),
+          DoublePoint(0.500, 0.727),
+          DoublePoint(0.500, 0.954),
+          DoublePoint(0.727, 0.954),
+          DoublePoint(0.727, 0.803),
         ),
         Quad(
-          DoublePoint(0.509, 0.719),
-          DoublePoint(0.730, 0.783),
-          DoublePoint(0.946, 0.701),
-          DoublePoint(0.724, 0.637),
+          DoublePoint(0.500, 0.727),
+          DoublePoint(0.727, 0.803),
+          DoublePoint(0.954, 0.727),
+          DoublePoint(0.727, 0.652),
         ),
         Quad(
-          DoublePoint(0.730, 0.783),
-          DoublePoint(0.736, 0.929),
-          DoublePoint(0.955, 0.920),
-          DoublePoint(0.946, 0.701),
+          DoublePoint(0.727, 0.803),
+          DoublePoint(0.727, 0.954),
+          DoublePoint(0.954, 0.955),
+          DoublePoint(0.954, 0.727),
         )
       ],
       constraints: ConstraintSet(

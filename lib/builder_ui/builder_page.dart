@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:fifteen/builder_ui/builder_painter.dart';
 import 'package:fifteen/game_ui/game_page.dart';
@@ -98,13 +99,18 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: () => rotateBy(-0.1),
+                  onPressed: () => rotateBy(-math.pi / 8),
                   child: Icon(Icons.rotate_right),
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: () => rotateBy(0.1),
+                  onPressed: () => rotateBy(math.pi / 8),
                   child: Icon(Icons.rotate_left),
+                ),
+                SizedBox.square(dimension: 8.0),
+                ElevatedButton(
+                  onPressed: prevSelectedCoord == null ? null : rotateVertical,
+                  child: Icon(Icons.vertical_align_center),
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
@@ -118,17 +124,18 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: linkCoords,
+                  onPressed: prevSelectedCoord == null ? null : linkCoords,
                   child: Icon(Icons.link),
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: linkSides,
+                  onPressed:
+                      prevPrevPrevSelectedCoord == null ? null : linkSides,
                   child: Icon(Icons.straighten),
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: () => setState(() => selectedCoord = null),
+                  onPressed: resetSelection,
                   child: Icon(Icons.cancel),
                 ),
                 SizedBox.square(dimension: 8.0),
@@ -305,6 +312,14 @@ class _BuilderPageState extends State<BuilderPage> {
     setState(() {});
   }
 
+  void rotateVertical() {
+    Coord? c1 = selectedCoord, c2 = prevSelectedCoord;
+    if (c1 == null || c2 == null) return;
+    DoublePoint axis = board.getVertex(c2) - board.getVertex(c1);
+    rotateBy(math.pi - atan2(axis.y, axis.x));
+    resetSelection();
+  }
+
   void linkCoords() {
     setBoard(
       Board(
@@ -340,7 +355,13 @@ class _BuilderPageState extends State<BuilderPage> {
         ),
       ),
     );
-    resetSelection();
+    // instead of resetting the whole selection, allow for chaining
+    setState(() {
+      selectedCoord = prevPrevSelectedCoord;
+      prevSelectedCoord = prevPrevPrevSelectedCoord;
+      prevPrevSelectedCoord = null;
+      prevPrevPrevSelectedCoord = null;
+    });
   }
 
   void solve() {

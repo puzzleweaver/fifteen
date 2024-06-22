@@ -51,7 +51,7 @@ class _ImageTestPageState extends State<ImageTestPage> {
         title: Text("Quad Shader Test Page"),
         actions: [
           IconButton(
-            icon: Icon(Icons.arrow_forward),
+            icon: Icon(quadTo ? Icons.arrow_downward : Icons.arrow_upward),
             onPressed: () => setState(() => quadTo = !quadTo),
           )
         ],
