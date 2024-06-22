@@ -23,7 +23,7 @@ class Game {
       len: len,
       permutation: [for (var i = 0; i < len; i++) i],
       dirs: [for (var i = 0; i < len; i++) Offsett.up],
-    ).shuffle(board);
+    ); //.shuffle(board);
   }
 
   Quad getQuad(List<Quad> subquads, int index) {

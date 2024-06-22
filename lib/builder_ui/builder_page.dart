@@ -174,14 +174,12 @@ class _BuilderPageState extends State<BuilderPage> {
     for (int i = 0; i < edgeCoords.length; i++) {
       double dist = (pos - board.getVertex(edgeCoords[i])).distance;
       if (dist <= 1.0 / 25) {
-        print("Tapped Vertex.");
         tapCoord(edgeCoords[i]);
         return;
       }
     }
     for (int i = 0; i < quads.length; i++) {
       if (quads[i].isInside(pos)) {
-        print("Tapped Space.");
         tapCoord(board.getCoord(i)!);
         return;
       }
@@ -194,7 +192,6 @@ class _BuilderPageState extends State<BuilderPage> {
       setState(() => selectedCoord = tappedCoord);
     } else {
       if (tappedCoord.isVertex && selectedCoord!.isVertex) {
-        print("Connecting $tappedCoord and $selectedCoord");
         setState(() {
           prevPrevPrevSelectedCoord = prevPrevSelectedCoord;
           prevPrevSelectedCoord = prevSelectedCoord;
@@ -288,7 +285,6 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void linkCoords() {
-    print("Coincident Constraint Attempted.");
     setBoard(
       Board(
         charts: board.charts,
@@ -357,9 +353,7 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void submit() {
-    print("------------------------");
     dev.log("$board");
-    print("------------------------");
   }
 
   void goToGamePage() {

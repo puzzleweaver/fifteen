@@ -52,7 +52,7 @@ class ImageTestPainter extends CustomPainter {
       Quad.unit()
           .sub(Offset(0.5, 0.5))
           .rot(r.nextDouble() * 3.141 - 3.141 / 2)
-          .mult(r.nextDouble())
+          .mult(0.7 + 0.1 * r.nextDouble())
           .add(Offset(0.5, 0.5))
           .dent(0.8 + 0.2 * r.nextDouble()),
       ctime,

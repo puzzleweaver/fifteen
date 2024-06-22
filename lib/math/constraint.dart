@@ -28,7 +28,6 @@ class ConstraintSet {
         Side? s1, s2;
         for (var coin in coincidents) {
           if (coin.hasA(a) && coin.hasA(b)) {
-            print("Got Here 1.");
             if (s1 == null) {
               s1 = Side(coin.coordWithA(a), coin.coordWithA(b));
             } else if (s2 == null) {
@@ -37,26 +36,20 @@ class ConstraintSet {
             }
           }
         }
-        print("Got Here 2. $s1, $s2");
         if (s1 != null && s2 != null) {
           // transpose s1 and s2 because FUCK YOU that's why :(
           (s1, s2) = (Side(s1.c1, s2.c1), Side(s1.c2, s2.c2));
-          print("Got Here 3. $s1, $s2");
           if (_sidePairValid(s1, s2)) {
-            print("Got Here 4. $s1, $s2");
             Conv result = convFromSidePair(s1, s2);
-            print("Conv Added! $result");
             ret.add(result);
           }
         }
-        print("Got Here 5");
       }
     }
     return ret;
   }
 
   static Conv convFromSidePair(Side s1, Side s2) {
-    print("FromSidePair entered.");
     if (!_sidePairInnerValid(s1, s2)) {
       Side ns1 = Side(s2.c1, s1.c2), ns2 = Side(s1.c1, s2.c2);
       s1 = ns1;
@@ -64,7 +57,6 @@ class ConstraintSet {
     }
     var rot =
         (s2.c2.hk - s2.c1.hk).asDir() * (s1.c2.hk - s1.c1.hk).asDir().inv();
-    print("Rot is $rot");
     return Conv(
       fromA: s1.c1.a,
       toA: s2.c1.a,
@@ -89,8 +81,6 @@ class ConstraintSet {
   }
 
   Board solve(Board board) {
-    print("Coincidents: $coincidents");
-    print("Equidistants: $equidistants");
     Board ret = board;
     for (int i = 0; i < 10; i++) {
       for (var coin in coincidents) {

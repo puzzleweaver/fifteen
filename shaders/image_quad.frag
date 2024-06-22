@@ -3,10 +3,6 @@
 out vec4 fragColor;
 
 uniform vec2 uSize;
-// uniform vec4 hs;
-// uniform vec4 ks;
-// uniform vec4 xs;
-// uniform vec4 ys;
 
 // quadrilateral inputs
 uniform vec2 H0, H1, H2, H3; // from
@@ -36,18 +32,7 @@ float alpha(vec2 x, vec2 p0, vec2 p1, vec2 p2, vec2 p3) {
 void main() {
     
     vec2 fragCoord = FlutterFragCoord();
-    
-    vec2 uv = (fragCoord) / uSize.xy;
-
-    // vec2 H0 = vec2(hs.x, ks.x);
-    // vec2 H1 = vec2(hs.y, ks.y);
-    // vec2 H2 = vec2(hs.z, ks.z);
-    // vec2 H3 = vec2(hs.w, ks.w);
-
-    // vec2 X0 = vec2(xs.x, ys.x);
-    // vec2 X1 = vec2(xs.y, ys.y);
-    // vec2 X2 = vec2(xs.z, ys.z);
-    // vec2 X3 = vec2(xs.w, ys.w);
+    vec2 uv = fragCoord / uSize.xy;
 
     float alpha01 = alpha(uv, H0, H1, H2, H3),
           alpha12 = alpha(uv, H1, H2, H3, H0),
