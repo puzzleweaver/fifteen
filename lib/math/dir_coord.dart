@@ -8,15 +8,15 @@ class DirCoord {
   DirCoord(this.coord, this.dir);
 
   Offsett rel(Offsett offset) {
-    return offset.rel(dir);
+    return offset * dir;
   }
 
   DirCoord rell(DirCoord prev) {
-    return DirCoord(coord, dir.rel(prev.dir));
+    return DirCoord(coord, dir * prev.dir);
   }
 
   @override
   String toString() {
-    return coord.toString();
+    return "DirCoord($coord, $dir),";
   }
 }

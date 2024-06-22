@@ -2,14 +2,13 @@ import 'dart:math';
 
 class Offsett {
   final int x, y;
-  final bool _isDir;
 
-  Offsett(this.x, this.y, {bool? isDir}) : _isDir = isDir ?? false;
+  Offsett(this.x, this.y);
 
-  static final up = Offsett(0, 1, isDir: true),
-      right = Offsett(1, 0, isDir: true),
-      down = Offsett(0, -1, isDir: true),
-      left = Offsett(-1, 0, isDir: true),
+  static final up = Offsett(0, 2),
+      right = Offsett(2, 0),
+      down = Offsett(0, -2),
+      left = Offsett(-2, 0),
       dirs = [up, right, down, left];
 
   static Offsett randomDir(Random r) {
@@ -25,72 +24,67 @@ class Offsett {
     return left;
   }
 
-  Offsett rel(Offsett dir) {
-    assert(dir._isDir);
-    return Offsett(
-      dir.y * x + dir.x * y,
-      dir.y * y - dir.x * x,
-      isDir: dir._isDir && _isDir,
-    );
-  }
-
   Offsett invrel(Offsett dir) {
-    assert(dir._isDir);
     Offsett ret = Offsett(
-      dir.y * x - dir.x * y,
-      dir.y * y + dir.x * x,
-      isDir: dir._isDir && _isDir,
+      (dir.y * x - dir.x * y) ~/ 2,
+      (dir.y * y + dir.x * x) ~/ 2,
     );
-    assert(ret.equals(rel(dir.inv())));
+    assert(ret == this * dir.inv());
     return ret;
   }
 
   Offsett inv() {
-    assert(_isDir);
-    return Offsett(-x, y, isDir: _isDir);
+    return Offsett(-x, y);
   }
 
-  Offsett add(Offsett o) {
+  Offsett operator +(Offsett o) {
     return Offsett(x + o.x, y + o.y);
   }
 
-  Offsett sub(Offsett o) {
+  Offsett operator -(Offsett o) {
     return Offsett(x - o.x, y - o.y);
   }
 
-  Offsett mult(int d) {
-    return Offsett(x * d, y * d);
+  Offsett operator *(Object other) {
+    if (other is int) {
+      return Offsett(x * other, y * other);
+    } else if (other is Offsett) {
+      return Offsett(
+        (other.y * x + other.x * y) ~/ 2,
+        (other.y * y - other.x * x) ~/ 2,
+      );
+    }
+    throw UnimplementedError("Offsett Operator *");
   }
 
-  Offsett neg() {
+  Offsett operator -() {
     return Offsett(-x, -y);
   }
 
   @override
   String toString() {
-    if (_isDir) {
-      if (x == 0 && y == 1) return "up";
-      if (x == 1 && y == 0) return "right";
-      if (x == 0 && y == -1) return "down";
-      if (x == -1 && y == 0) return "left";
-      return "DIR($x, $y)";
-    }
-    return "($x, $y)";
+    return "Offsett($x, $y)";
   }
 
   int taxi() {
     return x.abs() + y.abs();
   }
 
-  int dot(Offsett dir) {
-    return (x * dir.x + y * dir.y);
+  @override
+  bool operator ==(Object other) {
+    if (other is! Offsett) return false;
+    return x == other.x && y == other.y;
   }
 
-  int wedge(Offsett dir) {
-    return (x * dir.y - y * dir.x);
-  }
+  @override
+  int get hashCode => x * 10 + y;
 
-  bool equals(Offsett? o) {
-    return x == o?.x && y == o?.y;
+  Offsett asDir() {
+    Offsett ret = Offsett(
+      2 * (x < 0 ? -1 : (x > 0 ? 1 : 0)),
+      2 * (y < 0 ? -1 : (y > 0 ? 1 : 0)),
+    );
+    assert(ret == up || ret == right || ret == down || ret == left);
+    return ret;
   }
 }

@@ -50,7 +50,7 @@ class Game {
     List<Offsett> newDirs = dirs.toList();
     newPermutation[i] = permutation[j];
     newPermutation[j] = permutation[i];
-    newDirs[i] = dirs[j].rel(dir);
+    newDirs[i] = dirs[j] * dir;
     newDirs[j] = dirs[i].invrel(dir);
     return Game(
       len: len,
@@ -63,7 +63,7 @@ class Game {
     final Coord? c = board.getCoord(index);
     if (c != null) {
       for (Offsett dir in Offsett.dirs) {
-        DirCoord? result = board.simpleTransform(c, dir);
+        DirCoord? result = board.step(c, dir);
         if (result != null) {
           int resultIndex = board.getIndex(result.coord);
           if (isSpace(resultIndex)) {
@@ -83,7 +83,7 @@ class Game {
       int spaceIndex = ret.getSpace();
       Coord spaceCoord = board.getCoord(spaceIndex)!;
       Offsett dir = Offsett.randomDir(Random());
-      DirCoord? result = board.simpleTransform(spaceCoord, dir);
+      DirCoord? result = board.step(spaceCoord, dir);
       if (result != null) {
         int resultIndex = board.getIndex(result.coord);
         ret = ret.move(spaceIndex, resultIndex, result.dir);

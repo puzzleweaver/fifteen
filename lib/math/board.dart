@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fifteen/math/constraint.dart';
 import 'package:fifteen/math/conv.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/dir_coord.dart';
@@ -11,14 +12,21 @@ class Board {
   final List<(int, int)> charts;
   final List<Conv> convs;
   final List<Quad> quads;
+  final ConstraintSet constraints;
 
-  Board({required this.charts, required this.convs, required this.quads});
+  Board({
+    required this.charts,
+    required this.convs,
+    required this.quads,
+    required this.constraints,
+  });
 
   static Board createNew() {
     return Board(
       charts: [],
       convs: [],
       quads: [],
+      constraints: ConstraintSet.createNew(),
     );
   }
 
@@ -36,6 +44,7 @@ class Board {
               ),
             ),
       ],
+      constraints: constraints,
     );
   }
 
@@ -53,25 +62,34 @@ class Board {
     return ret;
   }
 
-  List<Offset> getVertices() {
-    List<Offset> ret = [];
+  List<Coord> getEdgeCoords() {
+    List<Coord> ret = [];
     var total = 0;
     for (int a = 0; a < charts.length; a++) {
       var (n, m) = charts[a];
       for (int i = 0; i < n; i++) {
-        double s = i / n;
-        ret.add(Offset.lerp(quads[a].p1, quads[a].p2, s)!);
-        ret.add(Offset.lerp(quads[a].p3, quads[a].p4, s)!);
+        ret.add(Coord(a, Offsett(i * 2 - 1, -1)));
+        ret.add(Coord(a, Offsett(i * 2 + 1, 2 * n - 1)));
       }
       for (int j = 0; j < m; j++) {
-        double s = j / m;
-        ret.add(Offset.lerp(quads[a].p2, quads[a].p3, s)!);
-        ret.add(Offset.lerp(quads[a].p4, quads[a].p1, s)!);
+        ret.add(Coord(a, Offsett(-1, j * 2 + 1)));
+        ret.add(Coord(a, Offsett(2 * m - 1, j * 2 - 1)));
       }
       total += 2 * (n + m);
     }
     assert(ret.length == total);
     return ret;
+  }
+
+  Offset getVertex(Coord c) {
+    Quad quad = quads[c.a];
+    var (n, m) = charts[c.a];
+    double s = (c.hk.x + 1) / (n) / 2, t = (c.hk.y + 1) / (m) / 2;
+    return Offset.lerp(
+      Offset.lerp(quad.p1, quad.p2, t)!,
+      Offset.lerp(quad.p4, quad.p3, t)!,
+      s,
+    )!;
   }
 
   Coord? getCoord(int i) {
@@ -80,7 +98,7 @@ class Board {
       int n = charts[a].$1, m = charts[a].$2;
       for (int h = 0; h < n; h++) {
         for (int k = 0; k < m; k++) {
-          if (index == i) return Coord(a, Offsett(h, k));
+          if (index == i) return Coord(a, Offsett(2 * h, 2 * k));
           index++;
         }
       }
@@ -94,8 +112,8 @@ class Board {
       int n = charts[a].$1, m = charts[a].$2;
       ret += n * m;
     }
-    ret += (c.hk.y + c.hk.x * charts[c.a].$2).toInt();
-    assert(c.equals(getCoord(ret)!));
+    ret += (c.hk.y / 2 + c.hk.x / 2 * charts[c.a].$2).toInt();
+    assert(c == getCoord(ret)!);
     return ret;
   }
 
@@ -107,64 +125,14 @@ class Board {
     return ret;
   }
 
-  static Board test() {
-    return Board(
-      charts: [(2, 2), (2, 2), (2, 2)],
-      convs: [
-        Conv(fromA: 0, toA: 1, trans: Offsett(0, -2), rot: Offsett.up),
-        Conv(fromA: 0, toA: 2, trans: Offsett(-2, 0), rot: Offsett.up),
-        Conv(fromA: 1, toA: 2, trans: Offsett(0, 3), rot: Offsett.right),
-      ],
-      quads: [
-        Quad(
-          Offset(-0.8426729364919308, -0.5664551916030472),
-          Offset(-0.05897370410395686, -1),
-          Offset(-0.01268553244599202, 0.0005059164077277634),
-          Offset(-0.8680440013839179, 0.3481024287495134),
-        ).mult(0.5).add(Offset(0.5, 0.5)),
-        Quad(
-          Offset(-0.05897370410395686, -1),
-          Offset(0.8680440013839185, -0.5155889979320708),
-          Offset(0.8173018715999445, 0.5176564076527692),
-          Offset(-0.01268553244599202, 0.0005059164077278466),
-        ).mult(0.5).add(Offset(0.5, 0.5)),
-        Quad(
-          Offset(-0.8680440013839179, 0.34810242874951347),
-          Offset(-0.01268553244599202, 0.0005059164077278466),
-          Offset(0.8173018715999444, 0.5176564076527692),
-          Offset(-0.012685532445992576, 0.9999999999999999),
-        ).mult(0.5).add(Offset(0.5, 0.5)),
-      ],
-    );
-  }
-
-  static Board test2() {
-    return Board.createNew();
-  }
-
-  static Board rect(int n, int m) {
-    return Board(
-      charts: [(n, m)],
-      convs: [],
-      quads: [
-        Quad(
-          Offset(0.0, 0.0),
-          Offset(1.0, 0.0),
-          Offset(1.0, 1.0),
-          Offset(0.0, 1.0),
-        ),
-      ],
-    );
-  }
-
   bool isValid(Coord? c) {
     if (c == null) return false;
     int w = charts[c.a].$1, h = charts[c.a].$2;
-    return c.hk.x >= 0 && c.hk.y >= 0 && c.hk.x < w && c.hk.y < h;
+    return c.hk.x >= 0 && c.hk.y >= 0 && c.hk.x < 2 * w && c.hk.y < 2 * h;
   }
 
-  DirCoord? simpleTransform(Coord c, Offsett o) {
-    Coord? nc = Coord(c.a, c.hk.add(o)), tmp;
+  DirCoord? step(Coord c, Offsett o) {
+    Coord? nc = Coord(c.a, c.hk + o), tmp;
     if (isValid(nc)) return DirCoord(nc, Offsett.up);
     for (Conv conv in [...convs, ...convs.map((conv) => conv.inv())]) {
       tmp = conv.get(nc);
@@ -175,6 +143,37 @@ class Board {
 
   @override
   String toString() {
-    return "Board(charts: $charts, convs: $convs, quads: $quads)";
+    return "Board(charts: $charts, convs: $convs, quads: $quads, constraints: $constraints,)";
+  }
+
+  Board withoutChart(int a) {
+    assert(a >= 0 && a < charts.length);
+    return Board(
+      charts: charts..removeAt(a),
+      quads: quads..removeAt(a),
+      convs: convs..removeWhere((conv) => conv.fromA == a || conv.toA == a),
+      constraints: constraints.withoutChart(a),
+    );
+  }
+
+  Board setCoordLocation(Coord c, Offset o) {
+    Quad quad = quads[c.a];
+    var (n, m) = charts[c.a];
+    double x = 0.5 * (c.hk.x + 1) / n, y = 0.5 * (c.hk.y + 1) / m;
+    Offset dif = o - getVertex(c);
+    Quad newQuad = Quad(
+      quad.p1 + dif * (1 - x) * (1 - y),
+      quad.p2 + dif * (1 - x) * y,
+      quad.p3 + dif * x * y,
+      quad.p4 + dif * x * (1 - y),
+    );
+    return Board(
+      charts: charts,
+      quads: [
+        for (int a = 0; a < quads.length; a++) a == c.a ? newQuad : quads[a]
+      ],
+      convs: convs,
+      constraints: constraints,
+    );
   }
 }

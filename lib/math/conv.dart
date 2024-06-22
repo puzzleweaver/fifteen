@@ -15,21 +15,9 @@ class Conv {
   })  : _rot = rot,
         _trans = trans;
 
-  static bool _innerValid(Side s1, Side s2) {
-    return s1.colinear() &&
-        s2.colinear() &&
-        !s1.sameChart(s2) &&
-        s1.len() == s2.len();
-  }
-
-  bool valid(Side s1, Side s2) {
-    return _innerValid(s1, s2) ||
-        _innerValid(Side(s2.c1, s1.c2), Side(s1.c1, s2.c2));
-  }
-
   Coord? get(Coord? c) {
     if (c == null || c.a != fromA) return null;
-    return Coord(toA, c.hk.rel(_rot).add(_trans));
+    return Coord(toA, c.hk * _rot + _trans);
   }
 
   Conv inv() {
@@ -38,12 +26,12 @@ class Conv {
       fromA: toA,
       toA: fromA,
       rot: newRot,
-      trans: _trans.neg().rel(newRot),
+      trans: -_trans * newRot,
     );
   }
 
   Offsett getDir(Offsett o) {
-    return o.rel(_rot);
+    return o * _rot;
   }
 
   Side? gettt(Side side) {
@@ -57,6 +45,6 @@ class Conv {
 
   @override
   String toString() {
-    return "Conv(from: $fromA, toA: $toA, rot: $_rot, trans: $_trans)";
+    return "Conv(fromA: $fromA, toA: $toA, rot: $_rot, trans: $_trans,)";
   }
 }

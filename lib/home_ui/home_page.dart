@@ -4,6 +4,7 @@ import 'package:fifteen/builder_ui/builder_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/game_ui/game_page.dart';
+import 'package:fifteen/math/board_list.dart';
 import 'package:fifteen/shader_test_ui/image_test_page.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
 import 'package:flutter/material.dart';
@@ -21,14 +22,14 @@ class _HomePageState extends State<HomePage> {
 
     var scrollController = ScrollController();
 
-    var gameButtons = [
-      getButton(Board.rect(3, 3), "assets/images/img3.png", appState),
-      getButton(Board.rect(4, 4), "assets/images/img3.png", appState),
-      getButton(Board.rect(5, 5), "assets/images/img3.png", appState),
-      getButton(Board.rect(20, 20), "assets/images/img3.png", appState),
-      getButton(Board.test(), "assets/images/img3.png", appState),
-      getButton(Board.test2(), "assets/images/img3.png", appState),
+    var imgs = [
+      "assets/images/img3.png",
+      "assets/images/img4.png",
     ];
+    Random r = Random(10000);
+    var gameButtons = BoardList.all.map(
+      (board) => getButton(board, imgs[r.nextInt(imgs.length)], appState),
+    );
 
     var testButtons = [
       ElevatedButton(

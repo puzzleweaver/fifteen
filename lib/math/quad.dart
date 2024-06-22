@@ -45,10 +45,10 @@ class Quad {
   }
 
   Quad rel(Offsett dir) {
-    if (dir.equals(Offsett.up)) return this;
-    if (dir.equals(Offsett.right)) return Quad(p4, p1, p2, p3);
-    if (dir.equals(Offsett.down)) return Quad(p3, p4, p1, p2);
-    if (dir.equals(Offsett.left)) return Quad(p2, p3, p4, p1);
+    if (dir == Offsett.up) return this;
+    if (dir == Offsett.right) return Quad(p4, p1, p2, p3);
+    if (dir == Offsett.down) return Quad(p3, p4, p1, p2);
+    if (dir == Offsett.left) return Quad(p2, p3, p4, p1);
     return this;
   }
 

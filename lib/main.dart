@@ -49,8 +49,8 @@ class FifteenApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  Board board = Board.rect(4, 4);
-  Game game = Game.fromBoard(Board.rect(4, 4));
+  Board board = Board.createNew();
+  Game game = Game(len: 0, permutation: [], dirs: []);
 
   void setBoard(Board board) {
     this.board = board;
