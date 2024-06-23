@@ -4,13 +4,10 @@ import 'package:fifteen/shared_ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
 class BuilderPainter extends BoardPainter {
-  final Coord? selected, prevSelected, prevPrevSelected, prevPrevPrevSelected;
+  final List<Coord> selectedCoords;
   BuilderPainter({
     required super.board,
-    required this.selected,
-    required this.prevSelected,
-    required this.prevPrevSelected,
-    required this.prevPrevPrevSelected,
+    required this.selectedCoords,
   });
 
   @override
@@ -47,9 +44,8 @@ class BuilderPainter extends BoardPainter {
 
     // render vertices
     for (Coord c in board.getEdgeCoords()) {
-      fillPaint.color = c == selected || c == prevSelected
-          ? Colors.transparent
-          : Color(0x8822e8f0);
+      fillPaint.color =
+          selectedCoords.contains(c) ? Colors.transparent : Color(0x8822e8f0);
       drawVertex(
         canvas,
         board.getVertex(c),
@@ -60,48 +56,24 @@ class BuilderPainter extends BoardPainter {
 
     // render selected stuff
     fillPaint.color = Color(0x88f0e822);
-    if (selected != null) {
-      if (prevSelected != null) {
-        if (prevPrevSelected != null && prevPrevPrevSelected != null) {
-          drawVertex(
-            canvas,
-            board.getVertex(prevPrevSelected!),
-            1.0 / 25,
-            size,
-          );
-          drawVertex(
-            canvas,
-            board.getVertex(prevPrevPrevSelected!),
-            1.0 / 25,
-            size,
-          );
-          drawLine(
-            canvas,
-            board.getVertex(prevPrevSelected!),
-            board.getVertex(prevPrevPrevSelected!),
-            size,
-            strokePaint,
-          );
-        }
-        drawVertex(
-          canvas,
-          board.getVertex(prevSelected!),
-          1.0 / 25,
-          size,
-        );
-        drawLine(
-          canvas,
-          board.getVertex(selected!),
-          board.getVertex(prevSelected!),
-          size,
-          strokePaint,
-        );
-      }
+    for (Coord coord in selectedCoords) {
+      // selected vertices
       drawVertex(
         canvas,
-        board.getVertex(selected!),
+        board.getVertex(coord),
         1.0 / 25,
         size,
+      );
+    }
+    for (int i = 0; 2 * i + 1 < selectedCoords.length; i++) {
+      // selected sides
+      Coord c1 = selectedCoords[2 * i], c2 = selectedCoords[2 * i + 1];
+      drawLine(
+        canvas,
+        board.getVertex(c1),
+        board.getVertex(c2),
+        size,
+        strokePaint,
       );
     }
 

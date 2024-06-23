@@ -24,10 +24,7 @@ class BuilderPage extends StatefulWidget {
 
 class _BuilderPageState extends State<BuilderPage> {
   // State Variables for BuilderPage
-  Coord? selectedCoord;
-  Coord? prevSelectedCoord;
-  Coord? prevPrevSelectedCoord;
-  Coord? prevPrevPrevSelectedCoord;
+  List<Coord> selectedCoords = [];
 
   List<Board> history = [];
 
@@ -64,10 +61,7 @@ class _BuilderPageState extends State<BuilderPage> {
                   child: CustomPaint(
                     painter: BuilderPainter(
                       board: board,
-                      selected: selectedCoord,
-                      prevSelected: prevSelectedCoord,
-                      prevPrevSelected: prevPrevSelectedCoord,
-                      prevPrevPrevSelected: prevPrevPrevSelectedCoord,
+                      selectedCoords: selectedCoords,
                     ),
                   ),
                 ),
@@ -84,7 +78,7 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: delete,
+                  onPressed: selectedCoords.isEmpty ? null : delete,
                   child: Icon(Icons.remove),
                 ),
                 SizedBox.square(dimension: 8.0),
@@ -109,7 +103,8 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: prevSelectedCoord == null ? null : rotateVertical,
+                  onPressed:
+                      (selectedCoords.length < 2) ? null : rotateVertical,
                   child: Icon(Icons.vertical_align_center),
                 ),
                 SizedBox.square(dimension: 8.0),
@@ -124,13 +119,12 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: prevSelectedCoord == null ? null : linkCoords,
+                  onPressed: selectedCoords.length < 2 ? null : linkCoords,
                   child: Icon(Icons.link),
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed:
-                      prevPrevPrevSelectedCoord == null ? null : linkSides,
+                  onPressed: selectedCoords.length < 4 ? null : linkSides,
                   child: Icon(Icons.straighten),
                 ),
                 SizedBox.square(dimension: 8.0),
@@ -159,10 +153,7 @@ class _BuilderPageState extends State<BuilderPage> {
 
   void resetSelection() {
     setState(() {
-      selectedCoord = null;
-      prevSelectedCoord = null;
-      prevPrevSelectedCoord = null;
-      prevPrevPrevSelectedCoord = null;
+      selectedCoords = [];
     });
   }
 
@@ -196,38 +187,36 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void tapCoord(Coord tappedCoord) {
-    if (selectedCoord == null) {
-      setState(() => selectedCoord = tappedCoord);
+    if (selectedCoords.isEmpty) {
+      setState(() => selectedCoords = [tappedCoord]);
     } else {
-      if (tappedCoord.isVertex && selectedCoord!.isVertex) {
+      if (tappedCoord.isVertex && selectedCoords[0].isVertex) {
         setState(() {
-          prevPrevPrevSelectedCoord = prevPrevSelectedCoord;
-          prevPrevSelectedCoord = prevSelectedCoord;
-          prevSelectedCoord = selectedCoord;
-          selectedCoord = tappedCoord;
+          selectedCoords = [tappedCoord, ...selectedCoords];
         });
       }
     }
   }
 
   void tapNothing(DoublePoint where) {
-    if (selectedCoord != null) {
-      if (selectedCoord?.isVertex == false) {
+    if (selectedCoords.isNotEmpty) {
+      if (!selectedCoords[0].isVertex) {
         setBoard(
-          mapBoard(board, (o) => (o - board.getVertex(selectedCoord!) + where)),
+          mapBoard(
+            board,
+            (o) => o - board.getVertex(selectedCoords[0]) + where,
+          ),
         );
       } else {
-        setBoard(
-          board.setCoordLocation(selectedCoord!, where),
-        );
+        setBoard(board.setCoordLocation(selectedCoords[0], where));
       }
     }
     resetSelection();
   }
 
   void delete() {
-    if (selectedCoord?.isVertex == false) {
-      setBoard(widget.appState.board.withoutChart(selectedCoord!.a));
+    if (selectedCoords[0].isVertex == false) {
+      setBoard(widget.appState.board.withoutChart(selectedCoords[0].a));
       resetSelection();
     }
   }
@@ -276,9 +265,8 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   bool isSelected(int a) {
-    Coord? coord = selectedCoord;
-    if (coord == null) return true;
-    return selectedCoord == null || getConnectedAs(coord.a).contains(a);
+    if (selectedCoords.isEmpty) return true;
+    return getConnectedAs(selectedCoords[0].a).contains(a);
   }
 
   DoublePoint getQuadCenter(Quad q) {
@@ -313,54 +301,50 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void rotateVertical() {
-    Coord? c1 = selectedCoord, c2 = prevSelectedCoord;
-    if (c1 == null || c2 == null) return;
+    Coord c1 = selectedCoords[0], c2 = selectedCoords[1];
     DoublePoint axis = board.getVertex(c2) - board.getVertex(c1);
     rotateBy(math.pi - atan2(axis.y, axis.x));
     resetSelection();
   }
 
   void linkCoords() {
-    setBoard(
-      Board(
-        charts: board.charts,
-        convs: board.convs,
-        quads: board.quads,
-        constraints: board.constraints.addCoincident(
+    Board nboard = board;
+    for (int i = 1; i < selectedCoords.length; i++) {
+      nboard = Board(
+        charts: nboard.charts,
+        convs: nboard.convs,
+        quads: nboard.quads,
+        constraints: nboard.constraints.addCoincident(
           CoincidentBoardConstraint.createNew(
-            prevSelectedCoord,
-            selectedCoord,
+            selectedCoords[i],
+            selectedCoords[0],
           ),
         ),
-      ),
-    );
+      );
+    }
+    setBoard(nboard);
     resetSelection();
   }
 
   void linkSides() {
-    if (selectedCoord == null ||
-        prevSelectedCoord == null ||
-        prevPrevSelectedCoord == null ||
-        prevPrevPrevSelectedCoord == null) return;
-    setBoard(
-      Board(
-        charts: board.charts,
-        convs: board.convs,
-        quads: board.quads,
-        constraints: board.constraints.addEquidistant(
+    Board nboard = board;
+    for (int i = 2; i + 1 < selectedCoords.length; i += 2) {
+      nboard = Board(
+        charts: nboard.charts,
+        convs: nboard.convs,
+        quads: nboard.quads,
+        constraints: nboard.constraints.addEquidistant(
           EquidistantBoardConstraint.createNew(
-            Side(prevSelectedCoord!, selectedCoord!),
-            Side(prevPrevSelectedCoord!, prevPrevPrevSelectedCoord!),
+            Side(selectedCoords[1], selectedCoords[0]),
+            Side(selectedCoords[i], selectedCoords[i + 1]),
           ),
         ),
-      ),
-    );
+      );
+    }
+    setBoard(nboard);
     // instead of resetting the whole selection, allow for chaining
     setState(() {
-      selectedCoord = prevPrevSelectedCoord;
-      prevSelectedCoord = prevPrevPrevSelectedCoord;
-      prevPrevSelectedCoord = null;
-      prevPrevPrevSelectedCoord = null;
+      selectedCoords = [selectedCoords[0], selectedCoords[1]];
     });
   }
 
