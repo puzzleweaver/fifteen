@@ -5,6 +5,7 @@ import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/game_ui/game_page.dart';
 import 'package:fifteen/math/board_list.dart';
+import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shader_test_ui/image_test_page.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +128,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void goToSettings() {
-    print("TODO LMAO XD");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsPage()),
+    );
   }
 
   void goToBuilder(MyAppState appState) {
