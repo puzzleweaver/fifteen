@@ -32,8 +32,6 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   FragmentShader? shader;
   ui.Image? image;
-  bool solvedGame = false;
-  bool showedDialog = false;
 
   @override
   void initState() {
@@ -74,36 +72,7 @@ class _GamePageState extends State<GamePage> {
               child: _body(),
             ),
             SizedBox.square(dimension: 8.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(""),
-                ElevatedButton(
-                  onPressed: () {
-                    widget.appState.shuffle();
-                    setState(() {}); // trigger repaint
-                  },
-                  child: Text("Shuffle"),
-                ),
-                ElevatedButton(
-                  onPressed: goToBuilder,
-                  child: Text("Build"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    widget.appState.solveGame();
-                    setState(() {});
-                  },
-                  child: Text("Solve"),
-                ),
-                GamePreviewWidget(
-                  imageAsset: widget.imagePath,
-                  board: widget.appState.board,
-                  dimension: 100,
-                ),
-              ],
-            ),
+            _buttonsRow(),
           ],
         ),
       ),
@@ -128,15 +97,58 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
+  Widget _buttonsRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            widget.appState.shuffle();
+            setState(() {}); // trigger repaint
+          },
+          child: Text("Shuffle"),
+        ),
+        ElevatedButton(
+          onPressed: goToBuilder,
+          child: Text("Build"),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            widget.appState.solveGame();
+            setState(() {});
+          },
+          child: Text("Solve"),
+        ),
+        GamePreviewWidget(
+          imageAsset: widget.imagePath,
+          board: widget.appState.board,
+          dimension: 100,
+        ),
+      ],
+    );
+  }
+
   void _checkForDialog() {
-    if (!showedDialog && widget.appState.game.isSolved()) {
-      solvedGame = true;
-      if (!showedDialog) {
-        showDialog(
-          context: context,
-          builder: (context) => _dialog(),
-        );
-      }
+    if (widget.appState.game.isSolved()) {
+      showGeneralDialog(
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
+          final curvedValue = Curves.easeOut.transform(a1.value) - 1.0;
+          return Transform(
+            transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
+            child: Opacity(
+              opacity: a1.value,
+              child: _dialog(),
+            ),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 1000),
+        barrierDismissible: false,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) => Container(),
+      );
     }
   }
 
@@ -149,11 +161,6 @@ class _GamePageState extends State<GamePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("Back"),
-              ),
-              SizedBox.square(dimension: 8.0),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);

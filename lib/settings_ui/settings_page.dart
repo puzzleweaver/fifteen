@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -26,15 +28,48 @@ class SettingsPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Gimme Ur Money >:("),
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.attach_money),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => _supportDialog(),
+                      );
+                    },
+                    label: Text("Support the Dev"),
                   )
                 ],
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _supportDialog() {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("Gimme Money", style: TextStyle(fontSize: 28)),
+          Row(
+            children: [
+              Checkbox(value: true, onChanged: (value) => {}),
+              Text("Interstitial Ads"),
+            ],
+          ),
+          Row(
+            children: [
+              Text("Ad Chance"),
+              Slider(value: Random().nextDouble(), onChanged: (value) => {}),
+            ],
+          ),
+          ElevatedButton(
+            onPressed: () => print("THANKS"),
+            child: Text("Donate :)"),
+          ),
+        ],
       ),
     );
   }

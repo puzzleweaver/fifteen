@@ -68,6 +68,8 @@ class BuilderPainter extends BoardPainter {
         size,
       );
     }
+    strokePaint.strokeWidth = 6;
+    strokePaint.color = Color(0x44000000);
     for (int i = 0; 2 * i + 1 < selectedCoords.length; i++) {
       // selected sides
       Coord c1 = selectedCoords[2 * i], c2 = selectedCoords[2 * i + 1];
