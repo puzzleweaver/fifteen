@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(Board.createNew());
+          appState.init(Board.createNew());
           return BuilderPage(
             appState: appState,
           );
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(board);
+          appState.init(board);
           return GamePage(
             imagePath: imgAsset,
             shaderPath: "shaders/image_quad.frag",

@@ -17,17 +17,44 @@ class Game {
     required this.rotation,
   });
 
-  static Game fromBoard(Board board) {
-    int len = board.countSubquads();
+  static Game _fromLen(int len) {
     return Game(
       len: len,
       permutation: [for (var i = 0; i < len; i++) i],
       rotation: [for (var i = 0; i < len; i++) IntPoint.up],
-    ); //.shuffle(board);
+    );
   }
 
-  bool isSolved(int index) {
+  static Game fromBoard(Board board) {
+    return _fromLen(board.countSubquads());
+  }
+
+  Game solve() {
+    return _fromLen(len);
+  }
+
+  Game shuffle(Board board) {
+    Game ret = this;
+    int len = board.countSubquads() * 60;
+    for (int i = 0; i < len; i++) {
+      int spaceIndex = ret.getSpace();
+      Coord spaceCoord = board.getCoord(spaceIndex)!;
+      IntPoint dir = IntPoint.randomDir(Random());
+      DirCoord? result = board.step(spaceCoord, dir);
+      if (result != null) {
+        int resultIndex = board.getIndex(result.coord);
+        ret = ret.move(spaceIndex, resultIndex, result.dir);
+      }
+    }
+    return ret;
+  }
+
+  bool isInPlace(int index) {
     return permutation[index] == index && rotation[index] == IntPoint.up;
+  }
+
+  bool isSolved() {
+    return [for (int i = 0; i < len; i++) i].every(isInPlace);
   }
 
   Quad getQuad(List<Quad> subquads, int index) {
@@ -77,22 +104,5 @@ class Game {
       }
     }
     return this;
-  }
-
-  //
-  Game shuffle(Board board) {
-    Game ret = this;
-    int len = board.countSubquads() * 60;
-    for (int i = 0; i < len; i++) {
-      int spaceIndex = ret.getSpace();
-      Coord spaceCoord = board.getCoord(spaceIndex)!;
-      IntPoint dir = IntPoint.randomDir(Random());
-      DirCoord? result = board.step(spaceCoord, dir);
-      if (result != null) {
-        int resultIndex = board.getIndex(result.coord);
-        ret = ret.move(spaceIndex, resultIndex, result.dir);
-      }
-    }
-    return ret;
   }
 }

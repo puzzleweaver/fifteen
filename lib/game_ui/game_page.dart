@@ -32,6 +32,8 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   FragmentShader? shader;
   ui.Image? image;
+  bool solvedGame = false;
+  bool showedDialog = false;
 
   @override
   void initState() {
@@ -39,11 +41,19 @@ class _GamePageState extends State<GamePage> {
       _loadShader();
     });
     super.initState();
+    widget.appState.addListener(_checkForDialog);
+  }
+
+  @override
+  void dispose() {
+    widget.appState.removeListener(_checkForDialog);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -81,6 +91,13 @@ class _GamePageState extends State<GamePage> {
                   onPressed: goToBuilder,
                   child: Text("Build"),
                 ),
+                ElevatedButton(
+                  onPressed: () {
+                    widget.appState.solveGame();
+                    setState(() {});
+                  },
+                  child: Text("Solve"),
+                ),
                 GamePreviewWidget(
                   imageAsset: widget.imagePath,
                   board: widget.appState.board,
@@ -110,6 +127,47 @@ class _GamePageState extends State<GamePage> {
         ),
       );
     }
+  }
+
+  void _checkForDialog() {
+    if (!showedDialog && widget.appState.game.isSolved()) {
+      solvedGame = true;
+      if (!showedDialog) {
+        showDialog(
+          context: context,
+          builder: (context) => _dialog(),
+        );
+      }
+    }
+  }
+
+  Widget _dialog() {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("You Solved This Board!"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Back"),
+              ),
+              SizedBox.square(dimension: 8.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  print("TODO navigate to next board.");
+                },
+                child: Text("Next"),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   void goToSettings() {
