@@ -8,7 +8,6 @@ import 'package:fifteen/math/board_list.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shader_test_ui/image_test_page.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     controller.addListener(() {
       setState(() {
         alpha = controller.position.pixels / 300;
-        alpha = clampDouble(0, alpha, 1);
+        alpha = alpha.clamp(0, 1);
       });
     });
   }
@@ -102,7 +101,6 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       ...gameButtons,
-                      ...gameButtons,
                       ...testButtons,
                     ],
                   ),
@@ -161,7 +159,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.init(Board.createNew());
+          appState.setBoard(Board.createNew());
           return BuilderPage(
             appState: appState,
           );
@@ -175,7 +173,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.init(board);
+          appState.setBoard(board);
           return GamePage(
             imagePath: imgAsset,
             shaderPath: "shaders/image_quad.frag",

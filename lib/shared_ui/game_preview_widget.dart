@@ -1,5 +1,5 @@
-import 'package:fifteen/game_ui/game_painter.dart';
 import 'package:fifteen/math/board.dart';
+import 'package:fifteen/shared_ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
 class GamePreviewWidget extends StatelessWidget {

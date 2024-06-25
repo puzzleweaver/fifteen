@@ -24,6 +24,8 @@ class BuilderPainter extends BoardPainter {
     for (int i = 0; i < board.quads.length; i++) {
       drawSubquads(canvas, board.quads[i], board.charts[i], size, strokePaint);
     }
+    fillPaint.color = Color(0x44000000);
+    fillSpace(canvas, board, size);
 
     // render equidistant constraints
     var eqs = board.constraints.equidistants;

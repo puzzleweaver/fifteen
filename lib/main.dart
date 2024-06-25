@@ -52,19 +52,10 @@ class MyAppState extends ChangeNotifier {
   Board board = Board.createNew();
   Game game = Game(len: 0, permutation: [], rotation: []);
 
-  void init(Board board) {
-    _setBoard(board);
-  }
-
-  void _setBoard(Board board) {
-    this.board = board;
-    game = Game.fromBoard(board);
-  }
-
   void setBoard(Board newBoard) {
     if (board != newBoard) {
-      _setBoard(board);
-      notifyListeners();
+      board = newBoard;
+      game = Game.fromBoard(newBoard);
     }
   }
 

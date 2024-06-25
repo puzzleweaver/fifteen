@@ -72,23 +72,7 @@ class GamePainter extends BoardPainter {
       }
       setQuads(2, from, to);
       drawQuad(canvas, q, size, game.isSpace(i) ? fillPaint : shaderPaint);
-
       drawQuad(canvas, q, size, strokePaint);
-    }
-  }
-}
-
-class BoardPreviewPainter extends BoardPainter {
-  BoardPreviewPainter({required super.board});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final strokePaint = Paint();
-    strokePaint.style = PaintingStyle.stroke;
-    strokePaint.strokeWidth = 1;
-    strokePaint.color = Color(0x88000000);
-    for (int i = 0; i < board.quads.length; i++) {
-      drawSubquads(canvas, board.quads[i], board.charts[i], size, strokePaint);
     }
   }
 }

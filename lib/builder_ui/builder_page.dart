@@ -266,7 +266,9 @@ class _BuilderPageState extends State<BuilderPage> {
       for (int i = 0; i < board.quads.length; i++)
         if (isSelected(i)) getQuadCenter(board.quads[i])
     ];
-    return list.reduce((val, o) => val + o) / list.length.toDouble();
+    return list.isEmpty
+        ? DoublePoint(0, 0)
+        : list.reduce((val, o) => val + o) / list.length.toDouble();
   }
 
   void scale(double scale) {
@@ -349,6 +351,7 @@ class _BuilderPageState extends State<BuilderPage> {
 
   void recenter() {
     var edgePoints = board.getEdgeCoords().map((c) => board.getVertex(c));
+    if (edgePoints.isEmpty) return;
     DoublePoint lo = edgePoints.reduce(
           (DoublePoint val, o) => DoublePoint(
             min(val.x, o.x),

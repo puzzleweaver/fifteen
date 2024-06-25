@@ -53,7 +53,6 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -159,9 +158,8 @@ class _GamePageState extends State<GamePage> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  print("TODO navigate to next board.");
                 },
-                child: Text("Next"),
+                child: Text("Home"),
               ),
             ],
           )

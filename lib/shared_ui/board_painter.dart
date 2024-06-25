@@ -66,8 +66,36 @@ abstract class BoardPainter extends CustomPainter {
     canvas.drawPath(path, paint);
   }
 
+  void fillSpace(Canvas canvas, Board board, Size size) {
+    var subquads = board.getSubquads();
+    if (subquads.isNotEmpty) {
+      drawQuad(canvas, subquads[subquads.length - 1], size, fillPaint);
+    }
+  }
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return oldDelegate != this;
+  }
+}
+
+class BoardPreviewPainter extends BoardPainter {
+  BoardPreviewPainter({required super.board});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final strokePaint = Paint();
+    strokePaint.style = PaintingStyle.stroke;
+    strokePaint.strokeWidth = 1;
+
+    // render the lines
+    strokePaint.color = Color(0x88000000);
+    for (int i = 0; i < board.quads.length; i++) {
+      drawSubquads(canvas, board.quads[i], board.charts[i], size, strokePaint);
+    }
+
+    // render the space.
+    fillPaint.color = Color(0x44000000);
+    fillSpace(canvas, board, size);
   }
 }
