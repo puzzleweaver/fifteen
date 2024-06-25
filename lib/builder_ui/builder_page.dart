@@ -78,11 +78,6 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
-                  onPressed: selectedCoords.isEmpty ? null : delete,
-                  child: Icon(Icons.remove),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
                   onPressed: solve,
                   child: Icon(Icons.calculate),
                 ),
@@ -212,13 +207,6 @@ class _BuilderPageState extends State<BuilderPage> {
       }
     }
     resetSelection();
-  }
-
-  void delete() {
-    if (selectedCoords[0].isVertex == false) {
-      setBoard(widget.appState.board.withoutChart(selectedCoords[0].a));
-      resetSelection();
-    }
   }
 
   void add() {

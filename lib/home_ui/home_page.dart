@@ -8,6 +8,7 @@ import 'package:fifteen/math/board_list.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shader_test_ui/image_test_page.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ScrollController controller = ScrollController();
+  double alpha = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      setState(() {
+        alpha = controller.position.pixels / 300;
+        alpha = clampDouble(0, alpha, 1);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-
-    var scrollController = ScrollController();
 
     var imgs = [
       "assets/images/img3.png",
@@ -57,29 +70,38 @@ class _HomePageState extends State<HomePage> {
                 onPressed: goToSettings,
               ),
             ],
-            leading: IconButton(
-              icon: Icon(Icons.expand_less),
-              onPressed: () => scrollController.animateTo(
-                0.0,
-                duration: Durations.long1,
-                curve: Curves.easeInOut,
+            leading: AnimatedOpacity(
+              opacity: alpha,
+              duration: Durations.short1,
+              child: IconButton(
+                icon: Icon(Icons.expand_less),
+                onPressed: () => controller.animateTo(
+                  0.0,
+                  duration: Durations.long1,
+                  curve: Curves.easeInOut,
+                ),
               ),
             ),
           ),
           body: SingleChildScrollView(
-            controller: scrollController,
+            controller: controller,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/icon.png",
-                      height: 300, width: 300, fit: BoxFit.fill),
+                  Image.asset(
+                    "assets/images/icon.png",
+                    height: 300,
+                    width: 300,
+                    fit: BoxFit.fill,
+                    opacity: AlwaysStoppedAnimation(1.0 - alpha),
+                  ),
                   Wrap(
                     runSpacing: 5.0,
                     spacing: 5.0,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      // for (int i = 0; i < 10; i++)
+                      ...gameButtons,
                       ...gameButtons,
                       ...testButtons,
                     ],

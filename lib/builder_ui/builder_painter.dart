@@ -44,8 +44,9 @@ class BuilderPainter extends BoardPainter {
 
     // render vertices
     for (Coord c in board.getEdgeCoords()) {
-      fillPaint.color =
-          selectedCoords.contains(c) ? Colors.transparent : Color(0x8822e8f0);
+      fillPaint.color = selectedCoords.contains(c)
+          ? Colors.transparent
+          : Color.fromRGBO(34, 232, 240, 0.533);
       drawVertex(
         canvas,
         board.getVertex(c),

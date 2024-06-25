@@ -22,11 +22,11 @@ class FifteenApp extends StatelessWidget {
           colorScheme: ColorScheme(
             primary: const Color.fromARGB(255, 255, 117, 158),
             onPrimary: Colors.black,
-            secondary: const Color.fromARGB(255, 151, 255, 203),
+            secondary: Color.fromARGB(255, 0, 201, 107),
             onSecondary: Colors.black,
             error: Colors.red,
             onError: const Color.fromARGB(255, 254, 0, 0),
-            surface: const Color.fromARGB(255, 79, 210, 210),
+            surface: Color.fromARGB(34, 232, 240, 255),
             onSurface: const Color(0xFF241E30),
             brightness: Brightness.light,
             surfaceBright: Colors.green,

@@ -8,6 +8,7 @@ import 'package:fifteen/main.dart';
 import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/game_ui/game_painter.dart';
+import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -112,7 +113,10 @@ class _GamePageState extends State<GamePage> {
   }
 
   void goToSettings() {
-    print("TODO lmao XD");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsPage()),
+    );
   }
 
   Size getSize(BuildContext context) {
