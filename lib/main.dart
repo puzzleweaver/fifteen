@@ -1,10 +1,17 @@
+import 'dart:async';
+
 import 'package:fifteen/home_ui/home_page.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/game.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  // initialize ad stuff
+  WidgetsFlutterBinding.ensureInitialized();
+  unawaited(MobileAds.instance.initialize());
+
   runApp(FifteenApp());
 }
 

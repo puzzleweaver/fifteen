@@ -1,3 +1,4 @@
+import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -90,6 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Center(
           child: Column(
             children: [
+              BannerAdWidget(),
               Row(
                 children: [
                   Checkbox(value: _adventureEnabled, onChanged: _setAdventure),
@@ -115,6 +117,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               if (_showSupportArea) _supportDialog(),
+              BannerAdWidget(),
             ],
           ),
         ),
@@ -144,6 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () => print("THANKS"),
             child: Text("Donate :)"),
           ),
+          BannerAdWidget(),
         ],
       ),
     );
