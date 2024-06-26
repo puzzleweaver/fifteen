@@ -11,12 +11,14 @@ class GamePainter extends BoardPainter {
   final FragmentShader shader;
   final ui.Image? image;
   final Game game;
+  final bool previewing;
 
   GamePainter({
     required this.shader,
     required this.image,
     required this.game,
     required super.board,
+    required this.previewing,
   });
 
   void _setFloats(int index, DoublePoint o) {
@@ -59,20 +61,31 @@ class GamePainter extends BoardPainter {
     setQuads(2, Quad.unit(), Quad.unit());
     canvas.drawRect(Offset.zero & size, shaderPaint);
 
-    strokePaint.color = Colors.black;
-    strokePaint.strokeWidth = 2;
-    List<Quad> quads = board.getSubquads();
-    for (int i = 0; i < quads.length; i++) {
-      Quad q = quads[i], from, to;
-      if (game.isInPlace(i)) {
-        from = to = Quad.unit(); // NEVER distort the solved image
-      } else {
-        from = q;
-        to = game.getQuad(quads, i);
+    if (previewing) {
+      for (int i = 0; i < board.quads.length; i++) {
+        drawSubquads(
+          canvas,
+          board.quads[i],
+          board.charts[i],
+          size,
+          strokePaint,
+        );
       }
-      setQuads(2, from, to);
-      drawQuad(canvas, q, size, game.isSpace(i) ? fillPaint : shaderPaint);
-      drawQuad(canvas, q, size, strokePaint);
+      fillSpace(canvas, board, size);
+    } else {
+      List<Quad> quads = board.getSubquads();
+      for (int i = 0; i < quads.length; i++) {
+        Quad q = quads[i], from, to;
+        if (game.isInPlace(i)) {
+          from = to = Quad.unit(); // NEVER distort the solved image
+        } else {
+          from = q;
+          to = game.getQuad(quads, i);
+        }
+        setQuads(2, from, to);
+        drawQuad(canvas, q, size, game.isSpace(i) ? fillPaint : shaderPaint);
+        drawQuad(canvas, q, size, strokePaint);
+      }
     }
   }
 }

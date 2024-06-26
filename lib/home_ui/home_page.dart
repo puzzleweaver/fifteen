@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+    var appState = context.watch<FifteenAppState>();
 
     var imgs = [
       "assets/images/img3.png",
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget getButton(Board board, String imgAsset, MyAppState appState) {
+  Widget getButton(Board board, String imgAsset, FifteenAppState appState) {
     return ElevatedButton(
       onPressed: () => goToGame(board, imgAsset, appState),
       style: ElevatedButton.styleFrom(
@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void goToBuilder(MyAppState appState) {
+  void goToBuilder(FifteenAppState appState) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void goToGame(Board board, String imgAsset, MyAppState appState) {
+  void goToGame(Board board, String imgAsset, FifteenAppState appState) {
     Navigator.push(
       context,
       MaterialPageRoute(

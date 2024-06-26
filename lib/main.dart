@@ -14,7 +14,7 @@ class FifteenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
+      create: (context) => FifteenAppState(),
       child: MaterialApp(
         title: 'Fifteen',
         theme: ThemeData(
@@ -48,7 +48,7 @@ class FifteenApp extends StatelessWidget {
   }
 }
 
-class MyAppState extends ChangeNotifier {
+class FifteenAppState extends ChangeNotifier {
   Board board = Board.createNew();
   Game game = Game(len: 0, permutation: [], rotation: []);
 

@@ -16,7 +16,7 @@ import 'dart:developer' as dev;
 class BuilderPage extends StatefulWidget {
   const BuilderPage({super.key, required this.appState});
 
-  final MyAppState appState;
+  final FifteenAppState appState;
 
   @override
   State<BuilderPage> createState() => _BuilderPageState();
@@ -29,7 +29,7 @@ class _BuilderPageState extends State<BuilderPage> {
   List<Board> history = [];
 
   Board get board => widget.appState.board;
-  MyAppState get appState => widget.appState;
+  FifteenAppState get appState => widget.appState;
 
   @override
   Widget build(BuildContext context) {

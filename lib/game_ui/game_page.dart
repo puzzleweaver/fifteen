@@ -23,7 +23,7 @@ class GamePage extends StatefulWidget {
 
   final String shaderPath;
   final String imagePath;
-  final MyAppState appState;
+  final FifteenAppState appState;
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -32,6 +32,7 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   FragmentShader? shader;
   ui.Image? image;
+  bool previewing = false;
 
   @override
   void initState() {
@@ -40,6 +41,18 @@ class _GamePageState extends State<GamePage> {
     });
     super.initState();
     widget.appState.addListener(_checkForDialog);
+  }
+
+  Future<void> _loadShader() async {
+    final imageData = await rootBundle.load(widget.imagePath);
+    final loadedImage = await decodeImageFromList(
+      imageData.buffer.asUint8List(),
+    );
+    final program = await FragmentProgram.fromAsset(widget.shaderPath);
+    setState(() {
+      shader = program.fragmentShader();
+      image = loadedImage;
+    });
   }
 
   @override
@@ -56,9 +69,18 @@ class _GamePageState extends State<GamePage> {
       appBar: AppBar(
         title: Text("Fifteen :)"),
         actions: [
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: goToSettings,
+          PopupMenuButton<String>(
+            onSelected: handleMore,
+            itemBuilder: (BuildContext context) {
+              return {'Shuffle', 'Solve', 'Build', 'Settings'}
+                  .map(
+                    (String choice) => PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    ),
+                  )
+                  .toList();
+            },
           ),
         ],
       ),
@@ -72,7 +94,22 @@ class _GamePageState extends State<GamePage> {
               child: _body(),
             ),
             SizedBox.square(dimension: 8.0),
-            _buttonsRow(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("3:04", style: TextStyle(fontSize: 14 * 3)),
+                GestureDetector(
+                  onTapDown: (details) => setState(() => previewing = true),
+                  onTapUp: (details) => setState(() => previewing = false),
+                  child: GamePreviewWidget(
+                    imageAsset: widget.imagePath,
+                    board: widget.appState.board,
+                    dimension: 100,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -91,42 +128,11 @@ class _GamePageState extends State<GamePage> {
             image: image,
             game: widget.appState.game,
             board: widget.appState.board,
+            previewing: previewing,
           ),
         ),
       );
     }
-  }
-
-  Widget _buttonsRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            widget.appState.shuffle();
-            setState(() {}); // trigger repaint
-          },
-          child: Text("Shuffle"),
-        ),
-        ElevatedButton(
-          onPressed: goToBuilder,
-          child: Text("Build"),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            widget.appState.solveGame();
-            setState(() {});
-          },
-          child: Text("Solve"),
-        ),
-        GamePreviewWidget(
-          imageAsset: widget.imagePath,
-          board: widget.appState.board,
-          dimension: 100,
-        ),
-      ],
-    );
   }
 
   void _checkForDialog() {
@@ -175,13 +181,6 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  void goToSettings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsPage()),
-    );
-  }
-
   Size getSize(BuildContext context) {
     final box = context.findRenderObject() as RenderBox;
     double dim = min(box.size.width, box.size.height);
@@ -201,24 +200,33 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  Future<void> _loadShader() async {
-    final imageData = await rootBundle.load(widget.imagePath);
-    image = await decodeImageFromList(imageData.buffer.asUint8List());
+  void handleMore(String label) {
+    switch (label) {
+      case 'Shuffle':
+        widget.appState.shuffle();
+        setState(() {});
+      case 'Settings':
+        goToSettings();
+      case 'Solve':
+        widget.appState.solveGame();
+        setState(() {});
+      case 'Build':
+        goToBuilder();
+    }
+  }
 
-    final program = await FragmentProgram.fromAsset(widget.shaderPath);
-    shader = program.fragmentShader();
-    setState(() {}); // trigger a repaint
+  void goToSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsPage()),
+    );
   }
 
   void goToBuilder() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) {
-          return BuilderPage(
-            appState: widget.appState,
-          );
-        },
+        builder: (context) => BuilderPage(appState: widget.appState),
       ),
     );
   }
