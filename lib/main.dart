@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:fifteen/home_ui/home_page.dart';
 import 'package:fifteen/math/board.dart';
@@ -58,6 +59,13 @@ class FifteenApp extends StatelessWidget {
 class FifteenAppState extends ChangeNotifier {
   Board board = Board.createNew();
   Game game = Game(len: 0, permutation: [], rotation: []);
+  List<double> adRolls = [for (int i = 0; i < 100; i++) Random().nextDouble()];
+
+  void rerollAds() {
+    print("Rerolling Ads...");
+    adRolls = [for (int i = 0; i < 100; i++) Random().nextDouble()];
+    notifyListeners();
+  }
 
   void setBoard(Board newBoard) {
     if (board != newBoard) {

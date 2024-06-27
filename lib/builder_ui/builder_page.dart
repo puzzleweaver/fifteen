@@ -374,6 +374,7 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void goToGamePage() {
+    appState.rerollAds();
     Navigator.push(
       context,
       MaterialPageRoute(

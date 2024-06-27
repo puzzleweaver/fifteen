@@ -1,5 +1,8 @@
+import 'package:fifteen/main.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
+import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -8,22 +11,10 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  static const String _adventureEnabledLabel = 'adventure_enabled';
-  static const bool _adventureEnabledDefault = true;
-
-  static const String _timerEnabledLabel = 'timer_enabled';
-  static const bool _timerEnabledDefault = true;
-
-  static const String _annoyingAdsLabel = 'annoying_ads';
-  static const bool _annoyingAdsDefault = false;
-
-  static const String _adChanceLabel = 'ad_chance';
-  static const double _adChanceDefault = 0.2;
-
-  bool _adventureEnabled = _adventureEnabledDefault;
-  bool _timerEnabled = _timerEnabledDefault;
-  bool _annoyingAds = _annoyingAdsDefault;
-  double _adChance = _adChanceDefault;
+  bool _adventureEnabled = Prefs.adventureEnabledDefault;
+  bool _timerEnabled = Prefs.timerEnabledDefault;
+  bool _annoyingAds = Prefs.annoyingAdsDefault;
+  double _adChance = Prefs.adChanceDefault;
 
   bool _showSupportArea = false;
 
@@ -36,43 +27,45 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _loadSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _adventureEnabled =
-          prefs.getBool(_adventureEnabledLabel) ?? _adventureEnabledDefault;
-      _timerEnabled = prefs.getBool(_timerEnabledLabel) ?? _timerEnabledDefault;
-      _annoyingAds = prefs.getBool(_annoyingAdsLabel) ?? _annoyingAdsDefault;
-      _adChance = prefs.getDouble(_adChanceLabel) ?? _adChanceDefault;
+      _adventureEnabled = prefs.getBool(Prefs.adventureEnabledLabel) ??
+          Prefs.adventureEnabledDefault;
+      _timerEnabled =
+          prefs.getBool(Prefs.timerEnabledLabel) ?? Prefs.timerEnabledDefault;
+      _annoyingAds =
+          prefs.getBool(Prefs.annoyingAdsLabel) ?? Prefs.annoyingAdsDefault;
+      _adChance = prefs.getDouble(Prefs.adChanceLabel) ?? Prefs.adChanceDefault;
     });
   }
 
   Future<void> _setAdventure(bool? newValue) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _adventureEnabled = newValue ?? _adventureEnabledDefault;
-      prefs.setBool(_adventureEnabledLabel, _adventureEnabled);
+      _adventureEnabled = newValue ?? Prefs.adventureEnabledDefault;
+      prefs.setBool(Prefs.adventureEnabledLabel, _adventureEnabled);
     });
   }
 
   Future<void> _setTimer(bool? newValue) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _timerEnabled = newValue ?? _timerEnabledDefault;
-      prefs.setBool(_timerEnabledLabel, _timerEnabled);
+      _timerEnabled = newValue ?? Prefs.timerEnabledDefault;
+      prefs.setBool(Prefs.timerEnabledLabel, _timerEnabled);
     });
   }
 
   Future<void> _setAnnoyingAds(bool? newValue) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _annoyingAds = newValue ?? _annoyingAdsDefault;
-      prefs.setBool(_annoyingAdsLabel, _annoyingAds);
+      _annoyingAds = newValue ?? Prefs.annoyingAdsDefault;
+      prefs.setBool(Prefs.annoyingAdsLabel, _annoyingAds);
     });
   }
 
   Future<void> _setAdChance(double? newValue) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _adChance = newValue ?? _adChanceDefault;
-      prefs.setDouble(_adChanceLabel, _adChance);
+      _adChance = newValue ?? Prefs.adChanceDefault;
+      prefs.setDouble(Prefs.adChanceLabel, _adChance);
     });
   }
 
@@ -81,17 +74,19 @@ class _SettingsPageState extends State<SettingsPage> {
     // Load and obtain the shared preferences for this app.
     // final prefs = await SharedPreferences.getInstance();
 
+    FifteenAppState appState = context.watch<FifteenAppState>();
+
     // // Save the counter value to persistent storage under the 'counter' key.
     // await prefs.setInt('counter', counter);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: BannerAdWidget(4),
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
-              BannerAdWidget(),
+              BannerAdWidget(5, padded: true),
               Row(
                 children: [
                   Checkbox(value: _adventureEnabled, onChanged: _setAdventure),
@@ -116,8 +111,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   )
                 ],
               ),
-              if (_showSupportArea) _supportDialog(),
-              BannerAdWidget(),
+              if (_showSupportArea) _supportDialog(appState),
+              SafeArea(top: false, child: BannerAdWidget(6, padded: true)),
             ],
           ),
         ),
@@ -125,7 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _supportDialog() {
+  Widget _supportDialog(FifteenAppState appState) {
     return AlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -137,17 +132,26 @@ class _SettingsPageState extends State<SettingsPage> {
               Text("Interstitial Ads"),
             ],
           ),
+          Divider(color: Colors.black),
           Row(
             children: [
               Text("Ad Chance"),
-              Slider(value: _adChance, onChanged: _setAdChance),
+              Slider(
+                value: _adChance,
+                onChanged: _setAdChance,
+                min: 1.0 / 3.0,
+                max: 1.0,
+              ),
             ],
           ),
+          Text(
+              "(Changes in ad settings may require restarting the app to take effect)"),
+          Divider(color: Colors.black),
           ElevatedButton(
             onPressed: () => print("THANKS"),
             child: Text("Donate :)"),
           ),
-          BannerAdWidget(),
+          BannerAdWidget(7, padded: true),
         ],
       ),
     );

@@ -7,6 +7,7 @@ import 'package:fifteen/game_ui/game_page.dart';
 import 'package:fifteen/math/board_list.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shader_test_ui/image_test_page.dart';
+import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,56 +57,57 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return LayoutBuilder(builder: (context, constraints) {
-      return SafeArea(
-        top: true,
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: goToSettings,
-              ),
-            ],
-            leading: AnimatedOpacity(
-              opacity: alpha,
-              duration: Durations.short1,
-              child: IconButton(
-                icon: Icon(Icons.expand_less),
-                onPressed: () => controller.animateTo(
-                  0.0,
-                  duration: Durations.long1,
-                  curve: Curves.easeInOut,
-                ),
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () => goToSettings(appState),
+            ),
+          ],
+          leading: AnimatedOpacity(
+            opacity: alpha,
+            duration: Durations.short1,
+            child: IconButton(
+              icon: Icon(Icons.expand_less),
+              onPressed: () => controller.animateTo(
+                0.0,
+                duration: Durations.long1,
+                curve: Curves.easeInOut,
               ),
             ),
           ),
-          body: SingleChildScrollView(
-            controller: controller,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
+        ),
+        body: SingleChildScrollView(
+          controller: controller,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SafeArea(
+                  bottom: false,
+                  child: Image.asset(
                     "assets/images/icon.png",
                     height: 300,
                     width: 300,
                     fit: BoxFit.fill,
                     opacity: AlwaysStoppedAnimation(1.0 - alpha),
                   ),
-                  Wrap(
-                    runSpacing: 5.0,
-                    spacing: 5.0,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      ...gameButtons,
-                      ...testButtons,
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                Wrap(
+                  runSpacing: 5.0,
+                  spacing: 5.0,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    ...gameButtons,
+                    ...testButtons,
+                  ],
+                ),
+                SafeArea(child: BannerAdWidget(3, padded: true)),
+              ],
             ),
           ),
         ),
@@ -147,7 +149,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void goToSettings() {
+  void goToSettings(FifteenAppState appState) {
+    appState.rerollAds();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SettingsPage()),
@@ -169,6 +172,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void goToGame(Board board, String imgAsset, FifteenAppState appState) {
+    appState.rerollAds();
     Navigator.push(
       context,
       MaterialPageRoute(

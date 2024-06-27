@@ -1,19 +1,27 @@
 import 'dart:io';
 
+import 'package:fifteen/main.dart';
 import 'package:fifteen/shared_ui/border_box.dart';
+import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BannerAdWidget extends StatefulWidget {
   final AdSize adSize;
+  final bool padded;
+  final int adIndex;
 
   final String adUnitId = Platform.isAndroid
       ? 'ca-app-pub-9631185147473049/3648411751' // android
       : 'ca-app-pub-9631185147473049/1022248415'; // ios
 
-  BannerAdWidget({
+  BannerAdWidget(
+    this.adIndex, {
     super.key,
     this.adSize = AdSize.banner,
+    this.padded = false,
   });
 
   @override
@@ -22,23 +30,50 @@ class BannerAdWidget extends StatefulWidget {
 
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
+  double _adChance = Prefs.adChanceDefault;
+
+  Future<void> _loadSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _adChance = prefs.getDouble(Prefs.adChanceLabel) ?? Prefs.adChanceDefault;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BorderBox(
-      SizedBox(
-        width: widget.adSize.width.toDouble(),
-        height: widget.adSize.height.toDouble(),
-        child: _bannerAd == null
-            ? SizedBox(child: Container(color: Colors.red))
-            : AdWidget(ad: _bannerAd!),
-      ),
+    var appState = context.watch<FifteenAppState>();
+    if (appState.adRolls[widget.adIndex] < _adChance) {
+      // DO show an ad
+      if (widget.padded) {
+        return BorderBox(
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: _ad(),
+          ),
+        );
+      } else {
+        return BorderBox(_ad());
+      }
+    } else {
+      // DON'T show an ad
+      return Container();
+    }
+  }
+
+  Widget _ad() {
+    return SizedBox(
+      width: widget.adSize.width.toDouble(),
+      height: widget.adSize.height.toDouble(),
+      child: _bannerAd == null
+          ? SizedBox(child: Container(color: Colors.red))
+          : AdWidget(ad: _bannerAd!),
     );
   }
 
   @override
   void initState() {
     super.initState();
+    _loadSharedPreferences();
     _loadAd();
   }
 
