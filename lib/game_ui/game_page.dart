@@ -6,24 +6,23 @@ import 'dart:ui' as ui;
 import 'package:fifteen/builder_ui/builder_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/math/level.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/game_ui/game_painter.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
+import 'package:fifteen/shared_ui/interstitial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({
     super.key,
-    required this.shaderPath,
-    required this.imagePath,
+    required this.level,
     required this.appState,
   });
-
-  final String shaderPath;
-  final String imagePath;
+  final Level level;
   final FifteenAppState appState;
 
   @override
@@ -45,11 +44,11 @@ class _GamePageState extends State<GamePage> {
   }
 
   Future<void> _loadShader() async {
-    final imageData = await rootBundle.load(widget.imagePath);
+    final imageData = await rootBundle.load(widget.level.image);
     final loadedImage = await decodeImageFromList(
       imageData.buffer.asUint8List(),
     );
-    final program = await FragmentProgram.fromAsset(widget.shaderPath);
+    final program = await FragmentProgram.fromAsset("shaders/image_quad.frag");
     setState(() {
       shader = program.fragmentShader();
       image = loadedImage;
@@ -104,9 +103,8 @@ class _GamePageState extends State<GamePage> {
                 GestureDetector(
                   onTapDown: (details) => setState(() => previewing = true),
                   onTapUp: (details) => setState(() => previewing = false),
-                  child: GamePreviewWidget(
-                    imageAsset: widget.imagePath,
-                    board: widget.appState.board,
+                  child: PreviewWidget(
+                    level: widget.level,
                     dimension: 100,
                   ),
                 ),
@@ -141,6 +139,7 @@ class _GamePageState extends State<GamePage> {
 
   void _checkForDialog() {
     if (widget.appState.game.isSolved()) {
+      Interstitial.load();
       showGeneralDialog(
         barrierColor: Colors.black.withOpacity(0.5),
         transitionBuilder: (context, a1, a2, widget) {
@@ -163,6 +162,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   Widget _dialog() {
+    bool hasNext = widget.level.hasNext();
     return AlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -172,12 +172,20 @@ class _GamePageState extends State<GamePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
+                onPressed: onHome,
                 child: Text("Home"),
               ),
+              SizedBox.square(dimension: 8.0),
+              ElevatedButton(
+                onPressed: onAgain,
+                child: Text("Again"),
+              ),
+              if (hasNext) SizedBox.square(dimension: 8.0),
+              if (hasNext)
+                ElevatedButton(
+                  onPressed: onNext,
+                  child: Text("Next"),
+                ),
             ],
           )
         ],
@@ -232,6 +240,50 @@ class _GamePageState extends State<GamePage> {
       context,
       MaterialPageRoute(
         builder: (context) => BuilderPage(appState: widget.appState),
+      ),
+    );
+  }
+
+  void onHome() {
+    Navigator.pop(context); // dismiss "you win" dialog
+    Navigator.pop(context); // dismiss game page
+    Interstitial.show();
+  }
+
+  void onAgain() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Interstitial.show();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          widget.appState.setBoard(widget.level.board);
+          return GamePage(
+            level: widget.level,
+            appState: widget.appState,
+          );
+        },
+      ),
+    );
+  }
+
+  void onNext() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Interstitial.show();
+    assert(widget.level.hasNext());
+    Level next = widget.level.next;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          widget.appState.setBoard(next.board);
+          return GamePage(
+            level: next,
+            appState: widget.appState,
+          );
+        },
       ),
     );
   }

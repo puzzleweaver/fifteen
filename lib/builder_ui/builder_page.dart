@@ -8,6 +8,7 @@ import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/constraint.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/math/level.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/math/side.dart';
 import 'package:flutter/material.dart';
@@ -380,8 +381,7 @@ class _BuilderPageState extends State<BuilderPage> {
       MaterialPageRoute(
         builder: (context) {
           return GamePage(
-            imagePath: "assets/images/img4.png",
-            shaderPath: "shaders/image_quad.frag",
+            level: Level(board: board),
             appState: appState,
           );
         },

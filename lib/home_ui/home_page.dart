@@ -4,7 +4,7 @@ import 'package:fifteen/builder_ui/builder_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/game_ui/game_page.dart';
-import 'package:fifteen/math/board_list.dart';
+import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shader_test_ui/image_test_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
@@ -36,14 +36,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var appState = context.watch<FifteenAppState>();
 
-    var imgs = [
-      "assets/images/img3.png",
-      "assets/images/img4.png",
-    ];
-    Random r = Random(10000);
-    var gameButtons = BoardList.all.map(
-      (board) => getButton(board, imgs[r.nextInt(imgs.length)], appState),
-    );
+    var gameButtons = Level.adventure.map((lvl) => getButton(lvl, appState));
 
     var testButtons = [
       ElevatedButton(
@@ -115,16 +108,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget getButton(Board board, String imgAsset, FifteenAppState appState) {
+  Widget getButton(Level level, FifteenAppState appState) {
     return ElevatedButton(
-      onPressed: () => goToGame(board, imgAsset, appState),
+      onPressed: () => goToGame(level, appState),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(8.0),
       ),
       // child: Text(label),
-      child: GamePreviewWidget(
-        imageAsset: imgAsset,
-        board: board,
+      child: PreviewWidget(
+        level: level,
         dimension: getDim(context),
       ),
     );
@@ -171,16 +163,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void goToGame(Board board, String imgAsset, FifteenAppState appState) {
+  void goToGame(Level level, FifteenAppState appState) {
     appState.rerollAds();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(board);
+          appState.setBoard(level.board);
           return GamePage(
-            imagePath: imgAsset,
-            shaderPath: "shaders/image_quad.frag",
+            level: level,
             appState: appState,
           );
         },

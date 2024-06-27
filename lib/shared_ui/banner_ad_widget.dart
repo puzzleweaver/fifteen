@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fifteen/main.dart';
-import 'package:fifteen/shared_ui/border_box.dart';
 import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -15,7 +14,7 @@ class BannerAdWidget extends StatefulWidget {
 
   final String adUnitId = Platform.isAndroid
       ? 'ca-app-pub-9631185147473049/3648411751' // android
-      : 'ca-app-pub-9631185147473049/1022248415'; // ios
+      : 'ca-app-pub-9631185147473049/8009047333'; // ios
 
   BannerAdWidget(
     this.adIndex, {
@@ -32,6 +31,13 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
   double _adChance = Prefs.adChanceDefault;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadSharedPreferences();
+    _loadAd();
+  }
+
   Future<void> _loadSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -40,19 +46,23 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   }
 
   @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var appState = context.watch<FifteenAppState>();
     if (appState.adRolls[widget.adIndex] < _adChance) {
       // DO show an ad
       if (widget.padded) {
-        return BorderBox(
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: _ad(),
-          ),
+        return Padding(
+          padding: EdgeInsets.all(8.0),
+          child: _ad(),
         );
       } else {
-        return BorderBox(_ad());
+        return _ad();
       }
     } else {
       // DON'T show an ad
@@ -65,32 +75,17 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       width: widget.adSize.width.toDouble(),
       height: widget.adSize.height.toDouble(),
       child: _bannerAd == null
-          ? SizedBox(child: Container(color: Colors.red))
+          ? SizedBox(child: Container()) // Container(color: Colors.red))
           : AdWidget(ad: _bannerAd!),
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadSharedPreferences();
-    _loadAd();
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
-  }
-
-  /// Loads a banner ad.
   void _loadAd() {
     final bannerAd = BannerAd(
       size: widget.adSize,
       adUnitId: widget.adUnitId,
       request: const AdRequest(),
       listener: BannerAdListener(
-        // Called when an ad is successfully received.
         onAdLoaded: (ad) {
           if (!mounted) {
             ad.dispose();
@@ -100,7 +95,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
             _bannerAd = ad as BannerAd;
           });
         },
-        // Called when an ad request failed.
         onAdFailedToLoad: (ad, error) {
           debugPrint('BannerAd failed to load: $error');
           ad.dispose();

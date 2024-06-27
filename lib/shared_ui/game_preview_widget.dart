@@ -1,14 +1,12 @@
-import 'package:fifteen/math/board.dart';
+import 'package:fifteen/math/level.dart';
 import 'package:fifteen/shared_ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
-class GamePreviewWidget extends StatelessWidget {
-  final String imageAsset;
-  final Board board;
+class PreviewWidget extends StatelessWidget {
+  final Level level;
   final double dimension;
 
-  GamePreviewWidget(
-      {required this.imageAsset, required this.board, required this.dimension});
+  PreviewWidget({required this.level, required this.dimension});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +14,10 @@ class GamePreviewWidget extends StatelessWidget {
       dimension: dimension,
       child: Stack(
         children: [
-          Image.asset(
-            imageAsset,
-          ),
+          Image.asset(level.image),
           SizedBox.expand(
             child: CustomPaint(
-              painter: BoardPreviewPainter(board: board),
+              painter: BoardPreviewPainter(board: level.board),
             ),
           ),
         ],

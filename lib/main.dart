@@ -68,10 +68,8 @@ class FifteenAppState extends ChangeNotifier {
   }
 
   void setBoard(Board newBoard) {
-    if (board != newBoard) {
-      board = newBoard;
-      game = Game.fromBoard(board).shuffle(board);
-    }
+    board = newBoard;
+    game = Game.fromBoard(board).shuffle(board);
   }
 
   void tapAtIndex(int index) {
