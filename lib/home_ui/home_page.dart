@@ -1,15 +1,14 @@
 import 'dart:math';
 
-import 'package:fifteen/builder_ui/builder_page.dart';
+import 'package:fifteen/debug_ui/debug_page.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/math/board.dart';
 import 'package:fifteen/game_ui/game_page.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
-import 'package:fifteen/shader_test_ui/image_test_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
 import 'package:fifteen/shared_ui/prefs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,17 +53,6 @@ class _HomePageState extends State<HomePage> {
     var gameButtons =
         Level.adventure.map((lvl) => getButton(lvl, theme, appState));
 
-    var testButtons = [
-      ElevatedButton(
-        onPressed: goToImageTest,
-        child: Text("Shader Test"),
-      ),
-      ElevatedButton(
-        onPressed: () => goToBuilder(appState),
-        child: Text("Board Builder"),
-      ),
-    ];
-
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
         extendBodyBehindAppBar: true,
@@ -72,6 +60,12 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           actions: [
+            if (kDebugMode)
+              IconButton(
+                icon: Icon(Icons.build),
+                color: Color(0x11000000),
+                onPressed: goToDebug,
+              ),
             IconButton(
               icon: Icon(Icons.menu),
               onPressed: () => goToSettings(appState),
@@ -112,7 +106,6 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     ...gameButtons,
-                    // ...testButtons,
                   ],
                 ),
                 SafeArea(child: BannerAdWidget(3, padded: true)),
@@ -150,39 +143,11 @@ class _HomePageState extends State<HomePage> {
     return min(box.size.width, box.size.height) / 4;
   }
 
-  void goToImageTest() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return ImageTestPage(
-            imagePath: "assets/images/img2.png",
-            shaderPath: "shaders/image_quad.frag",
-          );
-        },
-      ),
-    );
-  }
-
   void goToSettings(FifteenAppState appState) {
     appState.rerollAds();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SettingsPage()),
-    );
-  }
-
-  void goToBuilder(FifteenAppState appState) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          appState.setBoard(Board.createNew());
-          return BuilderPage(
-            appState: appState,
-          );
-        },
-      ),
     );
   }
 
@@ -216,4 +181,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void resetScroll() {}
+
+  void goToDebug() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DebugPage()),
+    );
+  }
 }

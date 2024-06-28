@@ -16,10 +16,13 @@ class Level {
     BoardList.eye2,
     BoardList.starbox3,
     BoardList.cube15,
+    BoardList.triangles3,
     BoardList.eye1,
     BoardList.eye4,
     BoardList.star66,
     BoardList.starbox4,
+    BoardList.paths4,
+    BoardList.split4,
   ];
   static final List<Level> adventure = [
     for (int i = 0; i < _boards.length; i++)
@@ -27,6 +30,10 @@ class Level {
         board: _boards[i],
         index: i,
       )
+  ];
+  static final List<Level> allBoards = [
+    for (int i = 0; i < BoardList.all.length; i++)
+      Level(board: BoardList.all[i])
   ];
 
   final Board board;

@@ -25,23 +25,23 @@ class ConstraintSet {
     for (int a = 0; a < board.charts.length; a++) {
       for (int b = a + 1; b < board.charts.length; b++) {
         // check for a pair of coincidents linking a and b
-        Side? s1, s2;
+        List<Side> links = [];
         for (var coin in coincidents) {
           if (coin.hasA(a) && coin.hasA(b)) {
-            if (s1 == null) {
-              s1 = Side(coin.coordWithA(a), coin.coordWithA(b));
-            } else if (s2 == null) {
-              s2 = Side(coin.coordWithA(a), coin.coordWithA(b));
-              break;
-            }
+            links.add(
+              Side(coin.coordWithA(a), coin.coordWithA(b)),
+            );
           }
         }
-        if (s1 != null && s2 != null) {
-          // transpose s1 and s2 because FUCK YOU that's why :(
-          (s1, s2) = (Side(s1.c1, s2.c1), Side(s1.c2, s2.c2));
-          if (_sidePairValid(s1, s2)) {
-            Conv result = convFromSidePair(s1, s2);
-            ret.add(result);
+        for (int i = 0; i < links.length; i++) {
+          for (int j = i + 1; j < links.length; j++) {
+            Side s1 = links[i], s2 = links[j];
+            // transpose s1 and s2 because FUCK YOU that's why :(
+            (s1, s2) = (Side(s1.c1, s2.c1), Side(s1.c2, s2.c2));
+            if (_sidePairValid(s1, s2)) {
+              Conv result = convFromSidePair(s1, s2);
+              ret.add(result);
+            }
           }
         }
       }

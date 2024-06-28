@@ -79,6 +79,11 @@ class _BuilderPageState extends State<BuilderPage> {
                 ),
                 SizedBox.square(dimension: 8.0),
                 ElevatedButton(
+                  onPressed: addDialog,
+                  child: Icon(Icons.addchart),
+                ),
+                SizedBox.square(dimension: 8.0),
+                ElevatedButton(
                   onPressed: solve,
                   child: Icon(Icons.calculate),
                 ),
@@ -211,7 +216,30 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void add() {
-    setBoard(board.add());
+    setBoard(board.add(1, 1));
+  }
+
+  void addDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Add Chart"),
+        content: Wrap(
+          children: [
+            for (int i = 1; i <= 5; i++)
+              for (int j = i; j <= 5; j++)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(padding: EdgeInsets.all(8.0)),
+                  onPressed: () {
+                    setBoard(widget.appState.board.add(i, j));
+                    Navigator.pop(context);
+                  },
+                  child: Text("${i}x$j"),
+                ),
+          ],
+        ),
+      ),
+    );
   }
 
   Board mapBoard(Board board, DoublePoint Function(DoublePoint) map) {

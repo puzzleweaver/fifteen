@@ -30,17 +30,17 @@ class Board {
     );
   }
 
-  Board add() {
+  Board add(int i, int j) {
     Random r = Random();
     return Board(
-      charts: [...charts, (1, 1)],
+      charts: [...charts, (i, j)],
       convs: convs,
       quads: [
         ...quads,
-        Quad.unit().mult(0.1).add(DoublePoint(
-              r.nextDouble() * 0.9,
-              r.nextDouble() * 0.9,
-            )),
+        Quad.unit()
+            .mult(0.1)
+            .scale(i.toDouble(), j.toDouble())
+            .add(DoublePoint(r.nextDouble() * 0.9, r.nextDouble() * 0.9))
       ],
       constraints: constraints,
     );
@@ -67,11 +67,11 @@ class Board {
       var (n, m) = charts[a];
       for (int i = 0; i < n; i++) {
         ret.add(Coord(a, IntPoint(i * 2 - 1, -1)));
-        ret.add(Coord(a, IntPoint(i * 2 + 1, 2 * n - 1)));
+        ret.add(Coord(a, IntPoint(i * 2 + 1, 2 * m - 1)));
       }
       for (int j = 0; j < m; j++) {
         ret.add(Coord(a, IntPoint(-1, j * 2 + 1)));
-        ret.add(Coord(a, IntPoint(2 * m - 1, j * 2 - 1)));
+        ret.add(Coord(a, IntPoint(2 * n - 1, j * 2 - 1)));
       }
       total += 2 * (n + m);
     }
