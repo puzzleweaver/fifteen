@@ -4,10 +4,27 @@ import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/board_list.dart';
 
 class Level {
+  static final List<Board> _boards = [
+    BoardList.classic3,
+    BoardList.classic4,
+    BoardList.cube2,
+    BoardList.star4,
+    BoardList.cube3,
+    BoardList.star5,
+    BoardList.star6,
+    BoardList.eyes2,
+    BoardList.eye2,
+    BoardList.starbox3,
+    BoardList.cube15,
+    BoardList.eye1,
+    BoardList.eye4,
+    BoardList.star66,
+    BoardList.starbox4,
+  ];
   static final List<Level> adventure = [
-    for (int i = 0; i < BoardList.all.length; i++)
+    for (int i = 0; i < _boards.length; i++)
       Level(
-        board: BoardList.all[i],
+        board: _boards[i],
         index: i,
       )
   ];
@@ -15,16 +32,15 @@ class Level {
   final Board board;
   final String image;
   final int background;
-  final int? _index; // if null, no next button after solving the level
+  final int? index; // if null, no next button after solving the level
 
   Level({
     required this.board,
     String? image,
     int? background,
-    int? index,
+    this.index,
   })  : image = image ?? randomImage(),
-        background = background ?? randomBackground(),
-        _index = index;
+        background = background ?? randomBackground();
 
   static String randomImage() {
     const images = [
@@ -39,8 +55,8 @@ class Level {
   }
 
   bool hasNext() {
-    return _index != null && _index != adventure.length - 1;
+    return index != null && index != adventure.length - 1;
   }
 
-  Level get next => adventure[_index! + 1];
+  Level get next => adventure[index! + 1];
 }

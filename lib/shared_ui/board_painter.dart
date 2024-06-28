@@ -80,7 +80,12 @@ abstract class BoardPainter extends CustomPainter {
 }
 
 class BoardPreviewPainter extends BoardPainter {
-  BoardPreviewPainter({required super.board});
+  final bool locked;
+
+  BoardPreviewPainter({
+    required super.board,
+    required this.locked,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -97,5 +102,10 @@ class BoardPreviewPainter extends BoardPainter {
     // render the space.
     fillPaint.color = Color(0x44000000);
     fillSpace(canvas, board, size);
+
+    if (locked) {
+      fillPaint.color = Color(0x88000000);
+      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), fillPaint);
+    }
   }
 }

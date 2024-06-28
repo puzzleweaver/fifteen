@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
-  Future<void> _setAdventure(bool? newValue) async {
+  Future<void> _setAdventureEnabled(bool? newValue) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _adventureEnabled = newValue ?? Prefs.adventureEnabledDefault;
@@ -89,7 +89,9 @@ class _SettingsPageState extends State<SettingsPage> {
               BannerAdWidget(5, padded: true),
               Row(
                 children: [
-                  Checkbox(value: _adventureEnabled, onChanged: _setAdventure),
+                  Checkbox(
+                      value: _adventureEnabled,
+                      onChanged: _setAdventureEnabled),
                   Text("Adventure Enabled"),
                 ],
               ),
@@ -99,19 +101,56 @@ class _SettingsPageState extends State<SettingsPage> {
                   Text("Timer Enabled"),
                 ],
               ),
+              SizedBox.square(dimension: 16.0),
+              if (_showSupportArea)
+                _supportDialog(appState)
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton.icon(
+                      icon: Icon(Icons.attach_money),
+                      onPressed: () => setState(() {
+                        _showSupportArea = !_showSupportArea;
+                      }),
+                      label: Text("Support the Dev"),
+                    )
+                  ],
+                ),
+              SizedBox.square(dimension: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
-                    icon: Icon(Icons.attach_money),
-                    onPressed: () => setState(() {
-                      _showSupportArea = !_showSupportArea;
-                    }),
-                    label: Text("Support the Dev"),
+                    icon: Icon(Icons.cancel),
+                    label: Text("Reset Adventure Progress"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text("Are You Sure?"),
+                        content: Text("This might take a while to undo."),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text("NEVER"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              deleteAdventure();
+                            },
+                            child: Text("OK"),
+                          ),
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),
-              if (_showSupportArea) _supportDialog(appState),
               SafeArea(top: false, child: BannerAdWidget(6, padded: true)),
             ],
           ),
@@ -125,17 +164,20 @@ class _SettingsPageState extends State<SettingsPage> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Gimme Money", style: TextStyle(fontSize: 28)),
+          Text("Support the Dev :-)", style: TextStyle(fontSize: 28)),
           Row(
             children: [
               Checkbox(value: _annoyingAds, onChanged: _setAnnoyingAds),
               Text("Interstitial Ads"),
             ],
           ),
+          Text(
+            "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way <3",
+          ),
           Divider(color: Colors.black),
           Row(
             children: [
-              Text("Ad Chance"),
+              Text("Ad Chance:"),
               Slider(
                 value: _adChance,
                 onChanged: _setAdChance,
@@ -145,7 +187,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           Text(
-              "(Changes in ad settings may require restarting the app to take effect)"),
+            "Banner Ads are shown with a certain probability. More ads means more money for the developer, of course.",
+          ),
           Divider(color: Colors.black),
           ElevatedButton(
             onPressed: () => print("THANKS"),
@@ -155,5 +198,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     );
+  }
+
+  void deleteAdventure() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Prefs.setAdventureData(prefs, {});
   }
 }

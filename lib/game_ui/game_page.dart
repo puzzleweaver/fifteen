@@ -13,8 +13,10 @@ import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
 import 'package:fifteen/shared_ui/interstitial.dart';
+import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({
@@ -22,6 +24,7 @@ class GamePage extends StatefulWidget {
     required this.level,
     required this.appState,
   });
+
   final Level level;
   final FifteenAppState appState;
 
@@ -34,6 +37,8 @@ class _GamePageState extends State<GamePage> {
   ui.Image? image;
   bool previewing = false;
 
+  Set<int> _adventureData = {};
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -41,6 +46,25 @@ class _GamePageState extends State<GamePage> {
     });
     super.initState();
     widget.appState.addListener(_checkForDialog);
+    _loadSharedPreferences();
+  }
+
+  Future<void> _loadSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _adventureData = Prefs.getAdventureData(prefs);
+    });
+  }
+
+  Future<void> _saveLevelSolved(int? solvedLevelIndex) async {
+    if (solvedLevelIndex == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _adventureData = Prefs.setAdventureData(prefs, {
+        ..._adventureData,
+        solvedLevelIndex,
+      });
+    });
   }
 
   Future<void> _loadShader() async {
@@ -106,6 +130,7 @@ class _GamePageState extends State<GamePage> {
                   child: PreviewWidget(
                     level: widget.level,
                     dimension: 100,
+                    locked: false,
                   ),
                 ),
               ],
@@ -139,6 +164,7 @@ class _GamePageState extends State<GamePage> {
 
   void _checkForDialog() {
     if (widget.appState.game.isSolved()) {
+      _saveLevelSolved(widget.level.index);
       Interstitial.load();
       showGeneralDialog(
         barrierColor: Colors.black.withOpacity(0.5),

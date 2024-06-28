@@ -14,7 +14,7 @@ class BannerAdWidget extends StatefulWidget {
 
   final String adUnitId = Platform.isAndroid
       ? 'ca-app-pub-9631185147473049/3648411751' // android
-      : 'ca-app-pub-9631185147473049/8009047333'; // ios
+      : 'ca-app-pub-9631185147473049/1022248415'; // ios
 
   BannerAdWidget(
     this.adIndex, {

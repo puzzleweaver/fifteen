@@ -9,8 +9,10 @@ import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shader_test_ui/image_test_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:fifteen/shared_ui/game_preview_widget.dart';
+import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,25 +20,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ScrollController controller = ScrollController();
-  double alpha = 0.0;
+  final ScrollController _controller = ScrollController();
+  double _alpha = 0.0;
+  Set<int> _adventureData = {};
 
   @override
   void initState() {
     super.initState();
-    controller.addListener(() {
+    // context.watch<FifteenAppState>();
+    _controller.addListener(() {
       setState(() {
-        alpha = controller.position.pixels / 300;
-        alpha = alpha.clamp(0, 1);
+        _alpha = _controller.position.pixels / 300;
+        _alpha = _alpha.clamp(0, 1);
       });
+    });
+    _loadSharedPreferences();
+  }
+
+  Future<void> _loadSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _adventureData = Prefs.getAdventureData(prefs);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<FifteenAppState>();
+    var theme = Theme.of(context);
 
-    var gameButtons = Level.adventure.map((lvl) => getButton(lvl, appState));
+    _loadSharedPreferences();
+
+    var gameButtons =
+        Level.adventure.map((lvl) => getButton(lvl, theme, appState));
 
     var testButtons = [
       ElevatedButton(
@@ -62,11 +78,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
           leading: AnimatedOpacity(
-            opacity: alpha,
+            opacity: _alpha,
             duration: Durations.short1,
             child: IconButton(
               icon: Icon(Icons.expand_less),
-              onPressed: () => controller.animateTo(
+              onPressed: () => _controller.animateTo(
                 0.0,
                 duration: Durations.long1,
                 curve: Curves.easeInOut,
@@ -75,7 +91,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: SingleChildScrollView(
-          controller: controller,
+          controller: _controller,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -87,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                     height: 300,
                     width: 300,
                     fit: BoxFit.fill,
-                    opacity: AlwaysStoppedAnimation(1.0 - alpha),
+                    opacity: AlwaysStoppedAnimation(1.0 - _alpha),
                   ),
                 ),
                 Wrap(
@@ -96,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     ...gameButtons,
-                    ...testButtons,
+                    // ...testButtons,
                   ],
                 ),
                 SafeArea(child: BannerAdWidget(3, padded: true)),
@@ -108,16 +124,23 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget getButton(Level level, FifteenAppState appState) {
+  Widget getButton(Level level, ThemeData theme, FifteenAppState appState) {
+    bool levelCompleted =
+        level.index != null && _adventureData.contains(level.index ?? -1);
+    bool levelLocked = isLevelLocked(level.index);
     return ElevatedButton(
-      onPressed: () => goToGame(level, appState),
+      onPressed: levelLocked ? null : () => goToGame(level, appState),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(8.0),
+        backgroundColor: levelCompleted
+            ? theme.colorScheme.secondary
+            : theme.colorScheme.primary,
       ),
       // child: Text(label),
       child: PreviewWidget(
         level: level,
         dimension: getDim(context),
+        locked: levelLocked,
       ),
     );
   }
@@ -177,6 +200,19 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+
+  bool isLevelLocked(int? index) {
+    if (index == null) return false;
+    if (_adventureData.contains(index)) {
+      return false; // never lock solved levels
+    }
+    if (index == 0 || index == 1 || index == 2) {
+      return false; // initial levels
+    }
+    return !_adventureData.contains(index - 3) &&
+        !_adventureData.contains(index - 2) &&
+        !_adventureData.contains(index - 1);
   }
 
   void resetScroll() {}

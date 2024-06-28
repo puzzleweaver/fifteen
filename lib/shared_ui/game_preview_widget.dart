@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 class PreviewWidget extends StatelessWidget {
   final Level level;
   final double dimension;
+  final bool locked;
 
-  PreviewWidget({required this.level, required this.dimension});
+  PreviewWidget({
+    required this.level,
+    required this.dimension,
+    required this.locked,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,10 @@ class PreviewWidget extends StatelessWidget {
           Image.asset(level.image),
           SizedBox.expand(
             child: CustomPaint(
-              painter: BoardPreviewPainter(board: level.board),
+              painter: BoardPreviewPainter(
+                board: level.board,
+                locked: locked,
+              ),
             ),
           ),
         ],
