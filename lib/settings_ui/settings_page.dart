@@ -4,6 +4,7 @@ import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -11,7 +12,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _adventureEnabled = Prefs.adventureEnabledDefault;
   bool _timerEnabled = Prefs.timerEnabledDefault;
   bool _annoyingAds = Prefs.annoyingAdsDefault;
   double _adChance = Prefs.adChanceDefault;
@@ -27,21 +27,11 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _loadSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _adventureEnabled = prefs.getBool(Prefs.adventureEnabledLabel) ??
-          Prefs.adventureEnabledDefault;
       _timerEnabled =
           prefs.getBool(Prefs.timerEnabledLabel) ?? Prefs.timerEnabledDefault;
       _annoyingAds =
           prefs.getBool(Prefs.annoyingAdsLabel) ?? Prefs.annoyingAdsDefault;
       _adChance = prefs.getDouble(Prefs.adChanceLabel) ?? Prefs.adChanceDefault;
-    });
-  }
-
-  Future<void> _setAdventureEnabled(bool? newValue) async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _adventureEnabled = newValue ?? Prefs.adventureEnabledDefault;
-      prefs.setBool(Prefs.adventureEnabledLabel, _adventureEnabled);
     });
   }
 
@@ -86,15 +76,6 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Center(
           child: Column(
             children: [
-              BannerAdWidget(5, padded: true),
-              Row(
-                children: [
-                  Checkbox(
-                      value: _adventureEnabled,
-                      onChanged: _setAdventureEnabled),
-                  Text("Adventure Enabled"),
-                ],
-              ),
               Row(
                 children: [
                   Checkbox(value: _timerEnabled, onChanged: _setTimer),
@@ -122,32 +103,23 @@ class _SettingsPageState extends State<SettingsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
+                    icon: Icon(Icons.mail),
+                    label: Text("Send Feedback"),
+                    onPressed: sendFeedback,
+                  )
+                ],
+              ),
+              SizedBox.square(dimension: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
                     icon: Icon(Icons.cancel),
                     label: Text("Reset Adventure Progress"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                     ),
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text("Are You Sure?"),
-                        content: Text("This might take a while to undo."),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text("NEVER"),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              deleteAdventure();
-                            },
-                            child: Text("OK"),
-                          ),
-                        ],
-                      ),
-                    ),
+                    onPressed: areYouSureResetAdventure,
                   )
                 ],
               ),
@@ -168,32 +140,24 @@ class _SettingsPageState extends State<SettingsPage> {
           Row(
             children: [
               Checkbox(value: _annoyingAds, onChanged: _setAnnoyingAds),
-              Text("Interstitial Ads"),
+              Text("Interstitial Ads${_annoyingAds ? ' <3' : ''}"),
             ],
           ),
           Text(
-            "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way <3",
+            "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way",
           ),
           Divider(color: Colors.black),
-          Row(
-            children: [
-              Text("Ad Chance:"),
-              Slider(
-                value: _adChance,
-                onChanged: _setAdChance,
-                min: 1.0 / 3.0,
-                max: 1.0,
-              ),
-            ],
+          Text("Ad Chance:"),
+          Slider(
+            value: _adChance,
+            onChanged: _setAdChance,
+            min: 1.0 / 3.0,
+            max: 1.0,
           ),
           Text(
-            "Banner Ads are shown with a certain probability. More ads means more money for the developer, of course.",
+            "Banner Ads are shown with a certain probability. More ads means more money for the developer :)",
           ),
-          Divider(color: Colors.black),
-          ElevatedButton(
-            onPressed: () => print("THANKS"),
-            child: Text("Donate :)"),
-          ),
+          SizedBox.square(dimension: 16.0),
           BannerAdWidget(7, padded: true),
         ],
       ),
@@ -203,5 +167,65 @@ class _SettingsPageState extends State<SettingsPage> {
   void deleteAdventure() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Prefs.setAdventureData(prefs, {});
+  }
+
+  void areYouSureDisableAdventure() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Are You Sure?"),
+        content: Text("This will probably be less exciting than following"),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("NEVER"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              deleteAdventure();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void areYouSureResetAdventure() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Are You Sure?"),
+        content: Text("This might take a while to undo."),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("NEVER"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              deleteAdventure();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void sendFeedback() async {
+    print("sending feedback...");
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'aweaver2718@gmail.com',
+      queryParameters: {'subject': 'Fifteent Feedback', 'body': "I hate you."},
+    );
+    if (!await launchUrl(emailUri)) {
+      throw Exception('Could not launch $emailUri');
+    }
   }
 }

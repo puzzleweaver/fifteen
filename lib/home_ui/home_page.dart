@@ -6,7 +6,7 @@ import 'package:fifteen/game_ui/game_page.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
-import 'package:fifteen/shared_ui/game_preview_widget.dart';
+import 'package:fifteen/shared_ui/preview_widget.dart';
 import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -90,10 +90,10 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SafeArea(
-                  bottom: false,
+                Padding(
+                  padding: EdgeInsets.all(50.0).copyWith(top: 75.0),
                   child: Image.asset(
-                    "assets/images/icon.png",
+                    "assets/images/header.png",
                     height: 300,
                     width: 300,
                     fit: BoxFit.fill,

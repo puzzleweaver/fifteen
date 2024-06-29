@@ -11,7 +11,7 @@ import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/game_ui/game_painter.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
-import 'package:fifteen/shared_ui/game_preview_widget.dart';
+import 'package:fifteen/shared_ui/preview_widget.dart';
 import 'package:fifteen/shared_ui/interstitial.dart';
 import 'package:fifteen/shared_ui/prefs.dart';
 import 'package:flutter/material.dart';
@@ -38,21 +38,31 @@ class _GamePageState extends State<GamePage> {
   bool previewing = false;
 
   Set<int> _adventureData = {};
+  bool _timerEnabled = Prefs.timerEnabledDefault;
+
+  Timer? timer;
+  DateTime? initialTime, currentTime;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadShader();
     });
-    super.initState();
     widget.appState.addListener(_checkForDialog);
     _loadSharedPreferences();
+    initialTime = DateTime.now();
+    timer = Timer.periodic(Duration(milliseconds: 100), (Timer t) {
+      setState(() => currentTime = DateTime.now());
+    });
+    super.initState();
   }
 
   Future<void> _loadSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _adventureData = Prefs.getAdventureData(prefs);
+      _timerEnabled =
+          prefs.getBool(Prefs.timerEnabledLabel) ?? Prefs.timerEnabledDefault;
     });
   }
 
@@ -82,7 +92,22 @@ class _GamePageState extends State<GamePage> {
   @override
   void dispose() {
     widget.appState.removeListener(_checkForDialog);
+    timer?.cancel();
+    timer = null;
     super.dispose();
+  }
+
+  String getTimeDisplay() {
+    DateTime? t0 = initialTime, t1 = currentTime;
+    if (t0 == null || t1 == null) return "XX:XX";
+    Duration delta = t1.difference(t0);
+    int hours = delta.inHours,
+        minutes = delta.inMinutes.remainder(60),
+        seconds = delta.inSeconds.remainder(60);
+    String hourStr = hours == 0 ? "" : "${hours.toString().padLeft(2, "0")}:",
+        minuteStr = "${minutes.toString().padLeft(2, '0')}:",
+        secondStr = seconds.toString().padLeft(2, '0');
+    return "$hourStr$minuteStr$secondStr";
   }
 
   @override
@@ -123,10 +148,18 @@ class _GamePageState extends State<GamePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("3:04", style: TextStyle(fontSize: 14 * 3)),
+                ...(_timerEnabled
+                    ? [
+                        Expanded(child: Container()),
+                        Text(getTimeDisplay(),
+                            style: TextStyle(fontSize: 14 * 3)),
+                        Expanded(child: Container()),
+                      ]
+                    : []),
                 GestureDetector(
                   onTapDown: (details) => setState(() => previewing = true),
                   onTapUp: (details) => setState(() => previewing = false),
+                  onTapCancel: () => setState(() => previewing = false),
                   child: PreviewWidget(
                     level: widget.level,
                     dimension: 100,
@@ -166,6 +199,8 @@ class _GamePageState extends State<GamePage> {
     if (widget.appState.game.isSolved()) {
       _saveLevelSolved(widget.level.index);
       Interstitial.load();
+      timer?.cancel();
+      timer = null;
       showGeneralDialog(
         barrierColor: Colors.black.withOpacity(0.5),
         transitionBuilder: (context, a1, a2, widget) {
@@ -190,32 +225,37 @@ class _GamePageState extends State<GamePage> {
   Widget _dialog() {
     bool hasNext = widget.level.hasNext();
     return AlertDialog(
+      title: Text("You Solved This Board!"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("You Solved This Board!"),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: onHome,
-                child: Text("Home"),
-              ),
-              SizedBox.square(dimension: 8.0),
-              ElevatedButton(
-                onPressed: onAgain,
-                child: Text("Again"),
-              ),
-              if (hasNext) SizedBox.square(dimension: 8.0),
-              if (hasNext)
-                ElevatedButton(
-                  onPressed: onNext,
-                  child: Text("Next"),
-                ),
-            ],
-          )
+          PreviewWidget(
+            level: widget.level,
+            locked: false,
+            dimension: 200,
+          ),
+          Text(
+            "Your time was ${getTimeDisplay()}.",
+          ),
         ],
       ),
+      actions: [
+        ElevatedButton(
+          onPressed: onHome,
+          child: Text("Home"),
+        ),
+        SizedBox.square(dimension: 8.0),
+        ElevatedButton(
+          onPressed: onAgain,
+          child: Text("Again"),
+        ),
+        if (hasNext) SizedBox.square(dimension: 8.0),
+        if (hasNext)
+          ElevatedButton(
+            onPressed: onNext,
+            child: Text("Next"),
+          ),
+      ],
     );
   }
 
