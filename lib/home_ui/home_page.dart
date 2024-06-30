@@ -92,12 +92,12 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Padding(
                   padding: EdgeInsets.all(50.0).copyWith(top: 75.0),
-                  child: Image.asset(
-                    "assets/images/header.png",
-                    height: 300,
-                    width: 300,
-                    fit: BoxFit.fill,
-                    opacity: AlwaysStoppedAnimation(1.0 - _alpha),
+                  child: SizedBox.square(
+                    child: Image.asset(
+                      "assets/images/header.png",
+                      fit: BoxFit.fill,
+                      opacity: AlwaysStoppedAnimation(1.0 - _alpha),
+                    ),
                   ),
                 ),
                 Wrap(

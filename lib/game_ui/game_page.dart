@@ -234,9 +234,10 @@ class _GamePageState extends State<GamePage> {
             locked: false,
             dimension: 200,
           ),
-          Text(
-            "Your time was ${getTimeDisplay()}.",
-          ),
+          if (_timerEnabled)
+            Text(
+              "Your time was ${getTimeDisplay()}.",
+            ),
         ],
       ),
       actions: [
