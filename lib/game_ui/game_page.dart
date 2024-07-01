@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
 import 'package:fifteen/builder_ui/builder_page.dart';
+import 'package:fifteen/game_ui/game_widget.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/math/quad.dart';
-import 'package:fifteen/game_ui/game_painter.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:fifteen/shared_ui/preview_widget.dart';
@@ -112,8 +109,6 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return Scaffold(
       appBar: AppBar(
         title: BannerAdWidget(0),
@@ -137,62 +132,57 @@ class _GamePageState extends State<GamePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BannerAdWidget(1, padded: true),
-            Expanded(child: Container()),
-            SizedBox.square(
-              dimension: min(size.width, size.height),
-              child: _body(),
+            Expanded(
+              flex: 1,
+              child: BannerAdWidget(1, padded: true),
             ),
-            SizedBox.square(dimension: 8.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ...(_timerEnabled
-                    ? [
-                        Expanded(child: Container()),
-                        Text(getTimeDisplay(),
-                            style: TextStyle(fontSize: 14 * 3)),
-                        Expanded(child: Container()),
-                      ]
-                    : []),
-                GestureDetector(
-                  onTapDown: (details) => setState(() => previewing = true),
-                  onTapUp: (details) => setState(() => previewing = false),
-                  onTapCancel: () => setState(() => previewing = false),
-                  child: PreviewWidget(
-                    level: widget.level,
-                    dimension: 100,
-                    locked: false,
-                  ),
+            Expanded(
+              flex: 6,
+              child: Center(
+                child: GameWidget(
+                  shader: shader,
+                  image: image,
+                  previewing: previewing,
                 ),
-              ],
+              ),
             ),
-            Expanded(child: Container()),
-            SafeArea(top: false, child: BannerAdWidget(2)),
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ...(_timerEnabled
+                      ? [
+                          Expanded(child: Container()),
+                          Text(getTimeDisplay(),
+                              style: TextStyle(fontSize: 14 * 3)),
+                          Expanded(child: Container()),
+                        ]
+                      : []),
+                  GestureDetector(
+                    onTapDown: (details) => setState(() => previewing = true),
+                    onTapUp: (details) => setState(() => previewing = false),
+                    onTapCancel: () => setState(() => previewing = false),
+                    child: PreviewWidget(
+                      level: widget.level,
+                      locked: false,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: SafeArea(
+                top: false,
+                child: BannerAdWidget(2),
+              ),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  Widget _body() {
-    if (shader == null) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      return GestureDetector(
-        onTapDown: (tapDetails) => onWidgetTap(tapDetails, getSize(context)),
-        child: CustomPaint(
-          painter: GamePainter(
-            shader: shader!,
-            image: image,
-            game: widget.appState.game,
-            board: widget.appState.board,
-            previewing: previewing,
-          ),
-        ),
-      );
-    }
   }
 
   void _checkForDialog() {
@@ -232,7 +222,6 @@ class _GamePageState extends State<GamePage> {
           PreviewWidget(
             level: widget.level,
             locked: false,
-            dimension: 200,
           ),
           if (_timerEnabled)
             Text(
@@ -245,12 +234,10 @@ class _GamePageState extends State<GamePage> {
           onPressed: onHome,
           child: Text("Home"),
         ),
-        SizedBox.square(dimension: 8.0),
         ElevatedButton(
           onPressed: onAgain,
           child: Text("Again"),
         ),
-        if (hasNext) SizedBox.square(dimension: 8.0),
         if (hasNext)
           ElevatedButton(
             onPressed: onNext,
@@ -258,25 +245,6 @@ class _GamePageState extends State<GamePage> {
           ),
       ],
     );
-  }
-
-  Size getSize(BuildContext context) {
-    final box = context.findRenderObject() as RenderBox;
-    double dim = min(box.size.width, box.size.height);
-    return Size(dim, dim);
-  }
-
-  void onWidgetTap(TapDownDetails tapDetails, Size size) {
-    DoublePoint pos = DoublePoint.fromOffset(tapDetails.localPosition);
-    pos = DoublePoint(pos.x / size.width, pos.y / size.height);
-
-    List<Quad> quads = widget.appState.board.getSubquads();
-    for (int i = 0; i < quads.length; i++) {
-      if (quads[i].isInside(pos)) {
-        widget.appState.tapAtIndex(i);
-        setState(() {}); // trigger repaint
-      }
-    }
   }
 
   void handleMore(String label) {

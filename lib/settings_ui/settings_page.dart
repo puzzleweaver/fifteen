@@ -137,14 +137,17 @@ class _SettingsPageState extends State<SettingsPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text("Support the Dev :-)", style: TextStyle(fontSize: 28)),
-          Row(
-            children: [
-              Checkbox(value: _annoyingAds, onChanged: _setAnnoyingAds),
-              Text("Interstitial Ads${_annoyingAds ? ' <3' : ''}"),
-            ],
+          CheckboxListTile(
+            title: Text("Interstitial Ads${_annoyingAds ? ' <3' : ''}"),
+            value: _annoyingAds,
+            onChanged: _setAnnoyingAds,
+            controlAffinity: ListTileControlAffinity.leading,
           ),
-          Text(
-            "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way",
+          Padding(
+            padding: EdgeInsets.only(left: 5.0, right: 5.0),
+            child: Text(
+              "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way",
+            ),
           ),
           Divider(color: Colors.black),
           Text("Ad Chance:"),
@@ -154,8 +157,11 @@ class _SettingsPageState extends State<SettingsPage> {
             min: 1.0 / 3.0,
             max: 1.0,
           ),
-          Text(
-            "Banner Ads are shown with a certain probability. More ads means more money for the developer :)",
+          Padding(
+            padding: EdgeInsets.only(left: 5.0, right: 5.0),
+            child: Text(
+              "Banner Ads are shown with a certain probability. More ads means more money for the developer :)",
+            ),
           ),
           SizedBox.square(dimension: 16.0),
           BannerAdWidget(7, padded: true),

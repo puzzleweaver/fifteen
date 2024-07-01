@@ -6,8 +6,8 @@ import 'package:fifteen/game_ui/game_page.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
-import 'package:fifteen/shared_ui/preview_widget.dart';
 import 'package:fifteen/shared_ui/prefs.dart';
+import 'package:fifteen/shared_ui/preview_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -100,15 +100,20 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Wrap(
-                  runSpacing: 5.0,
-                  spacing: 5.0,
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                GridView.count(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: 4,
+                  padding: EdgeInsets.all(5.0),
+                  mainAxisSpacing: 5.0,
+                  crossAxisSpacing: 5.0,
                   children: [
                     ...gameButtons,
                   ],
                 ),
-                SafeArea(child: BannerAdWidget(3, padded: true)),
+                SafeArea(
+                  child: BannerAdWidget(3, padded: true),
+                ),
               ],
             ),
           ),
@@ -129,10 +134,8 @@ class _HomePageState extends State<HomePage> {
             ? theme.colorScheme.secondary
             : theme.colorScheme.primary,
       ),
-      // child: Text(label),
       child: PreviewWidget(
         level: level,
-        dimension: getDim(context),
         locked: levelLocked,
       ),
     );

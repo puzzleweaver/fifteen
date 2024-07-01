@@ -16,30 +16,37 @@ class DebugPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("DEBUG (go away)"),
       ),
-      body: SingleChildScrollView(
-        child: Wrap(
-          children: [
-            ElevatedButton(
+      body: GridView.count(
+        crossAxisCount: 3,
+        mainAxisSpacing: 5.0,
+        crossAxisSpacing: 5.0,
+        padding: EdgeInsets.all(5.0),
+        children: [
+          Expanded(
+            child: ElevatedButton(
               onPressed: () => goToImageTest(context),
               child: Text("Shader Test"),
             ),
-            SizedBox.square(dimension: 8.0),
-            ElevatedButton(
+          ),
+          Expanded(
+            child: ElevatedButton(
               onPressed: () => goToBuilder(context, appState),
               child: Text("Board Builder"),
             ),
-            SizedBox.square(dimension: 8.0),
-            ...Level.allBoards.map(
-              (level) => ElevatedButton(
-                  onPressed: () => play(context, appState, level),
-                  child: PreviewWidget(
-                    level: level,
-                    dimension: 100.0,
-                    locked: false,
-                  )),
-            )
-          ],
-        ),
+          ),
+          ...Level.allBoards.map(
+            (level) => ElevatedButton(
+              onPressed: () => play(context, appState, level),
+              child: SizedBox.square(
+                dimension: 75.0,
+                child: PreviewWidget(
+                  level: level,
+                  locked: false,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

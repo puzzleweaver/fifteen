@@ -4,28 +4,25 @@ import 'package:flutter/material.dart';
 
 class PreviewWidget extends StatelessWidget {
   final Level level;
-  final double dimension;
   final bool locked;
 
   PreviewWidget({
     required this.level,
-    required this.dimension,
     required this.locked,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: dimension,
+    return AspectRatio(
+      aspectRatio: 1.0,
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          Image.asset(level.image),
-          SizedBox.expand(
-            child: CustomPaint(
-              painter: BoardPreviewPainter(
-                board: level.board,
-                locked: locked,
-              ),
+          Image.asset(level.image, fit: BoxFit.fill),
+          CustomPaint(
+            painter: BoardPreviewPainter(
+              board: level.board,
+              locked: locked,
             ),
           ),
         ],

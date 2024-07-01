@@ -11,6 +11,7 @@ import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/math/side.dart';
+import 'package:fifteen/shared_ui/border_box.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as dev;
 
@@ -34,8 +35,6 @@ class _BuilderPageState extends State<BuilderPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Build a Board"),
@@ -46,107 +45,104 @@ class _BuilderPageState extends State<BuilderPage> {
           ),
         ],
       ),
-      extendBodyBehindAppBar: true,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),
-              child: SizedBox.square(
-                dimension: min(size.width, size.height),
-                child: GestureDetector(
-                  onTapDown: (tapDetails) =>
-                      onWidgetTap(tapDetails, getSize(context)),
-                  child: CustomPaint(
-                    painter: BuilderPainter(
-                      board: board,
-                      selectedCoords: selectedCoords,
-                    ),
-                  ),
-                ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Center(
+            child: Expanded(
+              flex: 8,
+              child: AspectRatio(
+                aspectRatio: 1.0,
+                child: _board(),
               ),
             ),
-            SizedBox.square(dimension: 8.0),
-            Wrap(
-              runSpacing: 5.0,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: add,
-                  child: Icon(Icons.add),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: addDialog,
-                  child: Icon(Icons.addchart),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: solve,
-                  child: Icon(Icons.calculate),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: recenter,
-                  child: Icon(Icons.crop),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: () => rotateBy(-math.pi / 8),
-                  child: Icon(Icons.rotate_right),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: () => rotateBy(math.pi / 8),
-                  child: Icon(Icons.rotate_left),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed:
-                      (selectedCoords.length < 2) ? null : rotateVertical,
-                  child: Icon(Icons.vertical_align_center),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: () => scale(1.1),
-                  child: Icon(Icons.zoom_out_map),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: () => scale(1.0 / 1.1),
-                  child: Icon(Icons.zoom_in_map),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: selectedCoords.length < 2 ? null : linkCoords,
-                  child: Icon(Icons.link),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: selectedCoords.length < 4 ? null : linkSides,
-                  child: Icon(Icons.straighten),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: resetSelection,
-                  child: Icon(Icons.cancel),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: history.isEmpty ? null : undo,
-                  child: Icon(Icons.undo),
-                ),
-                SizedBox.square(dimension: 8.0),
-                ElevatedButton(
-                  onPressed: goToGamePage,
-                  child: Icon(Icons.science),
-                ),
-                SizedBox.square(dimension: 8.0),
-              ],
+          ),
+          Center(
+            child: Expanded(
+              flex: 3,
+              child: GridView.count(
+                crossAxisCount: 7,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                children: [
+                  ElevatedButton(
+                    onPressed: add,
+                    child: Icon(Icons.add),
+                  ),
+                  ElevatedButton(
+                    onPressed: addDialog,
+                    child: Icon(Icons.addchart),
+                  ),
+                  ElevatedButton(
+                    onPressed: solve,
+                    child: Icon(Icons.calculate),
+                  ),
+                  ElevatedButton(
+                    onPressed: recenter,
+                    child: Icon(Icons.crop),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => rotateBy(-math.pi / 8),
+                    child: Icon(Icons.rotate_right),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => rotateBy(math.pi / 8),
+                    child: Icon(Icons.rotate_left),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        (selectedCoords.length < 2) ? null : rotateVertical,
+                    child: Icon(Icons.vertical_align_center),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => scale(1.1),
+                    child: Icon(Icons.zoom_out_map),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => scale(1.0 / 1.1),
+                    child: Icon(Icons.zoom_in_map),
+                  ),
+                  ElevatedButton(
+                    onPressed: selectedCoords.length < 2 ? null : linkCoords,
+                    child: Icon(Icons.link),
+                  ),
+                  ElevatedButton(
+                    onPressed: selectedCoords.length < 4 ? null : linkSides,
+                    child: Icon(Icons.straighten),
+                  ),
+                  ElevatedButton(
+                    onPressed: resetSelection,
+                    child: Icon(Icons.cancel),
+                  ),
+                  ElevatedButton(
+                    onPressed: history.isEmpty ? null : undo,
+                    child: Icon(Icons.undo),
+                  ),
+                  ElevatedButton(
+                    onPressed: goToGamePage,
+                    child: Icon(Icons.science),
+                  ),
+                ],
+              ),
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _board() {
+    return LayoutBuilder(
+      builder: (context, constraints) => GestureDetector(
+        onTapDown: (tapDetails) => onWidgetTap(tapDetails, context),
+        child: BorderBox(
+          CustomPaint(
+            painter: BuilderPainter(
+              board: board,
+              selectedCoords: selectedCoords,
+            ),
+          ),
         ),
       ),
     );
@@ -158,13 +154,8 @@ class _BuilderPageState extends State<BuilderPage> {
     });
   }
 
-  Size getSize(BuildContext context) {
-    final box = context.findRenderObject() as RenderBox;
-    double dim = min(box.size.width, box.size.height);
-    return Size(dim, dim);
-  }
-
-  void onWidgetTap(TapDownDetails tapDetails, Size size) {
+  void onWidgetTap(TapDownDetails tapDetails, BuildContext context) {
+    final size = context.size ?? Size(1.0, 1.0);
     var pos = DoublePoint.fromOffset(tapDetails.localPosition);
     pos = DoublePoint(pos.x / size.width, pos.y / size.height);
 
