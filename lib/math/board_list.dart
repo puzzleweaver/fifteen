@@ -15,9 +15,9 @@ class BoardList {
       quads: [
         Quad(
           DoublePoint(0.04545, 0.04545),
-          DoublePoint(0.95454, 0.04545),
-          DoublePoint(0.95454, 0.95454),
           DoublePoint(0.04545, 0.95454),
+          DoublePoint(0.95454, 0.95454),
+          DoublePoint(0.95454, 0.04545),
         ),
       ],
       constraints: ConstraintSet.createNew(),

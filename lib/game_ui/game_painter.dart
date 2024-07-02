@@ -76,15 +76,11 @@ class GamePainter extends BoardPainter {
       List<Quad> quads = board.getSubquads();
       for (int i = 0; i < quads.length; i++) {
         Quad q = quads[i], from, to;
-        if (game.isInPlace(i)) {
-          from = to = Quad.unit(); // NEVER distort the solved image
-        } else {
-          from = q;
-          to = game.getQuad(quads, i);
-        }
+        from = q;
+        to = game.getQuad(quads, i);
         setQuads(2, from, to);
         drawQuad(canvas, q, size, game.isSpace(i) ? fillPaint : shaderPaint);
-        drawQuad(canvas, q, size, strokePaint);
+        // drawQuad(canvas, q, size, strokePaint);
       }
     }
   }

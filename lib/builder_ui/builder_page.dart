@@ -48,87 +48,56 @@ class _BuilderPageState extends State<BuilderPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Center(
-            child: Expanded(
-              flex: 8,
-              child: AspectRatio(
-                aspectRatio: 1.0,
-                child: _board(),
-              ),
-            ),
+          AspectRatio(
+            aspectRatio: 1.0,
+            child: _board(),
           ),
-          Center(
-            child: Expanded(
-              flex: 3,
-              child: GridView.count(
-                crossAxisCount: 7,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                children: [
-                  ElevatedButton(
-                    onPressed: add,
-                    child: Icon(Icons.add),
-                  ),
-                  ElevatedButton(
-                    onPressed: addDialog,
-                    child: Icon(Icons.addchart),
-                  ),
-                  ElevatedButton(
-                    onPressed: solve,
-                    child: Icon(Icons.calculate),
-                  ),
-                  ElevatedButton(
-                    onPressed: recenter,
-                    child: Icon(Icons.crop),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => rotateBy(-math.pi / 8),
-                    child: Icon(Icons.rotate_right),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => rotateBy(math.pi / 8),
-                    child: Icon(Icons.rotate_left),
-                  ),
-                  ElevatedButton(
-                    onPressed:
-                        (selectedCoords.length < 2) ? null : rotateVertical,
-                    child: Icon(Icons.vertical_align_center),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => scale(1.1),
-                    child: Icon(Icons.zoom_out_map),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => scale(1.0 / 1.1),
-                    child: Icon(Icons.zoom_in_map),
-                  ),
-                  ElevatedButton(
-                    onPressed: selectedCoords.length < 2 ? null : linkCoords,
-                    child: Icon(Icons.link),
-                  ),
-                  ElevatedButton(
-                    onPressed: selectedCoords.length < 4 ? null : linkSides,
-                    child: Icon(Icons.straighten),
-                  ),
-                  ElevatedButton(
-                    onPressed: resetSelection,
-                    child: Icon(Icons.cancel),
-                  ),
-                  ElevatedButton(
-                    onPressed: history.isEmpty ? null : undo,
-                    child: Icon(Icons.undo),
-                  ),
-                  ElevatedButton(
-                    onPressed: goToGamePage,
-                    child: Icon(Icons.science),
-                  ),
-                ],
+          GridView.count(
+            crossAxisCount: 7,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(5.0),
+            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 5.0,
+            children: [
+              builderButton(Icons.add, add),
+              builderButton(Icons.addchart, addDialog),
+              builderButton(Icons.calculate, solve),
+              builderButton(Icons.crop, recenter),
+              builderButton(
+                Icons.rotate_right,
+                () => rotateBy(-math.pi / 8),
               ),
-            ),
+              builderButton(Icons.rotate_left, () => rotateBy(math.pi / 8)),
+              builderButton(
+                Icons.vertical_align_center,
+                (selectedCoords.length < 2) ? null : rotateVertical,
+              ),
+              builderButton(Icons.zoom_out_map, () => scale(1.1)),
+              builderButton(Icons.zoom_in_map, () => scale(1.0 / 1.1)),
+              builderButton(
+                Icons.link,
+                selectedCoords.length < 2 ? null : linkCoords,
+              ),
+              builderButton(
+                Icons.straighten,
+                selectedCoords.length < 4 ? null : linkSides,
+              ),
+              builderButton(Icons.cancel, resetSelection),
+              builderButton(Icons.undo, history.isEmpty ? null : undo),
+              builderButton(Icons.science, goToGamePage),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget builderButton(IconData icon, void Function()? onPressed) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
+      onPressed: onPressed,
+      child: Icon(icon),
     );
   }
 

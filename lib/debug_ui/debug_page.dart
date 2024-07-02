@@ -3,7 +3,7 @@ import 'package:fifteen/game_ui/game_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shader_test_ui/image_test_page.dart';
+import 'package:fifteen/shader_test_ui/shader_test_page.dart';
 import 'package:fifteen/shared_ui/preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -71,8 +71,8 @@ class DebugPage extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return ImageTestPage(
-            imagePath: "assets/images/img2.png",
+          return ShaderTestPage(
+            imagePath: "assets/images/img.png",
             shaderPath: "shaders/image_quad.frag",
           );
         },
