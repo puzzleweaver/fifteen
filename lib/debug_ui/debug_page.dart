@@ -69,14 +69,7 @@ class DebugPage extends StatelessWidget {
   void goToImageTest(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) {
-          return ShaderTestPage(
-            imagePath: "assets/images/img.png",
-            shaderPath: "shaders/image_quad.frag",
-          );
-        },
-      ),
+      MaterialPageRoute(builder: (context) => ShaderTestPage()),
     );
   }
 

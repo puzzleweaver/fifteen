@@ -59,7 +59,7 @@ class ShaderTestPainter extends CustomPainter {
         Quad.unit()
             .sub(DoublePoint(0.5, 0.5))
             .rot(r.nextDouble() * 3.141 - 3.141 / 2)
-            .mult(0.7 + 0.1 * r.nextDouble())
+            .mult(0.2 + 0.1 * r.nextDouble())
             .add(DoublePoint(0.5, 0.5))
             .dent(0.8 + 0.2 * r.nextDouble()),
         ctime,

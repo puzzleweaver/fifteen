@@ -42,29 +42,28 @@ vec3 background(vec2 c, int which) {
     }
 }
 
-float wedge(vec2 a, vec2 b) {
-    return a.x*b.y - a.y*b.x;
+vec2 normal(vec2 z) { return vec2(z.y, -z.x) / length(z); } 
+float alpha(vec2 p, vec2 p0, vec2 p1, vec2 p2, vec2 p3) {
+    vec2 n0 = normal(p0-p3), n2 = normal(p2-p1);
+    return dot(p-p0, n0) / (dot(p-p0, n0) + dot(p-p2, n2));
 }
-float alpha(vec2 x, vec2 p0, vec2 p1, vec2 p2, vec2 p3) {
-    x = x - p0;
-    p1 = p1 - p0;
-    p2 = p2 - p0;
-    p3 = p3 - p0;
-    float r2r3 = wedge(p2, p1) - wedge(p3, p1),
-          dXd3 = dot(x, p1) - dot(p3, p1),
-          d2d3 = dot(p2, p1) - dot(p3, p1);
-    float den = r2r3 * dXd3 / d2d3 + wedge(p3, p1);
-    return wedge(x, p1) / den;
-}
-vec2 quadTransform(vec2 x, vec2 h0, vec2 h1, vec2 h2, vec2 h3, vec2 x0, vec2 x1, vec2 x2, vec2 x3) {
-    float alpha01 = alpha(x, h0, h1, h2, h3),
-          alpha12 = alpha(x, h1, h2, h3, h0),
-          alpha23 = 1.0 - alpha01,
-          alpha30 = 1.0 - alpha12;
-    return alpha23*alpha12*x0 +
-           alpha23*alpha30*x1 +
-           alpha01*alpha30*x2 +
-           alpha01*alpha12*x3;
+vec2 quadTransform(vec2 p, vec2 p0, vec2 p1, vec2 p2, vec2 p3, vec2 q0, vec2 q1, vec2 q2, vec2 q3) {
+    // coordinates from p_i:
+    vec2 n0 = normal(p1-p0), n1 = normal(p2-p1), n2 = normal(p3-p2), n3 = normal(p0-p3);
+    float u = dot(p-p3, n3) / (dot(p-p3, n3) + dot(p-p1, n1));
+    float v = dot(p-p0, n0) / (dot(p-p0, n0) + dot(p-p2, n2));
+    
+    // reconstruct from q_i:
+    n0 = normal(q1-q0);
+    n1 = normal(q2-q1);
+    n2 = normal(q3-q2);
+    n3 = normal(q0-q3);
+    vec2 A = (u-1)*n3 + u*n1;
+    vec2 B = (v-1)*n0 + v*n2;
+    float k = (u-1)*dot(q3, n3) + u*dot(q1, n1);
+    float l = (v-1)*dot(q0, n0) + v*dot(q2, n2);
+    float invdet = 1.0/(A.x*B.y - A.y*B.x);
+    return invdet * vec2(B.y*k - A.y*l, -B.x*k + A.x*l);
 }
 
 // rounded tile
@@ -114,14 +113,15 @@ void main() {
     vec2 np = quadTransform(uv, H0, H1, H2, H3, X0, X1, X2, X3);
 
     vec4 col = texture(image, np).xyzw;
-    if(col.a == 0) col.xyz = background(np, 2);
+    if(col.a == 0) col.xyz = background(np, 3);
+
     float distFromShape = roundedSDF(uv, H0, H1, H2, H3);
     if(distFromShape > 0.0) {
         col.xyz = vec3(0.0, 0.0, 0.0);
     } 
     // else { col *= smoothstep(0.1-distFromShape*256.0); }
     else if(distFromShape > -0.00125) {
-        col.xyz *= 0.0; // 
+        col.xyz *= 0.0;
     }
 
     // Output to screen

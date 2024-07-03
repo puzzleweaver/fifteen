@@ -7,14 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ShaderTestPage extends StatefulWidget {
-  const ShaderTestPage({
-    super.key,
-    required this.shaderPath,
-    required this.imagePath,
-  });
+  final String shaderPath = "shaders/image_quad.frag";
+  final String imagePath = "assets/images/img4.png";
 
-  final String shaderPath;
-  final String imagePath;
+  ShaderTestPage();
 
   @override
   State<ShaderTestPage> createState() => _ShaderTestPageState();
@@ -61,7 +57,12 @@ class _ShaderTestPageState extends State<ShaderTestPage> {
       body: Column(
         children: [
           Expanded(
+            flex: 8,
             child: Center(child: _body()),
+          ),
+          Expanded(
+            flex: 3,
+            child: Image.asset(widget.imagePath),
           ),
         ],
       ),
