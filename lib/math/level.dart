@@ -51,6 +51,8 @@ class Level {
 
   static String randomImage() {
     const images = [
+      "assets/images/img1.png",
+      "assets/images/img2.png",
       "assets/images/img3.png",
       "assets/images/img4.png",
     ];
@@ -58,7 +60,7 @@ class Level {
   }
 
   static int randomBackground() {
-    return Random().nextInt(7);
+    return Random().nextInt(6);
   }
 
   bool hasNext() {

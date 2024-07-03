@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 
 class ShaderTestPage extends StatefulWidget {
   final String shaderPath = "shaders/image_quad.frag";
-  final String imagePath = "assets/images/img4.png";
+  final String imagePath = "assets/image/img4.png";
 
   ShaderTestPage();
 

@@ -5,6 +5,7 @@ out vec4 fragColor;
 uniform vec2 uSize;
 uniform vec2 H0, H1, H2, H3; // from
 uniform vec2 X0, X1, X2, X3; // to
+uniform float bgIndex;
 uniform sampler2D image;
 
 float radius = 0.015;
@@ -113,7 +114,7 @@ void main() {
     vec2 np = quadTransform(uv, H0, H1, H2, H3, X0, X1, X2, X3);
 
     vec4 col = texture(image, np).xyzw;
-    if(col.a == 0) col.xyz = background(np, 3);
+    col.xyz = col.w*col.xyz + (1.0-col.w)*background(np, int(bgIndex));
 
     float distFromShape = roundedSDF(uv, H0, H1, H2, H3);
     if(distFromShape > 0.0) {

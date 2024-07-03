@@ -12,6 +12,7 @@ class GamePainter extends BoardPainter {
   final ui.Image? image;
   final Game game;
   final bool previewing;
+  final int background;
 
   GamePainter({
     required this.shader,
@@ -19,6 +20,7 @@ class GamePainter extends BoardPainter {
     required this.game,
     required super.board,
     required this.previewing,
+    required this.background,
   });
 
   void _setFloats(int index, DoublePoint o) {
@@ -44,6 +46,7 @@ class GamePainter extends BoardPainter {
     shader.setImageSampler(0, image!);
     shader.setFloat(0, size.width);
     shader.setFloat(1, size.height);
+    shader.setFloat(11, 1.0 * background);
 
     final shaderPaint = Paint();
     shaderPaint.shader = shader;

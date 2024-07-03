@@ -42,17 +42,16 @@ flutter:
   assets:
    - assets/images/icon.png
    - assets/images/header.png
-   - assets/images/img.png
+   - assets/images/img1.png
    - assets/images/img2.png
    - assets/images/img3.png
    - assets/images/img4.png
-   - assets/images/img5.png
-   - assets/images/placeholder1.png
-   - assets/images/placeholder2.png
-   - assets/images/placeholder3.png
-   - assets/images/placeholder4.png
-   - assets/images/placeholder5.png
-   - assets/images/placeholder6.png
+   - assets/images/bg0.png
+   - assets/images/bg1.png
+   - assets/images/bg2.png
+   - assets/images/bg3.png
+   - assets/images/bg4.png
+   - assets/images/bg5.png
   shaders:
    - shaders/test_fractal.frag
    - shaders/image_blur.frag

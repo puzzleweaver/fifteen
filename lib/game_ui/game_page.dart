@@ -143,6 +143,7 @@ class _GamePageState extends State<GamePage> {
                   shader: shader,
                   image: image,
                   previewing: previewing,
+                  level: widget.level,
                 ),
               ),
             ),

@@ -18,6 +18,8 @@ class PreviewWidget extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
+          Image.asset("assets/images/bg${level.background}.png",
+              fit: BoxFit.fill),
           Image.asset(level.image, fit: BoxFit.fill),
           CustomPaint(
             painter: BoardPreviewPainter(
