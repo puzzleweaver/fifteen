@@ -22,17 +22,13 @@ class DebugPage extends StatelessWidget {
         crossAxisSpacing: 5.0,
         padding: EdgeInsets.all(5.0),
         children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () => goToImageTest(context),
-              child: Text("Shader Test"),
-            ),
+          ElevatedButton(
+            onPressed: () => goToImageTest(context),
+            child: Text("Shader Test"),
           ),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () => goToBuilder(context, appState),
-              child: Text("Board Builder"),
-            ),
+          ElevatedButton(
+            onPressed: () => goToBuilder(context, appState),
+            child: Text("Board Builder"),
           ),
           ...Level.allBoards.map(
             (level) => ElevatedButton(
