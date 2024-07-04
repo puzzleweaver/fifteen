@@ -4,12 +4,12 @@ import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/board_list.dart';
 
 class Level {
-  static final List<Board> _boards = [
+  static final List<Board> _boardSequence = [
     BoardList.classic3,
     BoardList.classic4,
     BoardList.cube2,
     BoardList.star4,
-    BoardList.cube3,
+    BoardList.cube2x3,
     BoardList.star5,
     BoardList.star6,
     BoardList.eyes2,
@@ -20,14 +20,15 @@ class Level {
     BoardList.eye1,
     BoardList.eye4,
     BoardList.star66,
+    BoardList.cube3x3,
     BoardList.starbox4,
     BoardList.paths4,
     BoardList.split4,
   ];
   static final List<Level> adventure = [
-    for (int i = 0; i < _boards.length; i++)
+    for (int i = 0; i < _boardSequence.length; i++)
       Level(
-        board: _boards[i],
+        board: _boardSequence[i],
         index: i,
       )
   ];

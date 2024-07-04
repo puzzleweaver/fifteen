@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 GridView.count(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  crossAxisCount: 4,
+                  crossAxisCount: 3,
                   padding: EdgeInsets.all(5.0),
                   mainAxisSpacing: 5.0,
                   crossAxisSpacing: 5.0,

@@ -17,7 +17,7 @@ class DebugPage extends StatelessWidget {
         title: Text("DEBUG (go away)"),
       ),
       body: GridView.count(
-        crossAxisCount: 3,
+        crossAxisCount: 4,
         mainAxisSpacing: 5.0,
         crossAxisSpacing: 5.0,
         padding: EdgeInsets.all(5.0),
@@ -36,12 +36,15 @@ class DebugPage extends StatelessWidget {
           ),
           ...Level.allBoards.map(
             (level) => ElevatedButton(
+              style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
               onPressed: () => play(context, appState, level),
               child: SizedBox.square(
                 dimension: 75.0,
                 child: PreviewWidget(
                   level: level,
                   locked: false,
+                  showBackground: false,
+                  showImage: false,
                 ),
               ),
             ),

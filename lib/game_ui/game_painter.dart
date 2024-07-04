@@ -46,7 +46,7 @@ class GamePainter extends BoardPainter {
     shader.setImageSampler(0, image!);
     shader.setFloat(0, size.width);
     shader.setFloat(1, size.height);
-    shader.setFloat(11, 1.0 * background);
+    shader.setFloat(2, 1.0 * background);
 
     final shaderPaint = Paint();
     shaderPaint.shader = shader;
@@ -61,7 +61,7 @@ class GamePainter extends BoardPainter {
     fillPaint.color = Colors.black;
 
     // background
-    setQuads(2, Quad.unit(), Quad.unit());
+    setQuads(3, Quad.unit(), Quad.unit());
     canvas.drawRect(Offset.zero & size, shaderPaint);
 
     if (previewing) {
@@ -81,9 +81,9 @@ class GamePainter extends BoardPainter {
         Quad q = quads[i], from, to;
         from = q;
         to = game.getQuad(quads, i);
-        setQuads(2, from, to);
+        setQuads(3, from, to);
         drawQuad(canvas, q, size, game.isSpace(i) ? fillPaint : shaderPaint);
-        // drawQuad(canvas, q, size, strokePaint);
+        drawQuad(canvas, q, size, strokePaint);
       }
     }
   }

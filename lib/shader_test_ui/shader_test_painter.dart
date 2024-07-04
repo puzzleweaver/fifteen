@@ -39,7 +39,7 @@ class ShaderTestPainter extends CustomPainter {
     shader.setImageSampler(0, image!);
     shader.setFloat(0, size.width);
     shader.setFloat(1, size.height);
-    shader.setFloat(2, time);
+    shader.setFloat(2, 0);
 
     final shaderPaint = Paint();
     shaderPaint.shader = shader;
@@ -76,8 +76,8 @@ class ShaderTestPainter extends CustomPainter {
       );
     }
 
-    setQuad(shader, 2, from);
-    setQuad(shader, 10, to);
+    setQuad(shader, 3, from);
+    setQuad(shader, 11, to);
     drawQuad(canvas, Quad.unit(), size, shaderPaint);
 
     strokePaint.strokeWidth = 2.0;

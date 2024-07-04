@@ -3,9 +3,9 @@
 out vec4 fragColor;
 
 uniform vec2 uSize;
+uniform float bgIndex;
 uniform vec2 H0, H1, H2, H3; // from
 uniform vec2 X0, X1, X2, X3; // to
-uniform float bgIndex;
 uniform sampler2D image;
 
 float radius = 0.015;
@@ -41,6 +41,7 @@ vec3 background(vec2 c, int which) {
         if(ddd > dim*0.25 && ddd < dim*0.9) return col1;
         else return col2;
     }
+    return vec3(1.0, 0.0, 0.0);
 }
 
 vec2 normal(vec2 z) { return vec2(z.y, -z.x) / length(z); } 
@@ -116,14 +117,14 @@ void main() {
     vec4 col = texture(image, np).xyzw;
     col.xyz = col.w*col.xyz + (1.0-col.w)*background(np, int(bgIndex));
 
-    float distFromShape = roundedSDF(uv, H0, H1, H2, H3);
-    if(distFromShape > 0.0) {
-        col.xyz = vec3(0.0, 0.0, 0.0);
-    } 
-    // else { col *= smoothstep(0.1-distFromShape*256.0); }
-    else if(distFromShape > -0.00125) {
-        col.xyz *= 0.0;
-    }
+    // float distFromShape = roundedSDF(uv, H0, H1, H2, H3);
+    // if(distFromShape > 0.0) {
+    //     col.xyz = vec3(0.0, 0.0, 0.0);
+    // } 
+    // // else { col *= smoothstep(0.1-distFromShape*256.0); }
+    // else if(distFromShape > -0.00125) {
+    //     col.xyz *= 0.0;
+    // }
 
     // Output to screen
     fragColor = vec4(col.xyz, 1.0);
