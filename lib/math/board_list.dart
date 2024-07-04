@@ -6,10 +6,12 @@ import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/int_point.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/math/side.dart';
+import 'package:uuid/uuid.dart';
 
 class BoardList {
   static Board _createRect(int n, int m) {
     return Board(
+      uuid: Uuid().v1(),
       charts: [(n, m)],
       convs: [],
       quads: [
@@ -42,6 +44,7 @@ class BoardList {
   static final Board classic4 = _createRect(4, 4);
   static final Board cube2x3 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -387,6 +390,7 @@ class BoardList {
   }();
   static final Board cube3x3 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [(3, 3), (3, 3), (3, 3)],
       convs: [
         Conv(
@@ -506,6 +510,7 @@ class BoardList {
   }();
   static final Board cube2 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [(2, 2), (2, 2), (2, 2)],
       convs: [
         Conv(
@@ -625,6 +630,7 @@ class BoardList {
   }();
   static final Board cube15 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -1188,6 +1194,7 @@ class BoardList {
   }();
   static final Board eye1 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -1575,6 +1582,7 @@ class BoardList {
   }();
   static final Board eye2 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -2046,6 +2054,7 @@ class BoardList {
   }();
   static final Board eye4 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -2870,6 +2879,7 @@ class BoardList {
   }();
   static final Board eyes2 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -3342,6 +3352,7 @@ class BoardList {
   }();
   static final Board star4 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [(1, 1), (1, 1), (1, 1), (1, 1), (1, 1), (1, 1), (1, 1), (1, 1)],
       convs: [
         Conv(
@@ -3685,6 +3696,7 @@ class BoardList {
   }();
   static final Board star5 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -4092,6 +4104,7 @@ class BoardList {
   }();
   static final Board star6 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -4566,6 +4579,7 @@ class BoardList {
   }();
   static final Board star66 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -5302,6 +5316,7 @@ class BoardList {
   }();
   static final Board starbox3 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -5836,6 +5851,7 @@ class BoardList {
   }();
   static final Board starbox4 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (1, 1),
@@ -6616,6 +6632,7 @@ class BoardList {
   }();
   static final Board paths4 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [(3, 3), (1, 1), (1, 1), (1, 1), (1, 1), (3, 3), (3, 3), (3, 3)],
       convs: [
         Conv(
@@ -6967,6 +6984,7 @@ class BoardList {
   }();
   static final Board split4 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 2),
         (1, 2),
@@ -7546,6 +7564,7 @@ class BoardList {
   }();
   static final Board triangles3 = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [
         (1, 1),
         (2, 2),
@@ -7925,6 +7944,7 @@ class BoardList {
   }();
   static final Board bowtie = () {
     return Board(
+      uuid: Uuid().v1(),
       charts: [(1, 1), (1, 1), (1, 1), (1, 1), (1, 1)],
       convs: [
         Conv(

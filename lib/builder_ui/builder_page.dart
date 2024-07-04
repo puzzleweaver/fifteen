@@ -60,7 +60,7 @@ class _BuilderPageState extends State<BuilderPage> {
             mainAxisSpacing: 5.0,
             crossAxisSpacing: 5.0,
             children: [
-              builderButton(Icons.add, add),
+              builderButton(Icons.add, () => addChart(1, 1)),
               builderButton(Icons.addchart, addDialog),
               builderButton(Icons.calculate, solve),
               builderButton(Icons.crop, recenter),
@@ -169,14 +169,10 @@ class _BuilderPageState extends State<BuilderPage> {
           ),
         );
       } else {
-        setBoard(board.setCoordLocation(selectedCoords[0], where));
+        setBoard(ConstraintSet.boardMoveCoord(board, selectedCoords[0], where));
       }
     }
     resetSelection();
-  }
-
-  void add() {
-    setBoard(board.add(1, 1));
   }
 
   void addDialog() {
@@ -191,7 +187,7 @@ class _BuilderPageState extends State<BuilderPage> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.all(8.0)),
                   onPressed: () {
-                    setBoard(widget.appState.board.add(i, j));
+                    addChart(i, j);
                     Navigator.pop(context);
                   },
                   child: Text("${i}x$j"),
@@ -202,8 +198,24 @@ class _BuilderPageState extends State<BuilderPage> {
     );
   }
 
+  void addChart(int i, int j) {
+    Random r = Random();
+    setBoard(
+      board.copyWith(
+        charts: [...board.charts, (i, j)],
+        quads: [
+          ...board.quads,
+          Quad.unit()
+              .mult(0.1)
+              .scale(i.toDouble(), j.toDouble())
+              .add(DoublePoint(r.nextDouble() * 0.9, r.nextDouble() * 0.9))
+        ],
+      ),
+    );
+  }
+
   Board mapBoard(Board board, DoublePoint Function(DoublePoint) map) {
-    return Board(
+    return board.copyWith(
       convs: board.convs,
       quads: [
         for (int a = 0; a < board.quads.length; a++)
@@ -216,8 +228,6 @@ class _BuilderPageState extends State<BuilderPage> {
                 )
               : board.quads[a]
       ],
-      charts: board.charts,
-      constraints: board.constraints,
     );
   }
 
@@ -289,10 +299,7 @@ class _BuilderPageState extends State<BuilderPage> {
   void linkCoords() {
     Board nboard = board;
     for (int i = 1; i < selectedCoords.length; i++) {
-      nboard = Board(
-        charts: nboard.charts,
-        convs: nboard.convs,
-        quads: nboard.quads,
+      nboard = nboard.copyWith(
         constraints: nboard.constraints.addCoincident(
           CoincidentBoardConstraint.createNew(
             selectedCoords[i],
@@ -308,10 +315,7 @@ class _BuilderPageState extends State<BuilderPage> {
   void linkSides() {
     Board nboard = board;
     for (int i = 2; i + 1 < selectedCoords.length; i += 2) {
-      nboard = Board(
-        charts: nboard.charts,
-        convs: nboard.convs,
-        quads: nboard.quads,
+      nboard = nboard.copyWith(
         constraints: nboard.constraints.addEquidistant(
           EquidistantBoardConstraint.createNew(
             Side(selectedCoords[1], selectedCoords[0]),
@@ -328,11 +332,8 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void solve() {
-    Board newBoard = Board(
-      charts: board.charts,
+    Board newBoard = board.copyWith(
       convs: board.constraints.generateConvs(board),
-      constraints: board.constraints,
-      quads: board.quads,
     );
     setBoard(newBoard.constraints.solve(newBoard));
     resetSelection();

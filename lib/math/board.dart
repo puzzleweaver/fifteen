@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fifteen/math/constraint.dart';
 import 'package:fifteen/math/conv.dart';
 import 'package:fifteen/math/coord.dart';
@@ -7,42 +5,46 @@ import 'package:fifteen/math/dir_coord.dart';
 import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/int_point.dart';
 import 'package:fifteen/math/quad.dart';
+import 'package:uuid/uuid.dart';
 
 class Board {
+  final String uuid;
   final List<(int, int)> charts;
   final List<Conv> convs;
   final List<Quad> quads;
   final ConstraintSet constraints;
 
   Board({
+    required this.uuid,
     required this.charts,
     required this.convs,
     required this.quads,
     required this.constraints,
   });
 
+  Board copyWith({
+    String? uuid,
+    List<(int, int)>? charts,
+    List<Conv>? convs,
+    List<Quad>? quads,
+    ConstraintSet? constraints,
+  }) {
+    return Board(
+      uuid: uuid ?? this.uuid,
+      charts: charts ?? this.charts,
+      convs: convs ?? this.convs,
+      quads: quads ?? this.quads,
+      constraints: constraints ?? this.constraints,
+    );
+  }
+
   static Board createNew() {
     return Board(
+      uuid: Uuid().v1(),
       charts: [],
       convs: [],
       quads: [],
       constraints: ConstraintSet.createNew(),
-    );
-  }
-
-  Board add(int i, int j) {
-    Random r = Random();
-    return Board(
-      charts: [...charts, (i, j)],
-      convs: convs,
-      quads: [
-        ...quads,
-        Quad.unit()
-            .mult(0.1)
-            .scale(i.toDouble(), j.toDouble())
-            .add(DoublePoint(r.nextDouble() * 0.9, r.nextDouble() * 0.9))
-      ],
-      constraints: constraints,
     );
   }
 
@@ -141,37 +143,6 @@ class Board {
 
   @override
   String toString() {
-    return "Board(charts: $charts, convs: $convs, quads: $quads, constraints: $constraints,)";
-  }
-
-  Board withoutChart(int a) {
-    assert(a >= 0 && a < charts.length);
-    return Board(
-      charts: charts..removeAt(a),
-      quads: quads..removeAt(a),
-      convs: convs..removeWhere((conv) => conv.fromA == a || conv.toA == a),
-      constraints: constraints.withoutChart(a),
-    );
-  }
-
-  Board setCoordLocation(Coord c, DoublePoint to) {
-    Quad quad = quads[c.a];
-    var (n, m) = charts[c.a];
-    double x = 0.5 * (c.hk.x + 1) / n, y = 0.5 * (c.hk.y + 1) / m;
-    DoublePoint dif = to - getVertex(c);
-    Quad newQuad = Quad(
-      quad.p1 + dif * (1 - x) * (1 - y),
-      quad.p2 + dif * (1 - x) * y,
-      quad.p3 + dif * x * y,
-      quad.p4 + dif * x * (1 - y),
-    );
-    return Board(
-      charts: charts,
-      quads: [
-        for (int a = 0; a < quads.length; a++) a == c.a ? newQuad : quads[a]
-      ],
-      convs: convs,
-      constraints: constraints,
-    );
+    return "Board(uuid: '$uuid', charts: $charts, convs: $convs, quads: $quads, constraints: $constraints,)";
   }
 }

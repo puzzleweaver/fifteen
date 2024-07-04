@@ -2,6 +2,7 @@ import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/conv.dart';
 import 'package:fifteen/math/coord.dart';
 import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/math/side.dart';
 
 class ConstraintSet {
@@ -17,6 +18,29 @@ class ConstraintSet {
     return ConstraintSet(
       coincidents: [],
       equidistants: [],
+    );
+  }
+
+  static Board boardMoveCoord(
+    Board board,
+    Coord c,
+    DoublePoint to,
+  ) {
+    Quad quad = board.quads[c.a];
+    var (n, m) = board.charts[c.a];
+    double x = 0.5 * (c.hk.x + 1) / n, y = 0.5 * (c.hk.y + 1) / m;
+    DoublePoint dif = to - board.getVertex(c);
+    Quad newQuad = Quad(
+      quad.p1 + dif * (1 - x) * (1 - y),
+      quad.p2 + dif * (1 - x) * y,
+      quad.p3 + dif * x * y,
+      quad.p4 + dif * x * (1 - y),
+    );
+    return board.copyWith(
+      quads: [
+        for (int a = 0; a < board.quads.length; a++)
+          a == c.a ? newQuad : board.quads[a]
+      ],
     );
   }
 
@@ -207,14 +231,14 @@ class CoincidentBoardConstraint {
     avg = avg / coords.length.toDouble();
 
     for (Coord c in coords) {
-      ret = ret.setCoordLocation(c, avg);
+      ret = ConstraintSet.boardMoveCoord(ret, c, avg);
     }
     return ret;
   }
 
   void set(Board board, DoublePoint o) {
     for (Coord c in coords) {
-      board.setCoordLocation(c, o);
+      ConstraintSet.boardMoveCoord(board, c, o);
     }
   }
 
@@ -282,8 +306,8 @@ class EquidistantBoardConstraint {
       mid = (p1 + p2) / 2.0;
       v = p1 - mid;
       v = v * 0.5 * avg / v.distance;
-      ret = ret.setCoordLocation(s.c1, mid + v);
-      ret = ret.setCoordLocation(s.c2, mid - v);
+      ret = ConstraintSet.boardMoveCoord(ret, s.c1, mid + v);
+      ret = ConstraintSet.boardMoveCoord(ret, s.c2, mid - v);
     }
     return ret;
   }
