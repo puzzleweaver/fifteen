@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:fifteen/game_ui/game_painter.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/math/level.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +13,14 @@ class GameWidget extends StatelessWidget {
   final FragmentShader? shader;
   final ui.Image? image;
   final bool previewing;
+  final Level level;
 
   const GameWidget({
     super.key,
     this.shader,
     this.image,
     required this.previewing,
+    required this.level,
   });
 
   @override
@@ -38,8 +41,9 @@ class GameWidget extends StatelessWidget {
                     shader: shader!,
                     image: image,
                     game: appState.game,
-                    board: appState.board,
+                    board: level.board,
                     previewing: previewing,
+                    background: level.background,
                   ),
                 ),
               ),

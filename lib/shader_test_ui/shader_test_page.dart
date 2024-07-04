@@ -2,30 +2,26 @@ import 'dart:async';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
-import 'package:fifteen/shader_test_ui/image_test_painter.dart';
+import 'package:fifteen/shader_test_ui/shader_test_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ImageTestPage extends StatefulWidget {
-  const ImageTestPage({
-    super.key,
-    required this.shaderPath,
-    required this.imagePath,
-  });
+class ShaderTestPage extends StatefulWidget {
+  final String shaderPath = "shaders/image_quad.frag";
+  final String imagePath = "assets/images/img4.png";
 
-  final String shaderPath;
-  final String imagePath;
+  ShaderTestPage();
 
   @override
-  State<ImageTestPage> createState() => _ImageTestPageState();
+  State<ShaderTestPage> createState() => _ShaderTestPageState();
 }
 
-class _ImageTestPageState extends State<ImageTestPage> {
+class _ShaderTestPageState extends State<ShaderTestPage> {
   late Timer timer;
   double delta = 0;
   FragmentShader? shader;
   ui.Image? image;
-  bool quadTo = false;
+  bool quadTo = false, boardy = false;
 
   @override
   void initState() {
@@ -43,8 +39,6 @@ class _ImageTestPageState extends State<ImageTestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -53,13 +47,24 @@ class _ImageTestPageState extends State<ImageTestPage> {
           IconButton(
             icon: Icon(quadTo ? Icons.arrow_downward : Icons.arrow_upward),
             onPressed: () => setState(() => quadTo = !quadTo),
-          )
+          ),
+          IconButton(
+            icon: Icon(boardy ? Icons.square : Icons.waves),
+            onPressed: () => setState(() => boardy = !boardy),
+          ),
         ],
       ),
-      body: SizedBox(
-        width: size.width,
-        height: size.height,
-        child: _body(),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 8,
+            child: Center(child: _body()),
+          ),
+          Expanded(
+            flex: 3,
+            child: Image.asset(widget.imagePath),
+          ),
+        ],
       ),
     );
   }
@@ -68,13 +73,18 @@ class _ImageTestPageState extends State<ImageTestPage> {
     if (shader == null) {
       return const Center(child: CircularProgressIndicator());
     } else {
-      return CustomPaint(
-          painter: ImageTestPainter(
-        shader: shader!,
-        time: delta,
-        image: image,
-        quadTo: quadTo,
-      ));
+      return AspectRatio(
+        aspectRatio: 1.0,
+        child: CustomPaint(
+          painter: ShaderTestPainter(
+            shader: shader!,
+            time: delta,
+            image: image,
+            quadTo: quadTo,
+            boardy: boardy,
+          ),
+        ),
+      );
     }
   }
 
