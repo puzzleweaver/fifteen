@@ -11,6 +11,7 @@ import 'package:fifteen/shared_ui/banner_ad_widget.dart';
 import 'package:fifteen/shared_ui/preview_widget.dart';
 import 'package:fifteen/shared_ui/interstitial.dart';
 import 'package:fifteen/shared_ui/prefs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,7 +117,12 @@ class _GamePageState extends State<GamePage> {
           PopupMenuButton<String>(
             onSelected: handleMore,
             itemBuilder: (BuildContext context) {
-              return {'Shuffle', 'Solve', 'Build', 'Settings'}
+              return {
+                'Shuffle',
+                if (kDebugMode) 'Solve',
+                if (kDebugMode) 'Build',
+                'Settings',
+              }
                   .map(
                     (String choice) => PopupMenuItem<String>(
                       value: choice,
