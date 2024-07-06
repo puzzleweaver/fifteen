@@ -9,9 +9,9 @@ import 'package:fifteen/math/side.dart';
 import 'package:uuid/uuid.dart';
 
 class BoardList {
-  static Board _createRect(int n, int m) {
+  static Board _createRect(int n, int m, {String? uuid}) {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: uuid ?? Uuid().v1(),
       charts: [(n, m)],
       convs: [],
       quads: [
@@ -40,11 +40,13 @@ class BoardList {
     return Board.createNew();
   }();
 
-  static final Board classic3 = _createRect(3, 3);
-  static final Board classic4 = _createRect(4, 4);
+  static final Board classic3 =
+      _createRect(3, 3, uuid: "a9654bc0-8c39-106f-a650-777adaa3df7f");
+  static final Board classic4 =
+      _createRect(4, 4, uuid: "f1bda1e0-8c95-106f-a650-777adaa3df7f");
   static final Board cube2x3 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "a738bd70-8caa-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -390,7 +392,7 @@ class BoardList {
   }();
   static final Board cube3x3 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "45163440-8cc0-106f-a650-777adaa3df7f",
       charts: [(3, 3), (3, 3), (3, 3)],
       convs: [
         Conv(
@@ -510,7 +512,7 @@ class BoardList {
   }();
   static final Board cube2 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "d06ce3e0-8cd4-106f-a650-777adaa3df7f",
       charts: [(2, 2), (2, 2), (2, 2)],
       convs: [
         Conv(
@@ -630,7 +632,7 @@ class BoardList {
   }();
   static final Board cube15 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "e6c48e90-8ce8-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -1194,7 +1196,7 @@ class BoardList {
   }();
   static final Board eye1 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "26be8010-8d01-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -1582,7 +1584,7 @@ class BoardList {
   }();
   static final Board eye2 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "57101990-8d15-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -2054,7 +2056,7 @@ class BoardList {
   }();
   static final Board eye4 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "41273240-8d2d-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -2879,7 +2881,7 @@ class BoardList {
   }();
   static final Board eyes2 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "fec84de0-8d44-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -3352,7 +3354,7 @@ class BoardList {
   }();
   static final Board star4 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "444acbb0-8d75-106f-a650-777adaa3df7f",
       charts: [(1, 1), (1, 1), (1, 1), (1, 1), (1, 1), (1, 1), (1, 1), (1, 1)],
       convs: [
         Conv(
@@ -3696,7 +3698,7 @@ class BoardList {
   }();
   static final Board star5 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "fd926420-8d7f-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -4104,7 +4106,7 @@ class BoardList {
   }();
   static final Board star6 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "ac969690-8d8e-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -4579,7 +4581,7 @@ class BoardList {
   }();
   static final Board star66 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "ebe399b0-8dbb-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -5316,7 +5318,7 @@ class BoardList {
   }();
   static final Board starbox3 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "7f7c31a0-8dda-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -5851,7 +5853,7 @@ class BoardList {
   }();
   static final Board starbox4 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "97bc8890-8de5-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (1, 1),
@@ -6632,7 +6634,7 @@ class BoardList {
   }();
   static final Board paths4 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "de64b1c0-8e01-106f-a650-777adaa3df7f",
       charts: [(3, 3), (1, 1), (1, 1), (1, 1), (1, 1), (3, 3), (3, 3), (3, 3)],
       convs: [
         Conv(
@@ -6984,7 +6986,7 @@ class BoardList {
   }();
   static final Board split4 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "f678f2d0-8e10-106f-a650-777adaa3df7f",
       charts: [
         (1, 2),
         (1, 2),
@@ -7564,7 +7566,7 @@ class BoardList {
   }();
   static final Board triangles3 = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "9358db50-8e1c-106f-a650-777adaa3df7f",
       charts: [
         (1, 1),
         (2, 2),
@@ -7944,7 +7946,7 @@ class BoardList {
   }();
   static final Board bowtie = () {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: "2831b1e0-8e2f-106f-a650-777adaa3df7f",
       charts: [(1, 1), (1, 1), (1, 1), (1, 1), (1, 1)],
       convs: [
         Conv(
