@@ -31,6 +31,24 @@ class _ShaderTestPageState extends State<ShaderTestPage> {
     super.initState();
   }
 
+  Future<void> _loadShader() async {
+    final imageData = await rootBundle.load(widget.imagePath);
+    image = await decodeImageFromList(imageData.buffer.asUint8List());
+
+    final program = await FragmentProgram.fromAsset(widget.shaderPath);
+    shader = program.fragmentShader();
+    setState(() {
+      //trigger a repaint
+    });
+
+    timer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
+      if (!mounted) return;
+      setState(() {
+        delta += 1 / 60;
+      });
+    });
+  }
+
   @override
   void dispose() {
     timer.cancel();
@@ -86,23 +104,5 @@ class _ShaderTestPageState extends State<ShaderTestPage> {
         ),
       );
     }
-  }
-
-  Future<void> _loadShader() async {
-    final imageData = await rootBundle.load(widget.imagePath);
-    image = await decodeImageFromList(imageData.buffer.asUint8List());
-
-    final program = await FragmentProgram.fromAsset(widget.shaderPath);
-    shader = program.fragmentShader();
-    setState(() {
-      //trigger a repaint
-    });
-
-    timer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
-      if (!mounted) return;
-      setState(() {
-        delta += 1 / 60;
-      });
-    });
   }
 }

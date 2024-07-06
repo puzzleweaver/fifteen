@@ -1,4 +1,5 @@
 import 'package:fifteen/builder_ui/builder_page.dart';
+import 'package:fifteen/debug_ui/imager_page.dart';
 import 'package:fifteen/game_ui/game_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
@@ -23,8 +24,12 @@ class DebugPage extends StatelessWidget {
         padding: EdgeInsets.all(5.0),
         children: [
           ElevatedButton(
-            onPressed: () => goToImageTest(context),
+            onPressed: () => goToShaderTest(context),
             child: Text("Shader Test"),
+          ),
+          ElevatedButton(
+            onPressed: () => goToImager(context),
+            child: Text("Go To ImagerPage"),
           ),
           ElevatedButton(
             onPressed: () => goToBuilder(context, appState),
@@ -65,10 +70,17 @@ class DebugPage extends StatelessWidget {
     );
   }
 
-  void goToImageTest(BuildContext context) {
+  void goToShaderTest(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ShaderTestPage()),
+    );
+  }
+
+  void goToImager(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ImagerPage()),
     );
   }
 

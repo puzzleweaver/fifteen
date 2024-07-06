@@ -52,10 +52,11 @@ class Level {
 
   static String randomImage() {
     const images = [
-      "assets/images/img1.png",
-      "assets/images/img2.png",
-      "assets/images/img3.png",
-      "assets/images/img4.png",
+      // "assets/images/img1.png",
+      // "assets/images/img2.png",
+      // "assets/images/img3.png",
+      // "assets/images/img4.png",
+      "assets/images/img5.png",
     ];
     return images[Random().nextInt(images.length)];
   }
