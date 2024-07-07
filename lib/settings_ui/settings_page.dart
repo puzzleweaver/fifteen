@@ -172,7 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void deleteAdventure() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Prefs.setAdventureData(prefs, {});
+    Prefs.setSolvedBoards(prefs, {});
   }
 
   void areYouSureDisableAdventure() {

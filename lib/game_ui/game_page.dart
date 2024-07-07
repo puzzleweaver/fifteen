@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:fifteen/builder_ui/builder_page.dart';
 import 'package:fifteen/game_ui/game_widget.dart';
 import 'package:fifteen/main.dart';
+import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings_ui/settings_page.dart';
 import 'package:fifteen/shared_ui/banner_ad_widget.dart';
@@ -35,7 +36,7 @@ class _GamePageState extends State<GamePage> {
   ui.Image? image;
   bool previewing = false;
 
-  Set<int> _adventureData = {};
+  Set<String> _solvedBoards = {};
   bool _timerEnabled = Prefs.timerEnabledDefault;
 
   Timer? timer;
@@ -58,19 +59,19 @@ class _GamePageState extends State<GamePage> {
   Future<void> _loadSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _adventureData = Prefs.getAdventureData(prefs);
+      _solvedBoards = Prefs.getSolvedBoards(prefs);
       _timerEnabled =
           prefs.getBool(Prefs.timerEnabledLabel) ?? Prefs.timerEnabledDefault;
     });
   }
 
-  Future<void> _saveLevelSolved(int? solvedLevelIndex) async {
-    if (solvedLevelIndex == null) return;
+  Future<void> _saveLevelSolved(Board? solvedBoard) async {
+    if (solvedBoard == null) return;
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _adventureData = Prefs.setAdventureData(prefs, {
-        ..._adventureData,
-        solvedLevelIndex,
+      _solvedBoards = Prefs.setSolvedBoards(prefs, {
+        ..._solvedBoards,
+        solvedBoard.uuid,
       });
     });
   }
@@ -194,7 +195,7 @@ class _GamePageState extends State<GamePage> {
 
   void _checkForDialog() {
     if (widget.appState.game.isSolved()) {
-      _saveLevelSolved(widget.level.index);
+      _saveLevelSolved(widget.level.board);
       Interstitial.load();
       timer?.cancel();
       timer = null;

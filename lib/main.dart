@@ -62,7 +62,6 @@ class FifteenAppState extends ChangeNotifier {
   List<double> adRolls = [for (int i = 0; i < 100; i++) Random().nextDouble()];
 
   void rerollAds() {
-    print("Rerolling Ads...");
     adRolls = [for (int i = 0; i < 100; i++) Random().nextDouble()];
     notifyListeners();
   }

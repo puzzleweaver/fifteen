@@ -12,21 +12,20 @@ class Prefs {
   static const String annoyingAdsLabel = 'annoying_ads';
   static const bool annoyingAdsDefault = false;
 
-  static const String adventureDataLabel = 'adventure_progress';
-  static const String adventureDataDefault = "[]";
-  static Set<int> getAdventureData(SharedPreferences prefs) {
-    String adventureData =
-        prefs.getString(adventureDataLabel) ?? adventureDataDefault;
-    List<int> adventureDataList = List<int>.from(jsonDecode(adventureData));
-    return adventureDataList.toSet();
+  static const String solvedBoardsLabel = 'adventure_progress';
+  static const String solvedBoardsDefault = "[]";
+  static Set<String> getSolvedBoards(SharedPreferences prefs) {
+    String solvedBoards =
+        prefs.getString(solvedBoardsLabel) ?? solvedBoardsDefault;
+    return List<String>.from(jsonDecode(solvedBoards)).toSet();
   }
 
-  static Set<int> setAdventureData(
+  static Set<String> setSolvedBoards(
     SharedPreferences prefs,
-    Set<int> newProgress,
+    Set<String> newSolvedBoards,
   ) {
-    String newAdventureData = jsonEncode(newProgress.toList());
-    prefs.setString(adventureDataLabel, newAdventureData);
-    return newProgress;
+    String solvedBoards = jsonEncode(newSolvedBoards.toList());
+    prefs.setString(solvedBoardsLabel, solvedBoards);
+    return newSolvedBoards;
   }
 }

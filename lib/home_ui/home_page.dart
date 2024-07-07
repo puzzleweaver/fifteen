@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ScrollController _controller = ScrollController();
   double _alpha = 0.0;
-  Set<int> _adventureData = {};
+  Set<String> _solvedBoards = {};
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _adventureData = Prefs.getAdventureData(prefs);
+      _solvedBoards = Prefs.getSolvedBoards(prefs);
     });
   }
 
@@ -124,8 +124,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget getButton(Level level, ThemeData theme, FifteenAppState appState) {
     bool levelCompleted =
-        level.index != null && _adventureData.contains(level.index ?? -1);
-    bool levelLocked = isLevelLocked(level.index);
+        level.index != null && _solvedBoards.contains(level.board.uuid);
+    bool levelLocked = _isLevelLocked(level.index);
     return ElevatedButton(
       onPressed: levelLocked ? null : () => goToGame(level, appState),
       style: ElevatedButton.styleFrom(
@@ -170,17 +170,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  bool isLevelLocked(int? index) {
+  bool _isLevelSolved(int? index) {
     if (index == null) return false;
-    if (_adventureData.contains(index)) {
-      return false; // never lock solved levels
-    }
-    if (index == 0 || index == 1 || index == 2) {
+    return _solvedBoards.contains(Level.adventure[index].board.uuid);
+  }
+
+  bool _isLevelLocked(int? index) {
+    if (index == null ||
+        _isLevelSolved(index) ||
+        index == 0 ||
+        index == 1 ||
+        index == 2) {
       return false; // initial levels
     }
-    return !_adventureData.contains(index - 3) &&
-        !_adventureData.contains(index - 2) &&
-        !_adventureData.contains(index - 1);
+    return !_isLevelSolved(index - 3) &&
+        !_isLevelSolved(index - 2) &&
+        !_isLevelSolved(index - 1);
   }
 
   void resetScroll() {}

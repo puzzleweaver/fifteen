@@ -57,7 +57,6 @@ class GameWidget extends StatelessWidget {
     BuildContext context,
   ) {
     final size = context.size ?? Size(1.0, 1.0);
-    print("Size is $size");
 
     DoublePoint pos = DoublePoint.fromOffset(tapDetails.localPosition);
     pos = DoublePoint(pos.x / size.width, pos.y / size.height);
