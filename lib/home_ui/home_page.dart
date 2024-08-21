@@ -50,6 +50,8 @@ class _HomePageState extends State<HomePage> {
 
     _loadSharedPreferences();
 
+    var size = MediaQuery.of(context).size;
+
     var gameButtons =
         Level.adventure.map((lvl) => getButton(lvl, theme, appState));
 
@@ -91,7 +93,12 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(50.0).copyWith(top: 75.0),
+                  padding: EdgeInsets.only(
+                    left: size.width / 8,
+                    right: size.width / 8,
+                    top: size.height / 16,
+                    bottom: size.height / 16,
+                  ),
                   child: SizedBox.square(
                     child: Image.asset(
                       "assets/images/header.png",

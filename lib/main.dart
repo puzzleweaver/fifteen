@@ -24,6 +24,7 @@ class FifteenApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => FifteenAppState(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Fifteen',
         theme: ThemeData(
           useMaterial3: false,

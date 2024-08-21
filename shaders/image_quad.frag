@@ -14,7 +14,7 @@ vec3 background(vec2 c, int which) {
     float dim = 0.087979798;
     vec3 col1 = vec3(0.9, 0.9, 0.9), col2 = vec3(1.0, 1.0, 1.0);
     if(which == 0) { // vertical stripes
-        if(mod(c.x, dim*1.5) < dim*0.75)
+        if(mod(dot(c, vec2(0.95, 0.05)), dim*1.5) < dim*0.75)
             return col1;
         else return col2;
     } else if(which == 1) { // zig zags

@@ -53,19 +53,24 @@ class Level {
         background = background ?? randomBackground();
 
   static final _images = [
-    // "assets/images/img1.png",
-    // "assets/images/img2.png",
-    // "assets/images/img3.png",
-    // "assets/images/img4.png",
+    "assets/images/img1.png",
+    "assets/images/img2.png",
+    "assets/images/img3.png",
+    "assets/images/img4.png",
     "assets/images/fruit0.png",
-    "assets/images/fruit1.png",
-    "assets/images/fruit2.png",
-    "assets/images/fruit8.png",
-    "assets/images/fruit4.png",
+    "assets/images/fruit9.png",
+
+    // "assets/images/fruit0.png",
+    // "assets/images/fruit1.png",
+    // "assets/images/fruit2.png",
+    // "assets/images/fruit8.png",
+    // "assets/images/fruit4.png",
+    // "assets/images/fruit7.png",
+    // "assets/images/fruit3.png",
+
+    // "assets/images/img3.png",
     // "assets/images/fruit5.png", // needs to be redone (ASAP)
     // "assets/images/fruit6.png", // needs to be redone (ASAP)
-    "assets/images/fruit7.png",
-    "assets/images/fruit3.png",
     // "assets/images/fruit9.png",
   ];
   static String randomImage() {
