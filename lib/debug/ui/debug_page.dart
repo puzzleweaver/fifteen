@@ -1,10 +1,10 @@
-import 'package:fifteen/builder_ui/builder_page.dart';
-import 'package:fifteen/game_ui/game_page.dart';
+import 'package:fifteen/builder/ui/builder_page.dart';
+import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shader_test_ui/shader_test_page.dart';
-import 'package:fifteen/shared_ui/preview_widget.dart';
+import 'package:fifteen/debug/ui/shader_test/shader_test_page.dart';
+import 'package:fifteen/shared/ui/preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

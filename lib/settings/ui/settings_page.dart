@@ -1,6 +1,6 @@
 import 'package:fifteen/main.dart';
-import 'package:fifteen/shared_ui/banner_ad_widget.dart';
-import 'package:fifteen/shared_ui/prefs.dart';
+import 'package:fifteen/shared/ui/banner_ad_widget.dart';
+import 'package:fifteen/shared/ui/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

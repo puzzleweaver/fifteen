@@ -1,5 +1,5 @@
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared_ui/board_painter.dart';
+import 'package:fifteen/shared/ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
 class PreviewWidget extends StatelessWidget {

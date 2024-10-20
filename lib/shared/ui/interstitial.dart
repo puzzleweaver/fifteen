@@ -1,7 +1,7 @@
 // A simple app that loads an interstitial ad.
 import 'dart:io';
 
-import 'package:fifteen/shared_ui/prefs.dart';
+import 'package:fifteen/shared/ui/prefs.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/game.dart';
 import 'package:fifteen/math/quad.dart';
-import 'package:fifteen/shared_ui/board_painter.dart';
+import 'package:fifteen/shared/ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
 class GamePainter extends BoardPainter {

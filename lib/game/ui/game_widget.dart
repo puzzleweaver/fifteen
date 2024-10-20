@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'dart:ui' as ui;
 
-import 'package:fifteen/game_ui/game_painter.dart';
+import 'package:fifteen/game/ui/game_painter.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/level.dart';

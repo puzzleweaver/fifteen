@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:math' as math;
 
-import 'package:fifteen/builder_ui/builder_painter.dart';
-import 'package:fifteen/game_ui/game_page.dart';
+import 'package:fifteen/builder/ui/builder_painter.dart';
+import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/constraint.dart';
@@ -11,7 +11,7 @@ import 'package:fifteen/math/double_point.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/math/quad.dart';
 import 'package:fifteen/math/side.dart';
-import 'package:fifteen/shared_ui/border_box.dart';
+import 'package:fifteen/shared/ui/border_box.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as dev;
 

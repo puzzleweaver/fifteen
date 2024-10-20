@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
-import 'package:fifteen/shader_test_ui/shader_test_painter.dart';
+import 'package:fifteen/debug/ui/shader_test/shader_test_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

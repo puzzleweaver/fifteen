@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:fifteen/home_ui/home_page.dart';
+import 'package:fifteen/home/ui/home_page.dart';
 import 'package:fifteen/math/board.dart';
 import 'package:fifteen/math/game.dart';
 import 'package:flutter/material.dart';
