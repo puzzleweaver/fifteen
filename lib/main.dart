@@ -13,7 +13,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(MobileAds.instance.initialize());
 
-  runApp(FifteenApp());
+  runApp(const FifteenApp());
 }
 
 class FifteenApp extends StatelessWidget {
@@ -28,15 +28,15 @@ class FifteenApp extends StatelessWidget {
         title: 'Fifteen',
         theme: ThemeData(
           useMaterial3: false,
-          colorScheme: ColorScheme(
-            primary: const Color.fromARGB(255, 255, 117, 158),
+          colorScheme: const ColorScheme(
+            primary: Color.fromARGB(255, 255, 117, 158),
             onPrimary: Colors.black,
             secondary: Color.fromARGB(255, 0, 201, 107),
             onSecondary: Colors.black,
             error: Colors.red,
-            onError: const Color.fromARGB(255, 254, 0, 0),
+            onError: Color.fromARGB(255, 254, 0, 0),
             surface: Color.fromARGB(34, 232, 240, 255),
-            onSurface: const Color(0xFF241E30),
+            onSurface: Color(0xFF241E30),
             brightness: Brightness.light,
             surfaceBright: Colors.green,
           ),
@@ -51,7 +51,7 @@ class FifteenApp extends StatelessWidget {
             ),
           ),
         ),
-        home: HomePage(),
+        home: const HomePage(),
       ),
     );
   }

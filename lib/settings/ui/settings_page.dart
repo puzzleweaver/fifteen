@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fifteen/main.dart';
 import 'package:fifteen/shared/ui/banner_ad_widget.dart';
 import 'package:fifteen/shared/ui/prefs.dart';
@@ -7,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
@@ -79,10 +83,10 @@ class _SettingsPageState extends State<SettingsPage> {
               Row(
                 children: [
                   Checkbox(value: _timerEnabled, onChanged: _setTimer),
-                  Text("Timer Enabled"),
+                  const Text("Timer Enabled"),
                 ],
               ),
-              SizedBox.square(dimension: 16.0),
+              const SizedBox.square(dimension: 16.0),
               if (_showSupportArea)
                 _supportDialog(appState)
               else
@@ -90,32 +94,32 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton.icon(
-                      icon: Icon(Icons.attach_money),
+                      icon: const Icon(Icons.attach_money),
                       onPressed: () => setState(() {
                         _showSupportArea = !_showSupportArea;
                       }),
-                      label: Text("Support the Dev"),
+                      label: const Text("Support the Dev"),
                     )
                   ],
                 ),
-              SizedBox.square(dimension: 16.0),
+              const SizedBox.square(dimension: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
-                    icon: Icon(Icons.mail),
-                    label: Text("Send Feedback"),
+                    icon: const Icon(Icons.mail),
+                    label: const Text("Send Feedback"),
                     onPressed: sendFeedback,
                   )
                 ],
               ),
-              SizedBox.square(dimension: 16.0),
+              const SizedBox.square(dimension: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
-                    icon: Icon(Icons.cancel),
-                    label: Text("Reset Adventure Progress"),
+                    icon: const Icon(Icons.cancel),
+                    label: const Text("Reset Adventure Progress"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                     ),
@@ -136,34 +140,34 @@ class _SettingsPageState extends State<SettingsPage> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Support the Dev :-)", style: TextStyle(fontSize: 28)),
+          const Text("Support the Dev :-)", style: TextStyle(fontSize: 28)),
           CheckboxListTile(
             title: Text("Interstitial Ads${_annoyingAds ? ' <3' : ''}"),
             value: _annoyingAds,
             onChanged: _setAnnoyingAds,
             controlAffinity: ListTileControlAffinity.leading,
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(left: 5.0, right: 5.0),
             child: Text(
               "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way",
             ),
           ),
-          Divider(color: Colors.black),
-          Text("Ad Chance:"),
+          const Divider(color: Colors.black),
+          const Text("Ad Chance:"),
           Slider(
             value: _adChance,
             onChanged: _setAdChance,
             min: 1.0 / 3.0,
             max: 1.0,
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(left: 5.0, right: 5.0),
             child: Text(
               "Banner Ads are shown with a certain probability. More ads means more money for the developer :)",
             ),
           ),
-          SizedBox.square(dimension: 16.0),
+          const SizedBox.square(dimension: 16.0),
           BannerAdWidget(7, padded: true),
         ],
       ),
@@ -179,12 +183,13 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Are You Sure?"),
-        content: Text("This will probably be less exciting than following"),
+        title: const Text("Are You Sure?"),
+        content:
+            const Text("This will probably be less exciting than following"),
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("NEVER"),
+            child: const Text("NEVER"),
           ),
           ElevatedButton(
             onPressed: () {
@@ -192,7 +197,7 @@ class _SettingsPageState extends State<SettingsPage> {
               Navigator.pop(context);
               deleteAdventure();
             },
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ],
       ),
@@ -203,12 +208,12 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Are You Sure?"),
-        content: Text("This might take a while to undo."),
+        title: const Text("Are You Sure?"),
+        content: const Text("This might take a while to undo."),
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("NEVER"),
+            child: const Text("NEVER"),
           ),
           ElevatedButton(
             onPressed: () {
@@ -216,7 +221,7 @@ class _SettingsPageState extends State<SettingsPage> {
               Navigator.pop(context);
               deleteAdventure();
             },
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ],
       ),
@@ -224,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void sendFeedback() async {
-    print("sending feedback...");
+    log("sending feedback...");
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: 'aweaver2718@gmail.com',

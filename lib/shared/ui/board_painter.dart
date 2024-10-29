@@ -94,16 +94,16 @@ class BoardPreviewPainter extends BoardPainter {
     strokePaint.strokeWidth = 1;
 
     // render the lines
-    strokePaint.color = Color(0xff000000);
+    strokePaint.color = const Color(0xff000000);
     for (int i = 0; i < board.quads.length; i++) {
       drawSubquads(canvas, board.quads[i], board.charts[i], size, strokePaint);
     }
     // render the space.
-    fillPaint.color = Color(0x44000000);
+    fillPaint.color = const Color(0x44000000);
     fillSpace(canvas, board, size);
 
     if (locked) {
-      strokePaint.color = Color(0xbb000000);
+      strokePaint.color = const Color(0xbb000000);
       // canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), fillPaint);
       int n = 10;
       for (int i = 0; i <= n; i++) {

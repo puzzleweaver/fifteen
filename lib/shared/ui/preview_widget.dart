@@ -8,7 +8,8 @@ class PreviewWidget extends StatelessWidget {
   final bool showImage;
   final bool showBackground;
 
-  PreviewWidget({
+  const PreviewWidget({
+    super.key,
     required this.level,
     required this.locked,
     this.showImage = true,

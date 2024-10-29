@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 class BoardList {
   static Board _createRect(int n, int m, {String? uuid}) {
     return Board(
-      uuid: uuid ?? Uuid().v1(),
+      uuid: uuid ?? const Uuid().v1(),
       charts: [(n, m)],
       convs: [],
       quads: [

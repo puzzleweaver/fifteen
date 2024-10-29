@@ -30,9 +30,9 @@ class GameWidget extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.0,
       child: (shader == null || image == null)
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+              padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
               child: GestureDetector(
                 onTapDown: (tapDetails) =>
                     onWidgetTap(tapDetails, appState, context),
@@ -56,7 +56,7 @@ class GameWidget extends StatelessWidget {
     FifteenAppState appState,
     BuildContext context,
   ) {
-    final size = context.size ?? Size(1.0, 1.0);
+    final size = context.size ?? const Size(1.0, 1.0);
 
     DoublePoint pos = DoublePoint.fromOffset(tapDetails.localPosition);
     pos = DoublePoint(pos.x / size.width, pos.y / size.height);

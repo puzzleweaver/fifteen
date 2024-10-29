@@ -9,26 +9,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DebugPage extends StatelessWidget {
+  const DebugPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<FifteenAppState>();
     return Scaffold(
       appBar: AppBar(
-        title: Text("DEBUG (go away)"),
+        title: const Text("DEBUG (go away)"),
       ),
       body: GridView.count(
         crossAxisCount: 4,
         mainAxisSpacing: 5.0,
         crossAxisSpacing: 5.0,
-        padding: EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
         children: [
           ElevatedButton(
             onPressed: () => goToImageTest(context),
-            child: Text("Shader Test"),
+            child: const Text("Shader Test"),
           ),
           ElevatedButton(
             onPressed: () => goToBuilder(context, appState),
-            child: Text("Board Builder"),
+            child: const Text("Board Builder"),
           ),
           ...Level.allBoards.map(
             (level) => ElevatedButton(
@@ -68,7 +70,7 @@ class DebugPage extends StatelessWidget {
   void goToImageTest(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ShaderTestPage()),
+      MaterialPageRoute(builder: (context) => const ShaderTestPage()),
     );
   }
 

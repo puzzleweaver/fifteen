@@ -10,7 +10,7 @@ class ShaderTestPage extends StatefulWidget {
   final String shaderPath = "shaders/image_quad.frag";
   final String imagePath = "assets/images/img4.png";
 
-  ShaderTestPage();
+  const ShaderTestPage({super.key});
 
   @override
   State<ShaderTestPage> createState() => _ShaderTestPageState();
@@ -42,7 +42,7 @@ class _ShaderTestPageState extends State<ShaderTestPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text("Quad Shader Test Page"),
+        title: const Text("Quad Shader Test Page"),
         actions: [
           IconButton(
             icon: Icon(quadTo ? Icons.arrow_downward : Icons.arrow_upward),

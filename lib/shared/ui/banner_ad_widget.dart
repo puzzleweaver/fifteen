@@ -58,7 +58,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       // DO show an ad
       if (widget.padded) {
         return Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: _ad(),
         );
       } else {

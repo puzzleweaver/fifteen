@@ -40,7 +40,7 @@ class Board {
 
   static Board createNew() {
     return Board(
-      uuid: Uuid().v1(),
+      uuid: const Uuid().v1(),
       charts: [],
       convs: [],
       quads: [],

@@ -18,13 +18,13 @@ class BuilderPainter extends BoardPainter {
     strokePaint.strokeWidth = 2;
     strokePaint.color = Colors.black;
     fillPaint.style = PaintingStyle.fill;
-    fillPaint.color = Color(0x8822e8f0);
+    fillPaint.color = const Color(0x8822e8f0);
 
     // render the quads
     for (int i = 0; i < board.quads.length; i++) {
       drawSubquads(canvas, board.quads[i], board.charts[i], size, strokePaint);
     }
-    fillPaint.color = Color(0x44000000);
+    fillPaint.color = const Color(0x44000000);
     fillSpace(canvas, board, size);
 
     // render equidistant constraints
@@ -48,7 +48,7 @@ class BuilderPainter extends BoardPainter {
     for (Coord c in board.getEdgeCoords()) {
       fillPaint.color = selectedCoords.contains(c)
           ? Colors.transparent
-          : Color.fromRGBO(34, 232, 240, 0.533);
+          : const Color.fromRGBO(34, 232, 240, 0.533);
       drawVertex(
         canvas,
         board.getVertex(c),
@@ -58,7 +58,7 @@ class BuilderPainter extends BoardPainter {
     }
 
     // render selected stuff
-    fillPaint.color = Color(0x88f0e822);
+    fillPaint.color = const Color(0x88f0e822);
     for (Coord coord in selectedCoords) {
       // selected vertices
       drawVertex(
@@ -69,7 +69,7 @@ class BuilderPainter extends BoardPainter {
       );
     }
     strokePaint.strokeWidth = 6;
-    strokePaint.color = Color(0x44000000);
+    strokePaint.color = const Color(0x44000000);
     for (int i = 0; 2 * i + 1 < selectedCoords.length; i++) {
       // selected sides
       Coord c1 = selectedCoords[2 * i], c2 = selectedCoords[2 * i + 1];

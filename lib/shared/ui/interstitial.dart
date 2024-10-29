@@ -1,4 +1,5 @@
 // A simple app that loads an interstitial ad.
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fifteen/shared/ui/prefs.dart';
@@ -39,7 +40,7 @@ class Interstitial {
             _interstitialAd = ad;
           },
           onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error');
+            log('InterstitialAd failed to load: $error');
           },
         ));
   }

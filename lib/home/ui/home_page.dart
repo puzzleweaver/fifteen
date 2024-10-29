@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -64,12 +66,12 @@ class _HomePageState extends State<HomePage> {
           actions: [
             if (kDebugMode)
               IconButton(
-                icon: Icon(Icons.build),
-                color: Color(0x11000000),
+                icon: const Icon(Icons.build),
+                color: const Color(0x11000000),
                 onPressed: goToDebug,
               ),
             IconButton(
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () => goToSettings(appState),
             ),
           ],
@@ -77,7 +79,7 @@ class _HomePageState extends State<HomePage> {
             opacity: _alpha,
             duration: Durations.short1,
             child: IconButton(
-              icon: Icon(Icons.expand_less),
+              icon: const Icon(Icons.expand_less),
               onPressed: () => _controller.animateTo(
                 0.0,
                 duration: Durations.long1,
@@ -108,10 +110,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 GridView.count(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   crossAxisCount: 3,
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   mainAxisSpacing: 5.0,
                   crossAxisSpacing: 5.0,
                   children: [
@@ -136,7 +138,7 @@ class _HomePageState extends State<HomePage> {
     return ElevatedButton(
       onPressed: levelLocked ? null : () => goToGame(level, appState),
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         backgroundColor: levelCompleted
             ? theme.colorScheme.secondary
             : theme.colorScheme.primary,
@@ -157,7 +159,7 @@ class _HomePageState extends State<HomePage> {
     appState.rerollAds();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SettingsPage()),
+      MaterialPageRoute(builder: (context) => const SettingsPage()),
     );
   }
 
@@ -200,7 +202,7 @@ class _HomePageState extends State<HomePage> {
   void goToDebug() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => DebugPage()),
+      MaterialPageRoute(builder: (context) => const DebugPage()),
     );
   }
 }

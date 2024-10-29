@@ -50,7 +50,7 @@ class _GamePageState extends State<GamePage> {
     widget.appState.addListener(_checkForDialog);
     _loadSharedPreferences();
     initialTime = DateTime.now();
-    timer = Timer.periodic(Duration(milliseconds: 100), (Timer t) {
+    timer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
       setState(() => currentTime = DateTime.now());
     });
     super.initState();
@@ -164,7 +164,7 @@ class _GamePageState extends State<GamePage> {
                       ? [
                           Expanded(child: Container()),
                           Text(getTimeDisplay(),
-                              style: TextStyle(fontSize: 14 * 3)),
+                              style: const TextStyle(fontSize: 14 * 3)),
                           Expanded(child: Container()),
                         ]
                       : []),
@@ -211,7 +211,7 @@ class _GamePageState extends State<GamePage> {
             ),
           );
         },
-        transitionDuration: Duration(milliseconds: 1000),
+        transitionDuration: const Duration(milliseconds: 1000),
         barrierDismissible: false,
         barrierLabel: '',
         context: context,
@@ -223,7 +223,7 @@ class _GamePageState extends State<GamePage> {
   Widget _dialog() {
     bool hasNext = widget.level.hasNext();
     return AlertDialog(
-      title: Text("You Solved This Board!"),
+      title: const Text("You Solved This Board!"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -240,16 +240,16 @@ class _GamePageState extends State<GamePage> {
       actions: [
         ElevatedButton(
           onPressed: onHome,
-          child: Text("Home"),
+          child: const Text("Home"),
         ),
         ElevatedButton(
           onPressed: onAgain,
-          child: Text("Again"),
+          child: const Text("Again"),
         ),
         if (hasNext)
           ElevatedButton(
             onPressed: onNext,
-            child: Text("Next"),
+            child: const Text("Next"),
           ),
       ],
     );
@@ -274,7 +274,7 @@ class _GamePageState extends State<GamePage> {
     widget.appState.rerollAds();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SettingsPage()),
+      MaterialPageRoute(builder: (context) => const SettingsPage()),
     );
   }
 

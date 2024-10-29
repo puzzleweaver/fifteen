@@ -37,10 +37,10 @@ class _BuilderPageState extends State<BuilderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Build a Board"),
+        title: const Text("Build a Board"),
         actions: [
           IconButton(
-            icon: Icon(Icons.check),
+            icon: const Icon(Icons.check),
             onPressed: submit,
           ),
         ],
@@ -55,8 +55,8 @@ class _BuilderPageState extends State<BuilderPage> {
           GridView.count(
             crossAxisCount: 7,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.all(5.0),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(5.0),
             mainAxisSpacing: 5.0,
             crossAxisSpacing: 5.0,
             children: [
@@ -124,7 +124,7 @@ class _BuilderPageState extends State<BuilderPage> {
   }
 
   void onWidgetTap(TapDownDetails tapDetails, BuildContext context) {
-    final size = context.size ?? Size(1.0, 1.0);
+    final size = context.size ?? const Size(1.0, 1.0);
     var pos = DoublePoint.fromOffset(tapDetails.localPosition);
     pos = DoublePoint(pos.x / size.width, pos.y / size.height);
 
@@ -179,13 +179,13 @@ class _BuilderPageState extends State<BuilderPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Add Chart"),
+        title: const Text("Add Chart"),
         content: Wrap(
           children: [
             for (int i = 1; i <= 5; i++)
               for (int j = i; j <= 5; j++)
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(padding: EdgeInsets.all(8.0)),
+                  style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8.0)),
                   onPressed: () {
                     addChart(i, j);
                     Navigator.pop(context);
