@@ -30,13 +30,12 @@ class Level {
       Level(
         board: _boardSequence[i],
         index: i,
-        background: i % 6,
         image: _images[i % _images.length],
-      )
+      ),
   ];
   static final List<Level> allBoards = [
     for (int i = 0; i < BoardList.all.length; i++)
-      Level(board: BoardList.all[i])
+      Level(board: BoardList.all[i]),
   ];
 
   final Board board;
@@ -53,25 +52,24 @@ class Level {
         background = background ?? randomBackground();
 
   static final _images = [
-    "assets/images/img1.png",
-    "assets/images/img2.png",
-    "assets/images/img3.png",
-    "assets/images/img4.png",
-    "assets/images/fruit0.png",
-    "assets/images/fruit9.png",
-
-    // "assets/images/fruit0.png",
-    // "assets/images/fruit1.png",
-    // "assets/images/fruit2.png",
-    // "assets/images/fruit8.png",
-    // "assets/images/fruit4.png",
-    // "assets/images/fruit7.png",
-    // "assets/images/fruit3.png",
-
-    // "assets/images/img3.png",
-    // "assets/images/fruit5.png", // needs to be redone (ASAP)
-    // "assets/images/fruit6.png", // needs to be redone (ASAP)
-    // "assets/images/fruit9.png",
+    "assets/images/photos/avenue.jpg",
+    "assets/images/photos/beach.jpg",
+    "assets/images/photos/beach2.jpg",
+    "assets/images/photos/bee.jpg",
+    "assets/images/photos/dahlia.jpg",
+    "assets/images/photos/dahlia2.jpg",
+    "assets/images/photos/desert.jpg",
+    "assets/images/photos/drop.jpg",
+    "assets/images/photos/eurasian-squirrel.jpg",
+    "assets/images/photos/field.jpg",
+    "assets/images/photos/mean-leash.jpg",
+    "assets/images/photos/milky-way.jpg",
+    "assets/images/photos/moon.jpg",
+    "assets/images/photos/mountains.jpg",
+    "assets/images/photos/nature.jpg",
+    "assets/images/photos/plaid.jpg",
+    "assets/images/photos/straw-flower.jpg",
+    "assets/images/photos/wave.jpg",
   ];
   static String randomImage() {
     return _images[Random().nextInt(_images.length)];

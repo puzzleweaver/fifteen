@@ -12,7 +12,6 @@ class GamePainter extends BoardPainter {
   final ui.Image? image;
   final Game game;
   final bool previewing;
-  final int background;
 
   GamePainter({
     required this.shader,
@@ -20,7 +19,6 @@ class GamePainter extends BoardPainter {
     required this.game,
     required super.board,
     required this.previewing,
-    required this.background,
   });
 
   void _setFloats(int index, DoublePoint o) {
@@ -46,7 +44,6 @@ class GamePainter extends BoardPainter {
     shader.setImageSampler(0, image!);
     shader.setFloat(0, size.width);
     shader.setFloat(1, size.height);
-    shader.setFloat(2, 1.0 * background);
 
     final shaderPaint = Paint();
     shaderPaint.shader = shader;
@@ -61,7 +58,7 @@ class GamePainter extends BoardPainter {
     fillPaint.color = Colors.black;
 
     // background
-    setQuads(3, Quad.unit(), Quad.unit());
+    setQuads(2, Quad.unit(), Quad.unit());
     canvas.drawRect(Offset.zero & size, shaderPaint);
 
     if (previewing) {
@@ -81,7 +78,7 @@ class GamePainter extends BoardPainter {
         Quad q = quads[i], from, to;
         from = q;
         to = game.getQuad(quads, i);
-        setQuads(3, from, to);
+        setQuads(2, from, to);
         drawQuad(canvas, q, size, game.isSpace(i) ? fillPaint : shaderPaint);
         drawQuad(canvas, q, size, strokePaint);
       }

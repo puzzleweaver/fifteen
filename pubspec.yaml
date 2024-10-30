@@ -41,26 +41,25 @@ flutter:
   assets:
    - assets/images/icon.png
    - assets/images/header.png
-   - assets/images/img1.png
-   - assets/images/img2.png
-   - assets/images/img3.png
-   - assets/images/img4.png
-   - assets/images/fruit0.png
-   - assets/images/fruit1.png
-   - assets/images/fruit2.png
-   - assets/images/fruit3.png
-   - assets/images/fruit4.png
-   - assets/images/fruit5.png
-   - assets/images/fruit6.png
-   - assets/images/fruit7.png
-   - assets/images/fruit8.png
-   - assets/images/fruit9.png
-   - assets/images/bg0.png
-   - assets/images/bg1.png
-   - assets/images/bg2.png
-   - assets/images/bg3.png
-   - assets/images/bg4.png
-   - assets/images/bg5.png
+   - assets/images/photos/avenue.jpg
+   - assets/images/photos/beach.jpg
+   - assets/images/photos/beach2.jpg
+   - assets/images/photos/bee.jpg
+   - assets/images/photos/dahlia.jpg
+   - assets/images/photos/dahlia2.jpg
+   - assets/images/photos/desert.jpg
+   - assets/images/photos/drop.jpg
+   - assets/images/photos/eurasian-squirrel.jpg
+   - assets/images/photos/field.jpg
+   - assets/images/photos/mean-leash.jpg
+   - assets/images/photos/milky-way.jpg
+   - assets/images/photos/moon.jpg
+   - assets/images/photos/mountains.jpg
+   - assets/images/photos/nature.jpg
+   - assets/images/photos/plaid.jpg
+   - assets/images/photos/straw-flower.jpg
+   - assets/images/photos/wave.jpg
+
   shaders:
    - shaders/test_fractal.frag
    - shaders/image_blur.frag

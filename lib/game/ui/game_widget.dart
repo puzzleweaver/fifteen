@@ -43,7 +43,6 @@ class GameWidget extends StatelessWidget {
                     game: appState.game,
                     board: level.board,
                     previewing: previewing,
-                    background: level.background,
                   ),
                 ),
               ),
