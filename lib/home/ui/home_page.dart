@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(level.board);
+          appState.setLevel(level);
           return GamePage(
             level: level,
             appState: appState,

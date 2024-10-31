@@ -17,7 +17,7 @@ abstract class FifteenPainter extends CustomPainter {
 
 class FifteenCanvas extends StatefulWidget {
   final String shaderPath = "shaders/image_quad.frag";
-  final String imagePath = "assets/images/photos/desert.jpg";
+  final String imagePath;
 
   final void Function(DoublePoint pos)? onTap;
   final FifteenPainter Function(FragmentShader shader, ui.Image image)
@@ -25,6 +25,7 @@ class FifteenCanvas extends StatefulWidget {
 
   const FifteenCanvas({
     required this.getPainter,
+    required this.imagePath,
     this.onTap,
     super.key,
   });

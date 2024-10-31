@@ -67,7 +67,7 @@ class EndgameDialog extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(level.board);
+          appState.setLevel(level);
           return GamePage(
             level: level,
             appState: appState,
@@ -88,7 +88,7 @@ class EndgameDialog extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(next.board);
+          appState.setLevel(next);
           return GamePage(
             level: next,
             appState: appState,

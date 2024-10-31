@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:fifteen/builder/ui/builder_page.dart';
 import 'package:fifteen/game/ui/endgame_dialog.dart';
 import 'package:fifteen/game/ui/game_widget.dart';
+import 'package:fifteen/level/ui/level_builder_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/math/level.dart';
@@ -120,7 +120,6 @@ class _GamePageState extends State<GamePage> {
               child: Center(
                 child: GameWidget(
                   previewing: previewing,
-                  level: widget.level,
                 ),
               ),
             ),
@@ -133,7 +132,7 @@ class _GamePageState extends State<GamePage> {
                   ...(_timerEnabled
                       ? [
                           Expanded(child: Container()),
-                          Text(getDisplayTime(),
+                          Text(displayTime,
                               style: const TextStyle(fontSize: 14 * 3)),
                           Expanded(child: Container()),
                         ]
@@ -163,7 +162,7 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  String getDisplayTime() {
+  String get displayTime {
     DateTime? t0 = initialTime, t1 = currentTime;
     if (t0 == null || t1 == null) return "XX:XX";
     Duration delta = t1.difference(t0);
@@ -178,7 +177,7 @@ class _GamePageState extends State<GamePage> {
 
   void _checkForDialog() {
     widget.appState.addListener(() {
-      if (widget.appState.game.isSolved()) {
+      if (widget.appState.game.isSolved) {
         Level level = widget.level;
         _saveLevelSolved(widget.level.board);
         Interstitial.load();
@@ -194,7 +193,7 @@ class _GamePageState extends State<GamePage> {
                 opacity: a1.value,
                 child: EndgameDialog(
                   level: level,
-                  time: getDisplayTime(),
+                  time: displayTime,
                   hasNext: level.hasNext(),
                   timerEnabled: _timerEnabled,
                 ),
@@ -238,7 +237,9 @@ class _GamePageState extends State<GamePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BuilderPage(appState: widget.appState),
+        builder: (context) => LevelBuilderPage(
+          initialLevel: widget.appState.level,
+        ),
       ),
     );
   }

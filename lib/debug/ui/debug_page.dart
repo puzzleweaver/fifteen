@@ -1,7 +1,6 @@
 import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/level/ui/level_builder_page.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/debug/ui/shader_test/shader_test_page.dart';
 import 'package:fifteen/shared/ui/preview_widget.dart';
@@ -57,7 +56,7 @@ class DebugPage extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(level.board);
+          appState.setLevel(level);
           return GamePage(
             level: level,
             appState: appState,
@@ -79,7 +78,7 @@ class DebugPage extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          appState.setBoard(Board.createNew());
+          appState.setLevel(Level.createNew());
           return LevelBuilderPage(
             initialLevel: Level.createNew(),
           );

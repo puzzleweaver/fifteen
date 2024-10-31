@@ -34,7 +34,6 @@ class LevelRenderer {
     shader.setImageSampler(0, image);
     shader.setFloat(0, size.width);
     shader.setFloat(1, size.height);
-    shader.setFloat(2, 0); // no checkering
     shaderPaint.shader = shader;
   }
 
@@ -50,8 +49,12 @@ class LevelRenderer {
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), fillPaint);
   }
 
-  void drawVertices(Board board, Iterable<Coord> coords, double radius,
-      {Color Function(Coord)? fill}) {
+  void drawVertices(
+    Board board,
+    Iterable<Coord> coords,
+    double radius, {
+    Color Function(Coord)? fill,
+  }) {
     for (var c in coords) {
       if (fill != null) setFill(color: fill(c));
       drawVertex(board.getVertex(c), radius);
@@ -66,21 +69,31 @@ class LevelRenderer {
   }
 
   void drawQuadWithShader({
-    required Quad quad,
-    // TODO quad from, quad to, etc
+    required Quad from,
+    required Quad to,
+    required Quad shape,
   }) {
-    shader.setFloat(7, quad.p1.x);
-    shader.setFloat(8, quad.p1.y);
-    shader.setFloat(9, quad.p2.x);
-    shader.setFloat(10, quad.p2.y);
-    shader.setFloat(11, quad.p3.x);
-    shader.setFloat(12, quad.p3.y);
-    shader.setFloat(13, quad.p4.x);
-    shader.setFloat(14, quad.p4.y);
-    drawQuad(canvas, quad, size, shaderPaint);
+    int index = 2;
+    shader.setFloat(index++, from.p1.x);
+    shader.setFloat(index++, from.p1.y);
+    shader.setFloat(index++, from.p2.x);
+    shader.setFloat(index++, from.p2.y);
+    shader.setFloat(index++, from.p3.x);
+    shader.setFloat(index++, from.p3.y);
+    shader.setFloat(index++, from.p4.x);
+    shader.setFloat(index++, from.p4.y);
+    shader.setFloat(index++, to.p1.x);
+    shader.setFloat(index++, to.p1.y);
+    shader.setFloat(index++, to.p2.x);
+    shader.setFloat(index++, to.p2.y);
+    shader.setFloat(index++, to.p3.x);
+    shader.setFloat(index++, to.p3.y);
+    shader.setFloat(index++, to.p4.x);
+    shader.setFloat(index++, to.p4.y);
+    drawQuad(shape, shaderPaint);
   }
 
-  void drawQuad(Canvas canvas, Quad quad, Size size, Paint paint) {
+  void drawQuad(Quad quad, Paint paint) {
     quad = quad.scale(size.width, size.height);
     Path path = Path();
     path.moveTo(quad.p1.x, quad.p1.y);
@@ -91,10 +104,10 @@ class LevelRenderer {
     canvas.drawPath(path, paint);
   }
 
-  void drawQuads(Board board) {
+  void drawSubquadOutlines(Board board) {
     List<Quad> quads = board.subquads;
     for (int i = 0; i < quads.length; i++) {
-      drawQuad(canvas, quads[i], size, strokePaint);
+      drawQuad(quads[i], strokePaint);
     }
   }
 
@@ -114,35 +127,5 @@ class LevelRenderer {
       Offset(p2.x * size.width, p2.y * size.height),
       strokePaint,
     );
-  }
-
-  void drawPlaceholderGraphic() {
-    strokePaint.strokeWidth = 0.25;
-    canvas.drawRect(
-      Rect.fromCenter(
-        center: Offset(size.width / 2, size.height / 2),
-        width: size.width * 0.9,
-        height: size.height * 0.9,
-      ),
-      strokePaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.05, size.height * 0.05),
-      Offset(size.width * 0.95, size.height * 0.95),
-      strokePaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.95, size.height * 0.05),
-      Offset(size.width * 0.05, size.height * 0.95),
-      strokePaint,
-    );
-  }
-
-  void drawBoard({
-    required Board board,
-  }) {
-    for (Quad quad in board.subquads) {
-      drawQuadWithShader(quad: quad);
-    }
   }
 }

@@ -44,9 +44,9 @@ class Quad with QuadMappable {
 
   Quad rel(IntPoint dir) {
     if (dir == IntPoint.up) return this;
-    if (dir == IntPoint.right) return Quad(p4, p1, p2, p3);
+    if (dir == IntPoint.left) return Quad(p4, p1, p2, p3);
     if (dir == IntPoint.down) return Quad(p3, p4, p1, p2);
-    if (dir == IntPoint.left) return Quad(p2, p3, p4, p1);
+    if (dir == IntPoint.right) return Quad(p2, p3, p4, p1);
     return this;
   }
 

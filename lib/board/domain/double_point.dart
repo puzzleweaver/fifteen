@@ -9,7 +9,6 @@ part 'double_point.mapper.dart';
 @MappableClass()
 class DoublePoint with DoublePointMappable {
   final double x, y;
-  // final double z = 0; // TODO hehe >:3
 
   DoublePoint(this.x, this.y);
 

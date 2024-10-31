@@ -27,7 +27,12 @@ class BoardBuilderPainter extends FifteenPainter {
       image: image,
     );
     renderer.drawBackground(Colors.grey.withAlpha(255 ~/ 10));
-    renderer.drawQuads(board);
+    renderer.drawSubquadOutlines(board);
+    renderer.setFill(color: const Color(0x88000000));
+    if (board.charts.isNotEmpty) {
+      renderer.drawQuad(
+          board.subquads[board.subquads.length - 1], renderer.fillPaint);
+    }
     drawEquidistantConstraints(renderer);
     drawControlPoints(renderer);
     drawSelection(renderer);

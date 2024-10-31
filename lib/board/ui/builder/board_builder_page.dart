@@ -39,6 +39,7 @@ class BoardBuilderPageState extends State<BoardBuilderPage> {
       body: AspectRatio(
         aspectRatio: 1.0,
         child: FifteenCanvas(
+          imagePath: "assets/images/photos/desert.jpg",
           getPainter: (shader, image) => BoardBuilderPainter(
             shader: shader,
             image: image,
@@ -49,7 +50,8 @@ class BoardBuilderPageState extends State<BoardBuilderPage> {
         ),
       ),
       actions: [
-        Builders.button(Icons.add, addChartDialog),
+        Builders.button(Icons.add, () => addChart(1, 1)),
+        Builders.button(Icons.emergency, addChartDialog),
         Builders.button(Icons.calculate, solve),
         Builders.button(Icons.rotate_right, () => rotate(-math.pi / 8)),
         Builders.button(Icons.rotate_left, () => rotate(math.pi / 8)),

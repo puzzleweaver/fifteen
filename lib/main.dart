@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:fifteen/home/ui/home_page.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/math/game.dart';
+import 'package:fifteen/math/level.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -58,8 +59,9 @@ class FifteenApp extends StatelessWidget {
 }
 
 class FifteenAppState extends ChangeNotifier {
-  Board board = Board.createNew();
-  Game game = Game(len: 0, permutation: [], rotation: []);
+  Level level = Level.createNew();
+  Board get board => level.board;
+  Game game = Game.createNew();
   List<double> adRolls = [for (int i = 0; i < 100; i++) Random().nextDouble()];
 
   void rerollAds() {
@@ -67,13 +69,13 @@ class FifteenAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setBoard(Board newBoard) {
-    board = newBoard;
-    game = Game.fromBoard(board).shuffle(board);
+  void setLevel(Level newLevel) {
+    level = newLevel;
+    game = Game.fromBoard(level.board).shuffle(level.board);
   }
 
   void tapAtIndex(int index) {
-    Game newGame = game.tapAtIndex(board, index);
+    Game newGame = game.tapAtIndex(level.board, index);
     if (game != newGame) {
       game = newGame;
       notifyListeners();

@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:fifteen/level/ui/level_builder_tabs.dart';
+import 'package:fifteen/main.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/shared/ui/history_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LevelBuilderPage extends StatefulWidget {
   final Level initialLevel;
@@ -68,7 +70,7 @@ class LevelBuilderPageState extends State<LevelBuilderPage> {
             primary: true,
             child: LevelBuilderTabs.tab(
               current: level,
-              set: set,
+              set: (level, message) => set(level, message, context),
               index: currentIndex,
               context: context,
             ),
@@ -78,13 +80,14 @@ class LevelBuilderPageState extends State<LevelBuilderPage> {
     );
   }
 
-  void set(Level newLevel, String message) {
+  void set(Level newLevel, String message, BuildContext context) {
     if (newLevel == level) return;
     setState(() {
       history = [...history, GameBuilderHistoryItem(level, message)];
       level = newLevel;
       unsavedChanges = true;
     });
+    Provider.of<FifteenAppState>(context, listen: false).setLevel(level);
   }
 
   void undo() {
@@ -94,6 +97,7 @@ class LevelBuilderPageState extends State<LevelBuilderPage> {
       history = [for (int i = 0; i < history.length - 1; i++) history[i]];
       unsavedChanges = history.isNotEmpty;
     });
+    Provider.of<FifteenAppState>(context, listen: false).setLevel(level);
   }
 
   void submit() {

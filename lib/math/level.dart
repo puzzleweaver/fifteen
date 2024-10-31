@@ -16,7 +16,7 @@ class Level with LevelMappable {
       Level(
         board: _boardSequence[i],
         index: i,
-        image: _images[i % _images.length],
+        image: images[i % images.length],
       ),
   ];
   static final List<Level> allBoards = [
@@ -34,7 +34,7 @@ class Level with LevelMappable {
     this.index,
   }) : image = image ?? randomImage();
 
-  static final _images = [
+  static final images = [
     "assets/images/photos/avenue.jpg",
     "assets/images/photos/beach.jpg",
     "assets/images/photos/beach2.jpg",
@@ -55,7 +55,7 @@ class Level with LevelMappable {
     "assets/images/photos/wave.jpg",
   ];
   static String randomImage() {
-    return _images[Random().nextInt(_images.length)];
+    return images[Random().nextInt(images.length)];
   }
 
   static int randomBackground() {

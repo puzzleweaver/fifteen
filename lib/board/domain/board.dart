@@ -48,12 +48,11 @@ class Board with BoardMappable {
   Coord? getCoord(int i) {
     int index = 0;
     for (int a = 0; a < charts.length; a++) {
-      int n = charts[a].n, m = charts[a].m;
-      for (int h = 0; h < n; h++) {
-        for (int k = 0; k < m; k++) {
-          if (index == i) return Coord(a, IntPoint(2 * h, 2 * k));
-          index++;
+      for (IntPoint hk in charts[a].coords) {
+        if (index == i) {
+          return Coord(a, hk);
         }
+        index++;
       }
     }
     return null;

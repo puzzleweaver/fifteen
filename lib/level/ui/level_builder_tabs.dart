@@ -1,9 +1,8 @@
 import 'package:fifteen/board/ui/builder/board_builder_page.dart';
-import 'package:fifteen/game/ui/game_page.dart';
-import 'package:fifteen/main.dart';
+import 'package:fifteen/game/ui/game_widget.dart';
+import 'package:fifteen/level/ui/level_decorator_page.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LevelBuilderTabs {
   static const items = [
@@ -23,7 +22,7 @@ class LevelBuilderTabs {
 
   static String title(int index) => [
         "Build Board",
-        "Build Level",
+        "Decorate Level",
         "Test Level",
       ][index];
 
@@ -41,10 +40,10 @@ class LevelBuilderTabs {
             description,
           ),
         ),
-        const Center(child: Text("hOi")),
-        GamePage(
+        LevelDecoratorPage(
           level: current,
-          appState: Provider.of<FifteenAppState>(context),
+          setLevel: set,
         ),
+        const GameWidget(previewing: false),
       ][index];
 }

@@ -14,6 +14,7 @@ class BoardMapper extends ClassMapperBase<Board> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = BoardMapper._());
       ChartMapper.ensureInitialized();
+      ConnectionMapper.ensureInitialized();
       ConstraintSetMapper.ensureInitialized();
     }
     return _instance!;
@@ -22,8 +23,8 @@ class BoardMapper extends ClassMapperBase<Board> {
   @override
   final String id = 'Board';
 
-  static String _$uuid(Board v) => v.id;
-  static const Field<Board, String> _f$uuid = Field('uuid', _$uuid);
+  static String _$id(Board v) => v.id;
+  static const Field<Board, String> _f$id = Field('id', _$id);
   static List<Chart> _$charts(Board v) => v.charts;
   static const Field<Board, List<Chart>> _f$charts = Field('charts', _$charts);
   static List<Connection> _$connections(Board v) => v.connections;
@@ -35,7 +36,7 @@ class BoardMapper extends ClassMapperBase<Board> {
 
   @override
   final MappableFields<Board> fields = const {
-    #uuid: _f$uuid,
+    #id: _f$id,
     #charts: _f$charts,
     #connections: _f$connections,
     #constraints: _f$constraints,
@@ -43,7 +44,7 @@ class BoardMapper extends ClassMapperBase<Board> {
 
   static Board _instantiate(DecodingData data) {
     return Board(
-        id: data.dec(_f$uuid),
+        id: data.dec(_f$id),
         charts: data.dec(_f$charts),
         connections: data.dec(_f$connections),
         constraints: data.dec(_f$constraints));
@@ -96,11 +97,11 @@ extension BoardValueCopy<$R, $Out> on ObjectCopyWith<$R, Board, $Out> {
 abstract class BoardCopyWith<$R, $In extends Board, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, Chart, ChartCopyWith<$R, Chart, Chart>> get charts;
-  ListCopyWith<$R, Connection, ObjectCopyWith<$R, Connection, Connection>>
+  ListCopyWith<$R, Connection, ConnectionCopyWith<$R, Connection, Connection>>
       get connections;
   ConstraintSetCopyWith<$R, ConstraintSet, ConstraintSet> get constraints;
   $R call(
-      {String? uuid,
+      {String? id,
       List<Chart>? charts,
       List<Connection>? connections,
       ConstraintSet? constraints});
@@ -118,29 +119,27 @@ class _BoardCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Board, $Out>
       ListCopyWith($value.charts, (v, t) => v.copyWith.$chain(t),
           (v) => call(charts: v));
   @override
-  ListCopyWith<$R, Connection, ObjectCopyWith<$R, Connection, Connection>>
-      get connections => ListCopyWith(
-          $value.connections,
-          (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(connections: v));
+  ListCopyWith<$R, Connection, ConnectionCopyWith<$R, Connection, Connection>>
+      get connections => ListCopyWith($value.connections,
+          (v, t) => v.copyWith.$chain(t), (v) => call(connections: v));
   @override
   ConstraintSetCopyWith<$R, ConstraintSet, ConstraintSet> get constraints =>
       $value.constraints.copyWith.$chain((v) => call(constraints: v));
   @override
   $R call(
-          {String? uuid,
+          {String? id,
           List<Chart>? charts,
           List<Connection>? connections,
           ConstraintSet? constraints}) =>
       $apply(FieldCopyWithData({
-        if (uuid != null) #uuid: uuid,
+        if (id != null) #id: id,
         if (charts != null) #charts: charts,
         if (connections != null) #connections: connections,
         if (constraints != null) #constraints: constraints
       }));
   @override
   Board $make(CopyWithData data) => Board(
-      id: data.get(#uuid, or: $value.id),
+      id: data.get(#id, or: $value.id),
       charts: data.get(#charts, or: $value.charts),
       connections: data.get(#connections, or: $value.connections),
       constraints: data.get(#constraints, or: $value.constraints));

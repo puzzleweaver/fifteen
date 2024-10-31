@@ -17,6 +17,12 @@ class Game {
     required this.rotation,
   });
 
+  static Game createNew() => Game(
+        len: 0,
+        permutation: [],
+        rotation: [],
+      );
+
   static Game _fromLen(int len) {
     return Game(
       len: len,
@@ -37,7 +43,7 @@ class Game {
     Game ret = this;
     int len = board.subquads.length * 60;
     for (int i = 0; i < len; i++) {
-      int spaceIndex = ret.getSpace();
+      int spaceIndex = ret.space;
       Coord spaceCoord = board.getCoord(spaceIndex)!;
       IntPoint dir = IntPoint.randomDir(Random());
       OrientedCoord? result = board.step(spaceCoord, dir);
@@ -53,7 +59,7 @@ class Game {
     return permutation[index] == index && rotation[index] == IntPoint.up;
   }
 
-  bool isSolved() {
+  bool get isSolved {
     return [for (int i = 0; i < len; i++) i].every(isInPlace);
   }
 
@@ -69,7 +75,7 @@ class Game {
     return permutation[index] == len - 1;
   }
 
-  int getSpace() {
+  int get space {
     for (int i = 0; i < len; i++) {
       if (isSpace(i)) return i;
     }

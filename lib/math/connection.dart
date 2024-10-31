@@ -1,8 +1,12 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/board/domain/int_point.dart';
 import 'package:fifteen/board/domain/side.dart';
 
-class Connection {
+part 'connection.mapper.dart';
+
+@MappableClass()
+class Connection with ConnectionMappable {
   final int fromA, toA;
   final IntPoint _rot;
   final IntPoint _trans;
