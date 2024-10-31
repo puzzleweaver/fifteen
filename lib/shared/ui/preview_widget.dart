@@ -6,14 +6,12 @@ class PreviewWidget extends StatelessWidget {
   final Level level;
   final bool locked;
   final bool showImage;
-  final bool showBackground;
 
   const PreviewWidget({
     super.key,
     required this.level,
     required this.locked,
     this.showImage = true,
-    this.showBackground = true,
   });
 
   @override
@@ -23,11 +21,6 @@ class PreviewWidget extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (showBackground)
-            Image.asset(
-              "assets/images/bg${level.background}.png",
-              fit: BoxFit.fill,
-            ),
           if (showImage)
             Image.asset(
               level.image,

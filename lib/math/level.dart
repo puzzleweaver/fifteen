@@ -1,29 +1,15 @@
 import 'dart:math';
 
-import 'package:fifteen/math/board.dart';
-import 'package:fifteen/math/board_list.dart';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/board/domain/board_list.dart';
 
-class Level {
+part 'level.mapper.dart';
+
+@MappableClass()
+class Level with LevelMappable {
   static final List<Board> _boardSequence = [
-    BoardList.classic3,
-    BoardList.classic4,
-    BoardList.cube2,
-    BoardList.star4,
-    BoardList.cube2x3,
-    BoardList.star5,
-    BoardList.star6,
-    BoardList.eyes2,
-    BoardList.eye2,
-    BoardList.starbox3,
-    BoardList.cube15,
-    BoardList.triangles3,
-    BoardList.eye1,
-    BoardList.eye4,
-    BoardList.star66,
-    BoardList.cube3x3,
-    BoardList.starbox4,
-    BoardList.paths4,
-    BoardList.split4,
+    for (int i = 0; i < 20; i++) ...BoardList.all,
   ];
   static final List<Level> adventure = [
     for (int i = 0; i < _boardSequence.length; i++)
@@ -40,16 +26,13 @@ class Level {
 
   final Board board;
   final String image;
-  final int background;
   final int? index; // if null, no next button after solving the level
 
   Level({
     required this.board,
     String? image,
-    int? background,
     this.index,
-  })  : image = image ?? randomImage(),
-        background = background ?? randomBackground();
+  }) : image = image ?? randomImage();
 
   static final _images = [
     "assets/images/photos/avenue.jpg",
@@ -78,6 +61,10 @@ class Level {
   static int randomBackground() {
     return Random().nextInt(6);
   }
+
+  static Level createNew() => Level(
+        board: Board.createNew(),
+      );
 
   bool hasNext() {
     return index != null && index != adventure.length - 1;

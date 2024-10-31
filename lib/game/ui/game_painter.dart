@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'dart:ui' as ui;
 
-import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/math/game.dart';
-import 'package:fifteen/math/quad.dart';
+import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/shared/ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
@@ -62,10 +62,9 @@ class GamePainter extends BoardPainter {
     canvas.drawRect(Offset.zero & size, shaderPaint);
 
     if (previewing) {
-      for (int i = 0; i < board.quads.length; i++) {
+      for (int i = 0; i < board.charts.length; i++) {
         drawSubquads(
           canvas,
-          board.quads[i],
           board.charts[i],
           size,
           strokePaint,
@@ -73,7 +72,7 @@ class GamePainter extends BoardPainter {
       }
       fillSpace(canvas, board, size);
     } else {
-      List<Quad> quads = board.getSubquads();
+      List<Quad> quads = board.subquads;
       for (int i = 0; i < quads.length; i++) {
         Quad q = quads[i], from, to;
         from = q;

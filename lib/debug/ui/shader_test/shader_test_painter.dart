@@ -2,11 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
-import 'package:fifteen/math/board.dart';
-import 'package:fifteen/math/double_point.dart';
-import 'package:fifteen/math/int_point.dart';
+import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/board/domain/double_point.dart';
+import 'package:fifteen/board/domain/int_point.dart';
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/math/quad.dart';
+import 'package:fifteen/board/domain/quad.dart';
 import 'package:flutter/material.dart';
 
 class ShaderTestPainter extends CustomPainter {
@@ -66,7 +66,7 @@ class ShaderTestPainter extends CustomPainter {
       to = quadTo ? from : Quad.unit();
     } else {
       Board board = Level.allBoards[r.nextInt(Level.allBoards.length)].board;
-      List<Quad> quads = board.getSubquads();
+      List<Quad> quads = board.subquads;
       Quad q = quads[r.nextInt(quads.length)];
       from = q;
       to = from.lerpTo(

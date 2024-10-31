@@ -1,13 +1,13 @@
-import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/int_point.dart';
-import 'package:fifteen/math/side.dart';
+import 'package:fifteen/board/domain/coord.dart';
+import 'package:fifteen/board/domain/int_point.dart';
+import 'package:fifteen/board/domain/side.dart';
 
-class Conv {
+class Connection {
   final int fromA, toA;
   final IntPoint _rot;
   final IntPoint _trans;
 
-  Conv({
+  Connection({
     required this.fromA,
     required this.toA,
     required IntPoint rot,
@@ -20,9 +20,9 @@ class Conv {
     return Coord(toA, c.hk * _rot + _trans);
   }
 
-  Conv inv() {
+  Connection inv() {
     IntPoint newRot = _rot.inv();
-    return Conv(
+    return Connection(
       fromA: toA,
       toA: fromA,
       rot: newRot,

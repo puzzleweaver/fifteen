@@ -1,9 +1,12 @@
 import 'dart:math';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:fifteen/board/domain/double_point.dart';
+import 'package:fifteen/board/domain/int_point.dart';
 
-import 'package:fifteen/math/double_point.dart';
-import 'package:fifteen/math/int_point.dart';
+part 'quad.mapper.dart';
 
-class Quad {
+@MappableClass()
+class Quad with QuadMappable {
   final DoublePoint p1, p2, p3, p4;
 
   Quad(this.p1, this.p2, this.p3, this.p4);
@@ -86,34 +89,18 @@ class Quad {
     return Quad.lerp(this, b, t);
   }
 
-  Quad subquad(int i, int j, int n, int m) {
-    double s = 1.0 * i / n,
-        t = 1.0 * j / m,
-        ns = 1.0 * (i + 1) / n,
-        nt = 1.0 * (j + 1) / m;
-    return Quad(
-      DoublePoint.lerp(
-        DoublePoint.lerp(p1, p2, t),
-        DoublePoint.lerp(p4, p3, t),
-        s,
-      ),
-      DoublePoint.lerp(
-        DoublePoint.lerp(p1, p2, t),
-        DoublePoint.lerp(p4, p3, t),
-        ns,
-      ),
-      DoublePoint.lerp(
-        DoublePoint.lerp(p1, p2, nt),
-        DoublePoint.lerp(p4, p3, nt),
-        ns,
-      ),
-      DoublePoint.lerp(
-        DoublePoint.lerp(p1, p2, nt),
-        DoublePoint.lerp(p4, p3, nt),
-        s,
-      ),
-    );
-  }
+  DoublePoint interiorLerp(double a, double b) => DoublePoint.lerp(
+        DoublePoint.lerp(p1, p2, b),
+        DoublePoint.lerp(p4, p3, b),
+        a,
+      );
+
+  Quad subquad(double s, double t, double ns, double nt) => Quad(
+        interiorLerp(s, t),
+        interiorLerp(s, nt),
+        interiorLerp(ns, nt),
+        interiorLerp(ns, t),
+      );
 
   double _wedge(DoublePoint a, DoublePoint b) {
     return a.x * b.y - a.y * b.x;
@@ -148,8 +135,7 @@ class Quad {
     return alpha01 >= 0.0 && alpha01 <= 1.0 && alpha12 >= 0.0 && alpha12 <= 1.0;
   }
 
-  @override
-  String toString() {
-    return "Quad($p1, $p2, $p3, $p4,)";
-  }
+  DoublePoint get center => (p1 + p2 + p3 + p4) / 4.0;
+
+  static const fromJson = QuadMapper.fromJson;
 }

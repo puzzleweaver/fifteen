@@ -1,7 +1,7 @@
-import 'package:fifteen/builder/ui/builder_page.dart';
 import 'package:fifteen/game/ui/game_page.dart';
+import 'package:fifteen/level/ui/level_builder_page.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/math/board.dart';
+import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/debug/ui/shader_test/shader_test_page.dart';
 import 'package:fifteen/shared/ui/preview_widget.dart';
@@ -18,11 +18,7 @@ class DebugPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("DEBUG (go away)"),
       ),
-      body: GridView.count(
-        crossAxisCount: 4,
-        mainAxisSpacing: 5.0,
-        crossAxisSpacing: 5.0,
-        padding: const EdgeInsets.all(5.0),
+      body: Wrap(
         children: [
           ElevatedButton(
             onPressed: () => goToImageTest(context),
@@ -36,14 +32,18 @@ class DebugPage extends StatelessWidget {
             (level) => ElevatedButton(
               style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
               onPressed: () => play(context, appState, level),
-              child: SizedBox.square(
-                dimension: 75.0,
-                child: PreviewWidget(
-                  level: level,
-                  locked: false,
-                  showBackground: false,
-                  showImage: false,
-                ),
+              child: Column(
+                children: [
+                  SizedBox.square(
+                    dimension: 75.0,
+                    child: PreviewWidget(
+                      level: level,
+                      locked: false,
+                      showImage: false,
+                    ),
+                  ),
+                  Text("${level.board.subquads.length}")
+                ],
               ),
             ),
           )
@@ -80,8 +80,8 @@ class DebugPage extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) {
           appState.setBoard(Board.createNew());
-          return BuilderPage(
-            appState: appState,
+          return LevelBuilderPage(
+            initialLevel: Level.createNew(),
           );
         },
       ),

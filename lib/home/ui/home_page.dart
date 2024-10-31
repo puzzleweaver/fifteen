@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget getButton(Level level, ThemeData theme, FifteenAppState appState) {
     bool levelCompleted =
-        level.index != null && _solvedBoards.contains(level.board.uuid);
+        level.index != null && _solvedBoards.contains(level.board.id);
     bool levelLocked = _isLevelLocked(level.index);
     return ElevatedButton(
       onPressed: levelLocked ? null : () => goToGame(level, appState),
@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> {
 
   bool _isLevelSolved(int? index) {
     if (index == null) return false;
-    return _solvedBoards.contains(Level.adventure[index].board.uuid);
+    return _solvedBoards.contains(Level.adventure[index].board.id);
   }
 
   bool _isLevelLocked(int? index) {

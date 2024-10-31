@@ -1,5 +1,5 @@
-import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/board/domain/double_point.dart';
+import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/shared/ui/board_painter.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +21,8 @@ class BuilderPainter extends BoardPainter {
     fillPaint.color = const Color(0x8822e8f0);
 
     // render the quads
-    for (int i = 0; i < board.quads.length; i++) {
-      drawSubquads(canvas, board.quads[i], board.charts[i], size, strokePaint);
+    for (int i = 0; i < board.charts.length; i++) {
+      drawSubquads(canvas, board.charts[i], size, strokePaint);
     }
     fillPaint.color = const Color(0x44000000);
     fillSpace(canvas, board, size);
@@ -45,7 +45,7 @@ class BuilderPainter extends BoardPainter {
     }
 
     // render vertices
-    for (Coord c in board.getEdgeCoords()) {
+    for (Coord c in board.edgeCoords) {
       fillPaint.color = selectedCoords.contains(c)
           ? Colors.transparent
           : const Color.fromRGBO(34, 232, 240, 0.533);

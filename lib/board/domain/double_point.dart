@@ -1,9 +1,15 @@
 import 'dart:math';
+import 'dart:math' as math;
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 
-class DoublePoint {
+part 'double_point.mapper.dart';
+
+@MappableClass()
+class DoublePoint with DoublePointMappable {
   final double x, y;
+  // final double z = 0; // TODO hehe >:3
 
   DoublePoint(this.x, this.y);
 
@@ -33,18 +39,6 @@ class DoublePoint {
     return DoublePoint(x / d, y / d);
   }
 
-  @override
-  bool operator ==(Object other) {
-    if (other is! DoublePoint) {
-      return false;
-    } else {
-      return other.x == x && other.y == y;
-    }
-  }
-
-  @override
-  int get hashCode => Object.hash(x, y);
-
   Offset toOffset() {
     return Offset(x, y);
   }
@@ -53,12 +47,18 @@ class DoublePoint {
     return DoublePoint(o.dx, o.dy);
   }
 
-  @override
-  String toString() {
-    return "DoublePoint(${x.toStringAsPrecision(3)}, ${y.toStringAsPrecision(3)})";
-  }
-
   static DoublePoint lerp(DoublePoint p1, DoublePoint p2, double t) {
     return p1 * (1.0 - t) + p2 * t;
   }
+
+  DoublePoint? min(DoublePoint p) => DoublePoint(
+        math.min(x, p.x),
+        math.min(y, p.y),
+      );
+  DoublePoint? max(DoublePoint p) => DoublePoint(
+        math.max(x, p.x),
+        math.max(y, p.y),
+      );
+
+  static const fromJson = DoublePointMapper.fromJson;
 }

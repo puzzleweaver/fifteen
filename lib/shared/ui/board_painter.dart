@@ -1,6 +1,7 @@
-import 'package:fifteen/math/board.dart';
-import 'package:fifteen/math/double_point.dart';
-import 'package:fifteen/math/quad.dart';
+import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/board/domain/chart.dart';
+import 'package:fifteen/board/domain/double_point.dart';
+import 'package:fifteen/board/domain/quad.dart';
 import 'package:flutter/material.dart';
 
 abstract class BoardPainter extends CustomPainter {
@@ -33,22 +34,21 @@ abstract class BoardPainter extends CustomPainter {
 
   void drawSubquads(
     Canvas canvas,
-    Quad quad,
-    (int, int) chart,
+    Chart chart,
     Size size,
     Paint paint,
   ) {
-    quad = quad.scale(size.width, size.height);
-    for (int i = 0; i <= chart.$2; i++) {
-      double s = i / chart.$2;
+    Quad quad = chart.quad.scale(size.width, size.height);
+    for (int i = 0; i <= chart.m; i++) {
+      double s = i / chart.m;
       canvas.drawLine(
         DoublePoint.lerp(quad.p1, quad.p2, s).toOffset(),
         DoublePoint.lerp(quad.p4, quad.p3, s).toOffset(),
         paint,
       );
     }
-    for (int j = 0; j <= chart.$1; j++) {
-      double s = j / chart.$1;
+    for (int j = 0; j <= chart.n; j++) {
+      double s = j / chart.n;
       canvas.drawLine(
         DoublePoint.lerp(quad.p2, quad.p3, s).toOffset(),
         DoublePoint.lerp(quad.p1, quad.p4, s).toOffset(),
@@ -67,7 +67,7 @@ abstract class BoardPainter extends CustomPainter {
   }
 
   void fillSpace(Canvas canvas, Board board, Size size) {
-    var subquads = board.getSubquads();
+    var subquads = board.subquads;
     if (subquads.isNotEmpty) {
       drawQuad(canvas, subquads[subquads.length - 1], size, fillPaint);
     }
@@ -95,8 +95,8 @@ class BoardPreviewPainter extends BoardPainter {
 
     // render the lines
     strokePaint.color = const Color(0xff000000);
-    for (int i = 0; i < board.quads.length; i++) {
-      drawSubquads(canvas, board.quads[i], board.charts[i], size, strokePaint);
+    for (int i = 0; i < board.charts.length; i++) {
+      drawSubquads(canvas, board.charts[i], size, strokePaint);
     }
     // render the space.
     fillPaint.color = const Color(0x44000000);

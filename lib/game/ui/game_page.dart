@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:ui';
-import 'dart:ui' as ui;
 
 import 'package:fifteen/builder/ui/builder_page.dart';
+import 'package:fifteen/game/ui/endgame_dialog.dart';
 import 'package:fifteen/game/ui/game_widget.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/math/board.dart';
+import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings/ui/settings_page.dart';
 import 'package:fifteen/shared/ui/banner_ad_widget.dart';
@@ -14,7 +13,6 @@ import 'package:fifteen/shared/ui/interstitial.dart';
 import 'package:fifteen/shared/ui/prefs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
@@ -32,8 +30,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  FragmentShader? shader;
-  ui.Image? image;
   bool previewing = false;
 
   Set<String> _solvedBoards = {};
@@ -44,15 +40,9 @@ class _GamePageState extends State<GamePage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadShader();
-    });
-    widget.appState.addListener(_checkForDialog);
     _loadSharedPreferences();
-    initialTime = DateTime.now();
-    timer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
-      setState(() => currentTime = DateTime.now());
-    });
+    _checkForDialog();
+    _loadTimer();
     super.initState();
   }
 
@@ -65,26 +55,21 @@ class _GamePageState extends State<GamePage> {
     });
   }
 
+  void _loadTimer() {
+    initialTime = DateTime.now();
+    timer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
+      setState(() => currentTime = DateTime.now());
+    });
+  }
+
   Future<void> _saveLevelSolved(Board? solvedBoard) async {
     if (solvedBoard == null) return;
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _solvedBoards = Prefs.setSolvedBoards(prefs, {
         ..._solvedBoards,
-        solvedBoard.uuid,
+        solvedBoard.id,
       });
-    });
-  }
-
-  Future<void> _loadShader() async {
-    final imageData = await rootBundle.load(widget.level.image);
-    final loadedImage = await decodeImageFromList(
-      imageData.buffer.asUint8List(),
-    );
-    final program = await FragmentProgram.fromAsset("shaders/image_quad.frag");
-    setState(() {
-      shader = program.fragmentShader();
-      image = loadedImage;
     });
   }
 
@@ -94,19 +79,6 @@ class _GamePageState extends State<GamePage> {
     timer?.cancel();
     timer = null;
     super.dispose();
-  }
-
-  String getTimeDisplay() {
-    DateTime? t0 = initialTime, t1 = currentTime;
-    if (t0 == null || t1 == null) return "XX:XX";
-    Duration delta = t1.difference(t0);
-    int hours = delta.inHours,
-        minutes = delta.inMinutes.remainder(60),
-        seconds = delta.inSeconds.remainder(60);
-    String hourStr = hours == 0 ? "" : "${hours.toString().padLeft(2, "0")}:",
-        minuteStr = "${minutes.toString().padLeft(2, '0')}:",
-        secondStr = seconds.toString().padLeft(2, '0');
-    return "$hourStr$minuteStr$secondStr";
   }
 
   @override
@@ -147,8 +119,6 @@ class _GamePageState extends State<GamePage> {
               flex: 6,
               child: Center(
                 child: GameWidget(
-                  shader: shader,
-                  image: image,
                   previewing: previewing,
                   level: widget.level,
                 ),
@@ -163,7 +133,7 @@ class _GamePageState extends State<GamePage> {
                   ...(_timerEnabled
                       ? [
                           Expanded(child: Container()),
-                          Text(getTimeDisplay(),
+                          Text(getDisplayTime(),
                               style: const TextStyle(fontSize: 14 * 3)),
                           Expanded(child: Container()),
                         ]
@@ -193,66 +163,52 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  void _checkForDialog() {
-    if (widget.appState.game.isSolved()) {
-      _saveLevelSolved(widget.level.board);
-      Interstitial.load();
-      timer?.cancel();
-      timer = null;
-      showGeneralDialog(
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionBuilder: (context, a1, a2, widget) {
-          final curvedValue = Curves.easeOut.transform(a1.value) - 1.0;
-          return Transform(
-            transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
-            child: Opacity(
-              opacity: a1.value,
-              child: _dialog(),
-            ),
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 1000),
-        barrierDismissible: false,
-        barrierLabel: '',
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => Container(),
-      );
-    }
+  String getDisplayTime() {
+    DateTime? t0 = initialTime, t1 = currentTime;
+    if (t0 == null || t1 == null) return "XX:XX";
+    Duration delta = t1.difference(t0);
+    int hours = delta.inHours,
+        minutes = delta.inMinutes.remainder(60),
+        seconds = delta.inSeconds.remainder(60);
+    String hourStr = hours == 0 ? "" : "${hours.toString().padLeft(2, "0")}:",
+        minuteStr = "${minutes.toString().padLeft(2, '0')}:",
+        secondStr = seconds.toString().padLeft(2, '0');
+    return "$hourStr$minuteStr$secondStr";
   }
 
-  Widget _dialog() {
-    bool hasNext = widget.level.hasNext();
-    return AlertDialog(
-      title: const Text("You Solved This Board!"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          PreviewWidget(
-            level: widget.level,
-            locked: false,
-          ),
-          if (_timerEnabled)
-            Text(
-              "Your time was ${getTimeDisplay()}.",
-            ),
-        ],
-      ),
-      actions: [
-        ElevatedButton(
-          onPressed: onHome,
-          child: const Text("Home"),
-        ),
-        ElevatedButton(
-          onPressed: onAgain,
-          child: const Text("Again"),
-        ),
-        if (hasNext)
-          ElevatedButton(
-            onPressed: onNext,
-            child: const Text("Next"),
-          ),
-      ],
-    );
+  void _checkForDialog() {
+    widget.appState.addListener(() {
+      if (widget.appState.game.isSolved()) {
+        Level level = widget.level;
+        _saveLevelSolved(widget.level.board);
+        Interstitial.load();
+        timer?.cancel();
+        timer = null;
+        showGeneralDialog(
+          barrierColor: Colors.black.withOpacity(0.5),
+          transitionBuilder: (context, a1, a2, widget) {
+            final curvedValue = Curves.easeOut.transform(a1.value) - 1.0;
+            return Transform(
+              transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
+              child: Opacity(
+                opacity: a1.value,
+                child: EndgameDialog(
+                  level: level,
+                  time: getDisplayTime(),
+                  hasNext: level.hasNext(),
+                  timerEnabled: _timerEnabled,
+                ),
+              ),
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 1000),
+          barrierDismissible: false,
+          barrierLabel: '',
+          context: context,
+          pageBuilder: (context, animation, secondaryAnimation) => Container(),
+        );
+      }
+    });
   }
 
   void handleMore(String label) {
@@ -283,50 +239,6 @@ class _GamePageState extends State<GamePage> {
       context,
       MaterialPageRoute(
         builder: (context) => BuilderPage(appState: widget.appState),
-      ),
-    );
-  }
-
-  void onHome() {
-    Navigator.pop(context); // dismiss "you win" dialog
-    Navigator.pop(context); // dismiss game page
-    Interstitial.show();
-  }
-
-  void onAgain() {
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Interstitial.show();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          widget.appState.setBoard(widget.level.board);
-          return GamePage(
-            level: widget.level,
-            appState: widget.appState,
-          );
-        },
-      ),
-    );
-  }
-
-  void onNext() {
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Interstitial.show();
-    assert(widget.level.hasNext());
-    Level next = widget.level.next;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          widget.appState.setBoard(next.board);
-          return GamePage(
-            level: next,
-            appState: widget.appState,
-          );
-        },
       ),
     );
   }

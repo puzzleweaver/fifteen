@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:fifteen/math/board.dart';
-import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/dir_coord.dart';
-import 'package:fifteen/math/int_point.dart';
-import 'package:fifteen/math/quad.dart';
+import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/board/domain/oriented_coord.dart';
+import 'package:fifteen/board/domain/coord.dart';
+import 'package:fifteen/board/domain/int_point.dart';
+import 'package:fifteen/board/domain/quad.dart';
 
 class Game {
   final int len;
@@ -26,7 +26,7 @@ class Game {
   }
 
   static Game fromBoard(Board board) {
-    return _fromLen(board.countSubquads());
+    return _fromLen(board.subquads.length);
   }
 
   Game solve() {
@@ -35,12 +35,12 @@ class Game {
 
   Game shuffle(Board board) {
     Game ret = this;
-    int len = board.countSubquads() * 60;
+    int len = board.subquads.length * 60;
     for (int i = 0; i < len; i++) {
       int spaceIndex = ret.getSpace();
       Coord spaceCoord = board.getCoord(spaceIndex)!;
       IntPoint dir = IntPoint.randomDir(Random());
-      DirCoord? result = board.step(spaceCoord, dir);
+      OrientedCoord? result = board.step(spaceCoord, dir);
       if (result != null) {
         int resultIndex = board.getIndex(result.coord);
         ret = ret.move(spaceIndex, resultIndex, result.dir);
@@ -94,7 +94,7 @@ class Game {
     final Coord? c = board.getCoord(index);
     if (c != null) {
       for (IntPoint dir in IntPoint.dirs) {
-        DirCoord? result = board.step(c, dir);
+        OrientedCoord? result = board.step(c, dir);
         if (result != null) {
           int resultIndex = board.getIndex(result.coord);
           if (isSpace(resultIndex)) {

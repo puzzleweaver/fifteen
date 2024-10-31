@@ -1,11 +1,19 @@
 import 'dart:math';
 
-import 'package:fifteen/math/coord.dart';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:fifteen/board/domain/coord.dart';
 
-class Side {
+part 'side.mapper.dart';
+
+@MappableClass()
+class Side with SideMappable {
   final Coord c1, c2;
 
   Side(this.c1, this.c2);
+
+  Side.fromPair((Coord, Coord) pair)
+      : c1 = pair.$1,
+        c2 = pair.$2;
 
   bool colinear() {
     return c1.a == c2.a &&
@@ -18,7 +26,7 @@ class Side {
   }
 
   int len() {
-    return (c1.hk - c2.hk).taxi();
+    return (c1.hk - c2.hk).taxi;
   }
 
   Side flip() {
@@ -35,10 +43,5 @@ class Side {
   bool operator ==(Object other) {
     if (other is! Side) return false;
     return c1 == other.c1 && c2 == other.c2 || c2 == other.c1 && c1 == other.c2;
-  }
-
-  @override
-  String toString() {
-    return "Side($c1, $c2,)";
   }
 }

@@ -1,11 +1,15 @@
-import 'package:fifteen/math/board.dart';
-import 'package:fifteen/math/conv.dart';
-import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/double_point.dart';
-import 'package:fifteen/math/quad.dart';
-import 'package:fifteen/math/side.dart';
+import 'package:dart_mappable/dart_mappable.dart';
+import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/math/connection.dart';
+import 'package:fifteen/board/domain/coord.dart';
+import 'package:fifteen/board/domain/double_point.dart';
+import 'package:fifteen/board/domain/quad.dart';
+import 'package:fifteen/board/domain/side.dart';
 
-class ConstraintSet {
+part 'constraint.mapper.dart';
+
+@MappableClass()
+class ConstraintSet with ConstraintSetMappable {
   final List<CoincidentBoardConstraint> coincidents;
   final List<EquidistantBoardConstraint> equidistants;
 
@@ -26,8 +30,8 @@ class ConstraintSet {
     Coord c,
     DoublePoint to,
   ) {
-    Quad quad = board.quads[c.a];
-    var (n, m) = board.charts[c.a];
+    Quad quad = board.charts[c.a].quad;
+    int n = board.charts[c.a].n, m = board.charts[c.a].m;
     double x = 0.5 * (c.hk.x + 1) / n, y = 0.5 * (c.hk.y + 1) / m;
     DoublePoint dif = to - board.getVertex(c);
     Quad newQuad = Quad(
@@ -37,15 +41,15 @@ class ConstraintSet {
       quad.p4 + dif * x * (1 - y),
     );
     return board.copyWith(
-      quads: [
-        for (int a = 0; a < board.quads.length; a++)
-          a == c.a ? newQuad : board.quads[a]
+      charts: [
+        for (int a = 0; a < board.charts.length; a++)
+          a == c.a ? board.charts[a].copyWith(quad: newQuad) : board.charts[a]
       ],
     );
   }
 
-  List<Conv> generateConvs(Board board) {
-    List<Conv> ret = [];
+  List<Connection> generateconnections(Board board) {
+    List<Connection> ret = [];
     for (int a = 0; a < board.charts.length; a++) {
       for (int b = a + 1; b < board.charts.length; b++) {
         // check for a pair of coincidents linking a and b
@@ -63,7 +67,7 @@ class ConstraintSet {
             // transpose s1 and s2 because FUCK YOU that's why :(
             (s1, s2) = (Side(s1.c1, s2.c1), Side(s1.c2, s2.c2));
             if (_sidePairValid(s1, s2)) {
-              Conv result = convFromSidePair(s1, s2);
+              Connection result = convFromSidePair(s1, s2);
               ret.add(result);
             }
           }
@@ -73,7 +77,7 @@ class ConstraintSet {
     return ret;
   }
 
-  static Conv convFromSidePair(Side s1, Side s2) {
+  static Connection convFromSidePair(Side s1, Side s2) {
     if (!_sidePairInnerValid(s1, s2)) {
       Side ns1 = Side(s2.c1, s1.c2), ns2 = Side(s1.c1, s2.c2);
       s1 = ns1;
@@ -81,7 +85,7 @@ class ConstraintSet {
     }
     var rot =
         (s2.c2.hk - s2.c1.hk).asDir() * (s1.c2.hk - s1.c1.hk).asDir().inv();
-    return Conv(
+    return Connection(
       fromA: s1.c1.a,
       toA: s2.c1.a,
       rot: rot,
@@ -258,11 +262,6 @@ class CoincidentBoardConstraint {
     var ncoords = coords.where((c) => c.a != a).toSet();
     if (ncoords.isEmpty) return null;
     return CoincidentBoardConstraint(coords: ncoords);
-  }
-
-  @override
-  String toString() {
-    return "CoincidentBoardConstraint(coords: $coords,)";
   }
 
   Coord coordWithA(int a) {

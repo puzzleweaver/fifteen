@@ -1,16 +1,17 @@
 import 'dart:math';
 import 'dart:math' as math;
 
+import 'package:fifteen/board/domain/chart.dart';
+import 'package:fifteen/board/domain/side.dart';
 import 'package:fifteen/builder/ui/builder_painter.dart';
 import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/math/board.dart';
+import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/math/constraint.dart';
-import 'package:fifteen/math/coord.dart';
-import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/board/domain/coord.dart';
+import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/math/quad.dart';
-import 'package:fifteen/math/side.dart';
+import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/shared/ui/border_box.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as dev;
@@ -128,9 +129,9 @@ class _BuilderPageState extends State<BuilderPage> {
     var pos = DoublePoint.fromOffset(tapDetails.localPosition);
     pos = DoublePoint(pos.x / size.width, pos.y / size.height);
 
-    List<Coord> edgeCoords = board.getEdgeCoords();
+    List<Coord> edgeCoords = board.edgeCoords.toList();
     for (int i = 0; i < edgeCoords.length; i++) {}
-    List<Quad> quads = board.getSubquads();
+    List<Quad> quads = board.subquads;
     for (int i = 0; i < edgeCoords.length; i++) {
       double dist = (pos - board.getVertex(edgeCoords[i])).distance;
       if (dist <= 1.0 / 25) {
@@ -185,7 +186,8 @@ class _BuilderPageState extends State<BuilderPage> {
             for (int i = 1; i <= 5; i++)
               for (int j = i; j <= 5; j++)
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8.0)),
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(8.0)),
                   onPressed: () {
                     addChart(i, j);
                     Navigator.pop(context);
@@ -202,13 +204,16 @@ class _BuilderPageState extends State<BuilderPage> {
     Random r = Random();
     setBoard(
       board.copyWith(
-        charts: [...board.charts, (i, j)],
-        quads: [
-          ...board.quads,
-          Quad.unit()
-              .mult(0.1)
-              .scale(i.toDouble(), j.toDouble())
-              .add(DoublePoint(r.nextDouble() * 0.9, r.nextDouble() * 0.9))
+        charts: [
+          ...board.charts,
+          Chart(
+            n: i,
+            m: j,
+            quad: Quad.unit()
+                .mult(0.1)
+                .scale(i.toDouble(), j.toDouble())
+                .add(DoublePoint(r.nextDouble() * 0.9, r.nextDouble() * 0.9)),
+          )
         ],
       ),
     );
@@ -216,17 +221,21 @@ class _BuilderPageState extends State<BuilderPage> {
 
   Board mapBoard(Board board, DoublePoint Function(DoublePoint) map) {
     return board.copyWith(
-      convs: board.convs,
-      quads: [
-        for (int a = 0; a < board.quads.length; a++)
+      connections: board.connections,
+      charts: [
+        for (int a = 0; a < board.charts.length; a++)
           isSelected(a)
-              ? Quad(
-                  map(board.quads[a].p1),
-                  map(board.quads[a].p2),
-                  map(board.quads[a].p3),
-                  map(board.quads[a].p4),
+              ? Chart(
+                  n: board.charts[a].n,
+                  m: board.charts[a].m,
+                  quad: Quad(
+                    map(board.charts[a].quad.p1),
+                    map(board.charts[a].quad.p2),
+                    map(board.charts[a].quad.p3),
+                    map(board.charts[a].quad.p4),
+                  ),
                 )
-              : board.quads[a]
+              : board.charts[a]
       ],
     );
   }
@@ -262,8 +271,8 @@ class _BuilderPageState extends State<BuilderPage> {
 
   DoublePoint getSelectionCenter(Board board) {
     var list = [
-      for (int i = 0; i < board.quads.length; i++)
-        if (isSelected(i)) getQuadCenter(board.quads[i])
+      for (int i = 0; i < board.charts.length; i++)
+        if (isSelected(i)) board.charts[i].quad.center,
     ];
     return list.isEmpty
         ? DoublePoint(0, 0)
@@ -333,14 +342,16 @@ class _BuilderPageState extends State<BuilderPage> {
 
   void solve() {
     Board newBoard = board.copyWith(
-      convs: board.constraints.generateConvs(board),
+      connections: board.constraints.generateconnections(board),
     );
     setBoard(newBoard.constraints.solve(newBoard));
     resetSelection();
   }
 
   void recenter() {
-    var edgePoints = board.getEdgeCoords().map((c) => board.getVertex(c));
+    Iterable<DoublePoint> edgePoints = board.edgeCoords.map(
+      (c) => board.getVertex(c),
+    );
     if (edgePoints.isEmpty) return;
     DoublePoint lo = edgePoints.reduce(
           (DoublePoint val, o) => DoublePoint(

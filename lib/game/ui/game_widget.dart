@@ -3,9 +3,9 @@ import 'dart:ui' as ui;
 
 import 'package:fifteen/game/ui/game_painter.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/math/double_point.dart';
+import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/math/quad.dart';
+import 'package:fifteen/board/domain/quad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +60,7 @@ class GameWidget extends StatelessWidget {
     DoublePoint pos = DoublePoint.fromOffset(tapDetails.localPosition);
     pos = DoublePoint(pos.x / size.width, pos.y / size.height);
 
-    List<Quad> quads = appState.board.getSubquads();
+    List<Quad> quads = appState.board.subquads;
     for (int i = 0; i < quads.length; i++) {
       if (quads[i].isInside(pos)) {
         appState.tapAtIndex(i);
