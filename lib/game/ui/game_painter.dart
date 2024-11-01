@@ -35,6 +35,7 @@ class GamePainter extends FifteenPainter {
     );
 
     if (!previewing) {
+      renderer.setFill(color: Colors.black);
       List<Quad> quads = level.board.subquads;
       for (int i = 0; i < quads.length; i++) {
         Quad q = quads[i], from, to;

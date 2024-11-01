@@ -46,9 +46,4 @@ class Connection with ConnectionMappable {
       return null;
     }
   }
-
-  @override
-  String toString() {
-    return "Conv(fromA: $fromA, toA: $toA, rot: $_rot, trans: $_trans,)";
-  }
 }

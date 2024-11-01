@@ -5,6 +5,7 @@ import 'package:fifteen/main.dart';
 import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings/ui/settings_page.dart';
+import 'package:fifteen/shared/data/assets.dart';
 import 'package:fifteen/shared/ui/banner_ad_widget.dart';
 import 'package:fifteen/shared/ui/prefs.dart';
 import 'package:fifteen/shared/ui/preview_widget.dart';
@@ -55,7 +56,7 @@ class _HomePageState extends State<HomePage> {
     var size = MediaQuery.of(context).size;
 
     var gameButtons =
-        Level.adventure.map((lvl) => getButton(lvl, theme, appState));
+        Assets.boards.map((lvl) => getButton(lvl, theme, appState));
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
@@ -131,7 +132,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget getButton(Level level, ThemeData theme, FifteenAppState appState) {
+  Widget getButton(String asset, ThemeData theme, FifteenAppState appState) {
+    Level level = Level.createNew();
     bool levelCompleted =
         level.index != null && _solvedBoards.contains(level.board.id);
     bool levelLocked = _isLevelLocked(level.index);
@@ -181,7 +183,7 @@ class _HomePageState extends State<HomePage> {
 
   bool _isLevelSolved(int? index) {
     if (index == null) return false;
-    return _solvedBoards.contains(Level.adventure[index].board.id);
+    return _solvedBoards.contains(Level.createNew().board.id);
   }
 
   bool _isLevelLocked(int? index) {

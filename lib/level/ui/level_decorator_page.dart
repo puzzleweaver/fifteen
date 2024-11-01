@@ -1,4 +1,5 @@
 import 'package:fifteen/math/level.dart';
+import 'package:fifteen/shared/data/assets.dart';
 import 'package:flutter/material.dart';
 
 class LevelDecoratorPage extends StatelessWidget {
@@ -13,24 +14,34 @@ class LevelDecoratorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        for (String imagePath in Level.images)
-          ElevatedButton(
-            onPressed: level.image == imagePath
-                ? null
-                : () => setLevel(
-                      level.copyWith(
-                        image: imagePath,
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Wrap(
+        direction: Axis.horizontal,
+        spacing: 5,
+        runSpacing: 5,
+        children: [
+          for (String imagePath in Assets.images)
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
+              onPressed: level.image == imagePath
+                  ? null
+                  : () => setLevel(
+                        level.copyWith(
+                          image: imagePath,
+                        ),
+                        "Updated Image",
                       ),
-                      "Updated Image",
-                    ),
-            child: Image.asset(
-              imagePath,
-              width: 50,
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Image.asset(
+                  imagePath,
+                  width: 100,
+                ),
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

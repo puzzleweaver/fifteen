@@ -66,13 +66,16 @@ class LevelBuilderPageState extends State<LevelBuilderPage> {
             index: history.length - 1,
             getChild: (index) => Text("($index) ${history[index].description}"),
           ),
-          SingleChildScrollView(
-            primary: true,
-            child: LevelBuilderTabs.tab(
-              current: level,
-              set: (level, message) => set(level, message, context),
-              index: currentIndex,
-              context: context,
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              primary: true,
+              child: LevelBuilderTabs.tab(
+                current: level,
+                set: (level, message) => set(level, message, context),
+                index: currentIndex,
+                context: context,
+              ),
             ),
           ),
         ],
@@ -102,7 +105,7 @@ class LevelBuilderPageState extends State<LevelBuilderPage> {
 
   void submit() {
     log(
-      level.toJson(),
+      level.board.toJson(),
     );
   }
 }

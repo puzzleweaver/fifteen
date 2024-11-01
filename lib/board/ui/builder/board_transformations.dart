@@ -6,20 +6,54 @@ import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/board/domain/side.dart';
+import 'package:fifteen/math/connection.dart';
 import 'package:fifteen/math/constraint.dart';
 
 class BoardTransformations {
   static Board withChartAdded(Board board, int n, int m) {
+    double scale = 0.2;
     return board.copyWith(
       charts: [
         ...board.charts,
         Chart(
           n: n,
           m: m,
-          quad: Quad.unit().mult(0.1).scale(n.toDouble(), m.toDouble()),
+          quad: Quad.unit()
+              .mult(scale)
+              .scale(n.toDouble(), m.toDouble())
+              .add(DoublePoint(
+                Random().nextDouble() * (1.0 - scale * n),
+                Random().nextDouble() * (1.0 - scale * m),
+              )),
         ),
       ],
     );
+  }
+
+  static Set<int> connectedAs(int? a, Board board) {
+    if (a == null) {
+      return {
+        for (int i = 0; i < board.charts.length; i++) i,
+      };
+    }
+    Set<int> ret = {};
+    List<int> fringe = [a];
+    while (fringe.isNotEmpty) {
+      int currentA = fringe.removeAt(0);
+      ret.add(currentA);
+      for (Connection connection in board.connections) {
+        int fromA = connection.fromA, toA = connection.toA;
+        if (fromA == currentA && !ret.contains(toA)) {
+          ret.add(toA);
+          fringe.add(toA);
+        }
+        if (toA == currentA && !ret.contains(fromA)) {
+          ret.add(fromA);
+          fringe.add(fromA);
+        }
+      }
+    }
+    return ret;
   }
 
   static Board chartsMapped(
@@ -43,6 +77,7 @@ class BoardTransformations {
     DoublePoint Function(DoublePoint) map,
     int? selectedA,
   ) {
+    Set<int> connectedA = connectedAs(selectedA, board);
     return chartsMapped(
       board,
       (chart, a) => board.charts[a].copyWith(
@@ -53,7 +88,7 @@ class BoardTransformations {
           map(board.charts[a].quad.p4),
         ),
       ),
-      where: (a) => (a == (selectedA ?? a)),
+      where: (a) => connectedA.contains(a),
     );
   }
 
@@ -155,7 +190,7 @@ class BoardTransformations {
 
   static Board finalize(Board board) {
     Board ret = board.copyWith(
-      connections: board.constraints.generateconnections(board),
+      connections: board.constraints.generateConnections(board),
     );
     ret = board.constraints.solve(ret);
     ret = BoardTransformations.recentered(ret);

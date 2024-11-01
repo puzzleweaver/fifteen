@@ -86,4 +86,6 @@ class Board with BoardMappable {
     }
     return null;
   }
+
+  static const fromJson = BoardMapper.fromJson;
 }

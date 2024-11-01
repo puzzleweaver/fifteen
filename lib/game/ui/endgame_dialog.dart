@@ -82,8 +82,7 @@ class EndgameDialog extends StatelessWidget {
     Navigator.pop(context);
     Navigator.pop(context);
     Interstitial.show();
-    assert(level.hasNext());
-    Level next = level.next;
+    Level next = Level.createNew();
     Navigator.push(
       context,
       MaterialPageRoute(

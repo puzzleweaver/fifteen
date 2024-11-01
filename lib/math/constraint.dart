@@ -48,7 +48,7 @@ class ConstraintSet with ConstraintSetMappable {
     );
   }
 
-  List<Connection> generateconnections(Board board) {
+  List<Connection> generateConnections(Board board) {
     List<Connection> ret = [];
     for (int a = 0; a < board.charts.length; a++) {
       for (int b = a + 1; b < board.charts.length; b++) {
@@ -67,7 +67,7 @@ class ConstraintSet with ConstraintSetMappable {
             // transpose s1 and s2 because FUCK YOU that's why :(
             (s1, s2) = (Side(s1.c1, s2.c1), Side(s1.c2, s2.c2));
             if (_sidePairValid(s1, s2)) {
-              Connection result = convFromSidePair(s1, s2);
+              Connection result = connectionFromSidePair(s1, s2);
               ret.add(result);
             }
           }
@@ -77,7 +77,7 @@ class ConstraintSet with ConstraintSetMappable {
     return ret;
   }
 
-  static Connection convFromSidePair(Side s1, Side s2) {
+  static Connection connectionFromSidePair(Side s1, Side s2) {
     if (!_sidePairInnerValid(s1, s2)) {
       Side ns1 = Side(s2.c1, s1.c2), ns2 = Side(s1.c1, s2.c2);
       s1 = ns1;
@@ -117,19 +117,6 @@ class ConstraintSet with ConstraintSetMappable {
       for (var eq in equidistants) {
         ret = eq.solve(ret);
       }
-    }
-    return ret;
-  }
-
-  ConstraintSet withoutChart(int a) {
-    ConstraintSet ret = createNew();
-    for (var coin in coincidents) {
-      var ncoin = coin.without(a);
-      if (ncoin != null && ncoin.coords.isNotEmpty) ret.addCoincident(ncoin);
-    }
-    for (var eq in equidistants) {
-      var neq = eq.without(a);
-      if (neq != null && neq.sides.isNotEmpty) ret.addEquidistant(neq);
     }
     return ret;
   }
@@ -197,20 +184,23 @@ class ConstraintSet with ConstraintSetMappable {
     return areCoordsEquivalent(s.c1, t.c1) && areCoordsEquivalent(s.c2, t.c2) ||
         areCoordsEquivalent(s.c1, t.c2) && areCoordsEquivalent(s.c2, t.c1);
   }
-
-  @override
-  String toString() {
-    return "ConstraintSet(coincidents: $coincidents, equidistants: $equidistants,)";
-  }
 }
 
-class CoincidentBoardConstraint {
+@MappableClass()
+class CoincidentBoardConstraint with CoincidentBoardConstraintMappable {
   final Set<Coord> coords;
 
   CoincidentBoardConstraint({Set<Coord>? coords})
       : coords = coords ?? <Coord>{} {
     assert(this.coords.isNotEmpty);
   }
+
+  @MappableConstructor()
+  factory CoincidentBoardConstraint.fromList(
+          {required List<Coord> coordList}) =>
+      CoincidentBoardConstraint(coords: Set.of(coordList));
+
+  List<Coord> get coordList => coords.toList();
 
   static CoincidentBoardConstraint? createNew(Coord? a, Coord? b) {
     if (a == null || b == null) return null;
@@ -258,34 +248,27 @@ class CoincidentBoardConstraint {
     return coords.any((c) => c.a == a);
   }
 
-  CoincidentBoardConstraint? without(int a) {
-    var ncoords = coords.where((c) => c.a != a).toSet();
-    if (ncoords.isEmpty) return null;
-    return CoincidentBoardConstraint(coords: ncoords);
-  }
-
   Coord coordWithA(int a) {
     return coords.firstWhere((c) => c.a == a);
   }
 }
 
-class EquidistantBoardConstraint {
+@MappableClass()
+class EquidistantBoardConstraint with EquidistantBoardConstraintMappable {
   final Set<Side> sides;
 
   EquidistantBoardConstraint({required this.sides}) {
     assert(sides.isNotEmpty);
   }
 
+  @MappableConstructor()
+  factory EquidistantBoardConstraint.fromList({required List<Side> sideList}) =>
+      EquidistantBoardConstraint(sides: Set.of(sideList));
+
+  List<Side> get sideList => sides.toList();
+
   static EquidistantBoardConstraint createNew(Side a, Side b) {
     return EquidistantBoardConstraint(sides: {a, b});
-  }
-
-  EquidistantBoardConstraint? without(int a) {
-    var nsides = sides;
-    if (nsides.isEmpty) return null;
-    return EquidistantBoardConstraint(
-      sides: nsides,
-    );
   }
 
   Board solve(Board board) {
@@ -330,10 +313,5 @@ class EquidistantBoardConstraint {
       if (!constraints.anyEquivalent(nsides, s)) nsides.add(s);
     }
     return EquidistantBoardConstraint(sides: nsides);
-  }
-
-  @override
-  String toString() {
-    return "EquidistantBoardConstraint(sides: $sides,)";
   }
 }

@@ -31,7 +31,9 @@ class BoardBuilderPainter extends FifteenPainter {
     renderer.setFill(color: const Color(0x88000000));
     if (board.charts.isNotEmpty) {
       renderer.drawQuad(
-          board.subquads[board.subquads.length - 1], renderer.fillPaint);
+        board.subquads[board.subquads.length - 1],
+        renderer.fillPaint,
+      );
     }
     drawEquidistantConstraints(renderer);
     drawControlPoints(renderer);
@@ -77,20 +79,31 @@ class BoardBuilderPainter extends FifteenPainter {
   }
 
   void drawSelection(LevelRenderer renderer) {
-    if (selectedCoords.isEmpty || selectedCoords[0].isSpace) return;
-    renderer.setStroke(strokeWidth: 8, color: const Color(0x88000000));
-    for (int i = 0; i + 1 < selectedCoords.length; i++) {
-      renderer.setStroke(
-        color: i % 2 == 0 ? const Color(0xbb000000) : const Color(0x88000000),
-      );
-      renderer.drawLine(
-        board.getVertex(selectedCoords[i]),
-        board.getVertex(selectedCoords[i + 1]),
-      );
+    if (selectedCoords.isEmpty) {
+      return;
+    } else if (selectedCoords.first.isSpace) {
+      renderer.setFill(color: const Color(0x88ffff00));
+      for (Coord coord in selectedCoords) {
+        renderer.drawQuad(
+          board.subquads[board.getIndex(coord)],
+          renderer.fillPaint,
+        );
+      }
+    } else {
+      renderer.setStroke(strokeWidth: 8, color: const Color(0x88000000));
+      for (int i = 0; i + 1 < selectedCoords.length; i++) {
+        renderer.setStroke(
+          color: i % 2 == 0 ? const Color(0xbb000000) : const Color(0x88000000),
+        );
+        renderer.drawLine(
+          board.getVertex(selectedCoords[i]),
+          board.getVertex(selectedCoords[i + 1]),
+        );
+      }
+      renderer.setStroke(color: const Color(0x44000000), strokeWidth: 2);
+      renderer.setFill(color: const Color.fromRGBO(255, 255, 0, 0.5));
+      renderer.drawVertices(board, selectedCoords, 0.04);
     }
-    renderer.setStroke(color: const Color(0x44000000), strokeWidth: 2);
-    renderer.setFill(color: const Color.fromRGBO(255, 255, 0, 0.5));
-    renderer.drawVertices(board, selectedCoords, 0.04);
   }
 
   void drawControlPoints(LevelRenderer renderer) {
