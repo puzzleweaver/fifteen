@@ -4,7 +4,6 @@ import 'package:fifteen/game/ui/endgame_dialog.dart';
 import 'package:fifteen/game/ui/game_page_popup_menu.dart';
 import 'package:fifteen/game/ui/game_widget.dart';
 import 'package:fifteen/main.dart';
-import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/shared/ui/banner_ad_widget.dart';
 import 'package:fifteen/shared/ui/preferences_data.dart';
@@ -16,11 +15,13 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
+  final String? boardAsset;
   final Level level;
 
   const GamePage({
     super.key,
     required this.level,
+    this.boardAsset,
   });
 
   @override
@@ -47,14 +48,14 @@ class _GamePageState extends State<GamePage> {
     });
   }
 
-  Future<void> _saveLevelSolved(Board? solvedBoard) async {
-    if (solvedBoard == null) return;
+  Future<void> _saveLevelSolved(String? boardAsset) async {
+    if (boardAsset == null) return;
     final prefs = await SharedPreferences.getInstance();
     PreferencesData preferences = PreferencesData(preferences: prefs);
     setState(() {
       preferences.solvedBoards = [
         ...preferences.solvedBoards,
-        solvedBoard.id,
+        boardAsset,
       ];
     });
   }
@@ -162,7 +163,7 @@ class _GamePageState extends State<GamePage> {
     if (appState.game.isSolved && !dialogShown) {
       setState(() => dialogShown = true);
       Level level = widget.level;
-      _saveLevelSolved(widget.level.board);
+      _saveLevelSolved(widget.boardAsset);
       InterstitialAdWidget.load();
       timer?.cancel();
       timer = null;

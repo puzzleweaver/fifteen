@@ -33,7 +33,7 @@ class HomePageGameButton extends StatelessWidget {
         onPressed: isLocked ? null : () => goToGame(context, level),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(8.0),
-          backgroundColor: isSolved ? Colors.red : Colors.blue,
+          backgroundColor: isSolved ? Colors.green : Colors.blue,
         ),
         child: PreviewWidget(
           level: level,
@@ -53,6 +53,7 @@ class HomePageGameButton extends StatelessWidget {
         builder: (context) {
           return GamePage(
             level: level,
+            boardAsset: boardAsset,
           );
         },
       ),

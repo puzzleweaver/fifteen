@@ -22,26 +22,24 @@ class InterstitialAdWidget {
 
     // load the ad
     InterstitialAd.load(
-        adUnitId: _adUnitId,
-        request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            ad.fullScreenContentCallback = FullScreenContentCallback(
-                onAdShowedFullScreenContent: (ad) {},
-                onAdImpression: (ad) {},
-                onAdFailedToShowFullScreenContent: (ad, err) {
-                  dispose();
-                },
-                onAdDismissedFullScreenContent: (ad) {
-                  dispose();
-                },
-                onAdClicked: (ad) {});
-            _interstitialAd = ad;
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            log('InterstitialAd failed to load: $error');
-          },
-        ));
+      adUnitId: _adUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (ad) {},
+            onAdImpression: (ad) {},
+            onAdFailedToShowFullScreenContent: (ad, err) => dispose(),
+            onAdDismissedFullScreenContent: (ad) => dispose(),
+            onAdClicked: (ad) {},
+          );
+          _interstitialAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          log('InterstitialAd failed to load: $error');
+        },
+      ),
+    );
   }
 
   // show the ad (if it's loaded)

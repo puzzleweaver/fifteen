@@ -1,12 +1,9 @@
-import 'dart:math';
-
 import 'package:fifteen/debug/ui/debug_icon_button.dart';
-import 'package:fifteen/home/ui/home_page_game_button.dart';
+import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/home/ui/home_page_header_icon.dart';
+import 'package:fifteen/level/level_list_page.dart';
+import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings/ui/settings_icon_button.dart';
-import 'package:fifteen/shared/data/assets.dart';
-import 'package:fifteen/shared/ui/banner_ad_widget.dart';
-import 'package:fifteen/shared/ui/preferences_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -34,8 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    int levelCount = min(Assets.images.length, Assets.boards.length);
-
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
         extendBodyBehindAppBar: true,
@@ -47,37 +42,34 @@ class _HomePageState extends State<HomePage> {
             SettingsIconButton(),
           ],
         ),
-        body: PreferencesWidget(
-          builder: (context, preferences) => SingleChildScrollView(
-            controller: _controller,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  HomePageHeaderIcon(alpha: _alpha),
-                  GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 3,
-                    padding: const EdgeInsets.all(5.0),
-                    mainAxisSpacing: 5.0,
-                    crossAxisSpacing: 5.0,
-                    children: [
-                      for (int i = 0; i < levelCount; i++)
-                        HomePageGameButton(
-                          isLocked: Random().nextBool(),
-                          isSolved: Random().nextBool(),
-                          imageAsset: Assets.images[i],
-                          boardAsset: Assets.boards[i],
-                        ),
-                    ],
-                  ),
-                  SafeArea(
-                    child: BannerAdWidget(3, padded: true),
-                  ),
-                ],
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              HomePageHeaderIcon(alpha: _alpha),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => GamePage(
+                        level: Level.createNew(),
+                      ),
+                    ),
+                  );
+                },
+                child: const Text("Play Next Puzzle"),
               ),
-            ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LevelListPage(),
+                    ),
+                  );
+                },
+                child: const Text("View All Puzzles"),
+              ),
+            ],
           ),
         ),
       );

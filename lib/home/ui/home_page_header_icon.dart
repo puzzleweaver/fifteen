@@ -11,8 +11,8 @@ class HomePageHeaderIcon extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        left: size.width / 8,
-        right: size.width / 8,
+        left: size.width / 6,
+        right: size.width / 6,
         top: size.height / 16,
         bottom: size.height / 16,
       ),

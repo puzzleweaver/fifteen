@@ -82,6 +82,7 @@ flutter:
    - assets/boards/4-example.json
    - assets/boards/5-trivial.json
    - assets/boards/5-frame.json
+   - assets/boards/6-split-example.json
    - assets/boards/7-less-trivial.json
    - assets/boards/8-square.json
    - assets/boards/9-classic.json

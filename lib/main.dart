@@ -30,9 +30,9 @@ class FifteenApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: false,
           colorScheme: const ColorScheme(
-            primary: Color.fromARGB(255, 255, 117, 158),
+            primary: Colors.blue,
             onPrimary: Colors.black,
-            secondary: Color.fromARGB(255, 0, 201, 107),
+            secondary: Colors.green,
             onSecondary: Colors.black,
             error: Colors.red,
             onError: Color.fromARGB(255, 254, 0, 0),

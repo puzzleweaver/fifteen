@@ -14,6 +14,9 @@ class DoublePoint with DoublePointMappable {
 
   double get distance => sqrt(x * x + y * y);
 
+  double dot(DoublePoint other) => x * other.x + y * other.y;
+  DoublePoint mult(double factor) => DoublePoint(factor * x, factor * y);
+
   DoublePoint normal() {
     return DoublePoint(-y, x);
   }
