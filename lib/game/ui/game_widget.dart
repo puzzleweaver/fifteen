@@ -16,7 +16,7 @@ class GameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<FifteenAppState>();
+    FifteenAppState appState = Provider.of(context);
 
     return FifteenCanvas(
       imagePath: appState.level.image,

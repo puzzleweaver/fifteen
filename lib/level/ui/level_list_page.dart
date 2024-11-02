@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:fifteen/home/ui/home_page_game_button.dart';
+import 'package:fifteen/level/ui/level_list_button.dart';
 import 'package:fifteen/shared/data/assets.dart';
 import 'package:fifteen/shared/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class LevelListPage extends StatelessWidget {
               crossAxisSpacing: 5.0,
               children: [
                 for (int i = 0; i < levelCount; i++)
-                  HomePageGameButton(
+                  LevelListButton(
                     isLocked: i == 0
                         ? false
                         : !preferences.solvedBoards.contains(

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fifteen/game/ui/endgame_dialog.dart';
+import 'package:fifteen/game/ui/solved_game_page.dart';
 import 'package:fifteen/game/ui/game_page_popup_menu.dart';
 import 'package:fifteen/game/ui/game_widget.dart';
 import 'package:fifteen/main.dart';
@@ -167,30 +167,23 @@ class _GamePageState extends State<GamePage> {
       InterstitialAdWidget.load();
       timer?.cancel();
       timer = null;
-      showGeneralDialog(
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: const Duration(milliseconds: 1000),
-        barrierDismissible: false,
-        barrierLabel: '',
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => Container(),
-        transitionBuilder: (context, a1, a2, widget) {
-          final curvedValue = Curves.easeOut.transform(a1.value) - 1.0;
-          return Transform(
-            transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
-            child: Opacity(
-              opacity: a1.value,
-              child: PreferencesWidget(
-                builder: (context, preferences) => EndgameDialog(
-                  level: level,
-                  time: displayTime,
-                  hasNext: false,
-                  timerEnabled: preferences.timerEnabled,
-                ),
-              ),
+
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          transitionDuration: const Duration(seconds: 1),
+          transitionsBuilder: (context, a1, a2, child) => FadeTransition(
+            opacity: a1,
+            child: child,
+          ),
+          pageBuilder: (context, a1, a2) => PreferencesWidget(
+            builder: (context, preferences) => SolvedGamePage(
+              level: level,
+              time: displayTime,
+              hasNext: false,
+              timerEnabled: preferences.timerEnabled,
             ),
-          );
-        },
+          ),
+        ),
       );
     }
   }

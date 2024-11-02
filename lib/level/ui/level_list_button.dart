@@ -7,13 +7,13 @@ import 'package:fifteen/shared/ui/preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePageGameButton extends StatelessWidget {
+class LevelListButton extends StatelessWidget {
   final bool isLocked;
   final bool isSolved;
   final String imageAsset;
   final String boardAsset;
 
-  const HomePageGameButton({
+  const LevelListButton({
     super.key,
     required this.isLocked,
     required this.isSolved,
