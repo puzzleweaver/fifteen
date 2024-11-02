@@ -1,7 +1,7 @@
 import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/interstitial.dart';
+import 'package:fifteen/shared/ui/interstitial_ad_widget.dart';
 import 'package:fifteen/shared/ui/preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,23 +55,22 @@ class EndgameDialog extends StatelessWidget {
   void onHome(BuildContext context) {
     Navigator.pop(context); // dismiss "you win" dialog
     Navigator.pop(context); // dismiss game page
-    Interstitial.show();
+    InterstitialAdWidget.show();
   }
 
   void onAgain(BuildContext context) {
-    FifteenAppState appState = Provider.of(context);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Interstitial.show();
-    Navigator.push(
+    FifteenAppState appState = Provider.of<FifteenAppState>(
       context,
+      listen: false,
+    );
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    InterstitialAdWidget.show();
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           appState.setLevel(level);
-          return GamePage(
-            level: level,
-            appState: appState,
-          );
+          return GamePage(level: level);
         },
       ),
     );
@@ -81,17 +80,14 @@ class EndgameDialog extends StatelessWidget {
     FifteenAppState appState = Provider.of(context);
     Navigator.pop(context);
     Navigator.pop(context);
-    Interstitial.show();
+    InterstitialAdWidget.show();
     Level next = Level.createNew();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
           appState.setLevel(next);
-          return GamePage(
-            level: next,
-            appState: appState,
-          );
+          return GamePage(level: next);
         },
       ),
     );

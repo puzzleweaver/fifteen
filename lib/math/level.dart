@@ -11,12 +11,13 @@ class Level with LevelMappable {
 
   Level({
     required this.board,
-    String? image,
+    required this.image,
     this.index,
-  }) : image = "assets/images/photos/desert.jpg";
+  });
 
   static Level createNew() => Level(
         board: Board.createNew(),
+        image: "assets/images/photos/desert.jpg",
       );
 
   bool hasNext() {

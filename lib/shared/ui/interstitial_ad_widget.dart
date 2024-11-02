@@ -2,11 +2,11 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:fifteen/shared/ui/prefs.dart';
+import 'package:fifteen/shared/ui/preferences_data.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Interstitial {
+class InterstitialAdWidget {
   static InterstitialAd? _interstitialAd;
 
   static final String _adUnitId = Platform.isAndroid
@@ -17,8 +17,7 @@ class Interstitial {
   static void load() async {
     // first make sure that interstitials are allowed:
     final prefs = await SharedPreferences.getInstance();
-    bool annoyingAds =
-        prefs.getBool(Prefs.annoyingAdsLabel) ?? Prefs.annoyingAdsDefault;
+    bool annoyingAds = PreferencesData(preferences: prefs).annoyingAdsEnabled;
     if (!annoyingAds) return;
 
     // load the ad
