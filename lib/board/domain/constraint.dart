@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fifteen/board/domain/board.dart';
-import 'package:fifteen/math/connection.dart';
+import 'package:fifteen/board/domain/connection.dart';
 import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
@@ -195,13 +195,6 @@ class CoincidentBoardConstraint with CoincidentBoardConstraintMappable {
     assert(this.coords.isNotEmpty);
   }
 
-  @MappableConstructor()
-  factory CoincidentBoardConstraint.fromList(
-          {required List<Coord> coordList}) =>
-      CoincidentBoardConstraint(coords: Set.of(coordList));
-
-  List<Coord> get coordList => coords.toList();
-
   static CoincidentBoardConstraint? createNew(Coord? a, Coord? b) {
     if (a == null || b == null) return null;
     return CoincidentBoardConstraint(coords: {a, b});
@@ -260,12 +253,6 @@ class EquidistantBoardConstraint with EquidistantBoardConstraintMappable {
   EquidistantBoardConstraint({required this.sides}) {
     assert(sides.isNotEmpty);
   }
-
-  @MappableConstructor()
-  factory EquidistantBoardConstraint.fromList({required List<Side> sideList}) =>
-      EquidistantBoardConstraint(sides: Set.of(sideList));
-
-  List<Side> get sideList => sides.toList();
 
   static EquidistantBoardConstraint createNew(Side a, Side b) {
     return EquidistantBoardConstraint(sides: {a, b});

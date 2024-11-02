@@ -184,7 +184,7 @@ class _GamePageState extends State<GamePage> {
                 builder: (context, preferences) => EndgameDialog(
                   level: level,
                   time: displayTime,
-                  hasNext: level.hasNext(),
+                  hasNext: false,
                   timerEnabled: preferences.timerEnabled,
                 ),
               ),

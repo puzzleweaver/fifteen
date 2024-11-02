@@ -1,8 +1,7 @@
 import 'package:fifteen/debug/ui/debug_icon_button.dart';
-import 'package:fifteen/game/ui/game_page.dart';
+import 'package:fifteen/home/ui/all_puzzles_button.dart';
 import 'package:fifteen/home/ui/home_page_header_icon.dart';
-import 'package:fifteen/level/level_list_page.dart';
-import 'package:fifteen/math/level.dart';
+import 'package:fifteen/home/ui/next_puzzle_button.dart';
 import 'package:fifteen/settings/ui/settings_icon_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -47,28 +46,8 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               HomePageHeaderIcon(alpha: _alpha),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => GamePage(
-                        level: Level.createNew(),
-                      ),
-                    ),
-                  );
-                },
-                child: const Text("Play Next Puzzle"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const LevelListPage(),
-                    ),
-                  );
-                },
-                child: const Text("View All Puzzles"),
-              ),
+              const NextPuzzleButton(),
+              const AllPuzzlesButton(),
             ],
           ),
         ),

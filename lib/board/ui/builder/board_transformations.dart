@@ -6,8 +6,8 @@ import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/board/domain/side.dart';
-import 'package:fifteen/math/connection.dart';
-import 'package:fifteen/math/constraint.dart';
+import 'package:fifteen/board/domain/connection.dart';
+import 'package:fifteen/board/domain/constraint.dart';
 
 class BoardTransformations {
   static Board withChartAdded(Board board, int n, int m) {

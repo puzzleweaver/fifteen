@@ -24,23 +24,16 @@ class LevelMapper extends ClassMapperBase<Level> {
   static Board _$board(Level v) => v.board;
   static const Field<Level, Board> _f$board = Field('board', _$board);
   static String _$image(Level v) => v.image;
-  static const Field<Level, String> _f$image =
-      Field('image', _$image, opt: true);
-  static int? _$index(Level v) => v.index;
-  static const Field<Level, int> _f$index = Field('index', _$index, opt: true);
+  static const Field<Level, String> _f$image = Field('image', _$image);
 
   @override
   final MappableFields<Level> fields = const {
     #board: _f$board,
     #image: _f$image,
-    #index: _f$index,
   };
 
   static Level _instantiate(DecodingData data) {
-    return Level(
-        board: data.dec(_f$board),
-        image: data.dec(_f$image),
-        index: data.dec(_f$index));
+    return Level(board: data.dec(_f$board), image: data.dec(_f$image));
   }
 
   @override
@@ -90,7 +83,7 @@ extension LevelValueCopy<$R, $Out> on ObjectCopyWith<$R, Level, $Out> {
 abstract class LevelCopyWith<$R, $In extends Level, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   BoardCopyWith<$R, Board, Board> get board;
-  $R call({Board? board, String? image, int? index});
+  $R call({Board? board, String? image});
   LevelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -104,17 +97,12 @@ class _LevelCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Level, $Out>
   BoardCopyWith<$R, Board, Board> get board =>
       $value.board.copyWith.$chain((v) => call(board: v));
   @override
-  $R call({Board? board, Object? image = $none, Object? index = $none}) =>
-      $apply(FieldCopyWithData({
-        if (board != null) #board: board,
-        if (image != $none) #image: image,
-        if (index != $none) #index: index
-      }));
+  $R call({Board? board, String? image}) => $apply(FieldCopyWithData(
+      {if (board != null) #board: board, if (image != null) #image: image}));
   @override
   Level $make(CopyWithData data) => Level(
       board: data.get(#board, or: $value.board),
-      image: data.get(#image, or: $value.image),
-      index: data.get(#index, or: $value.index));
+      image: data.get(#image, or: $value.image));
 
   @override
   LevelCopyWith<$R2, Level, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
