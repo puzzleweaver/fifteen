@@ -41,7 +41,7 @@ class GameWidget extends StatelessWidget {
     for (int i = 0; i < quads.length; i++) {
       if (quads[i].isInside(pos)) {
         tapSquare(i);
-        return; // TODO should we return here? should we tap all of them?
+        return;
       }
     }
   }

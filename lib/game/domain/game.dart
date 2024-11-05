@@ -1,33 +1,26 @@
 import 'dart:math';
 
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/domain/oriented_coord.dart';
 import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/board/domain/int_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 
-part 'game.mapper.dart';
-
-@MappableClass()
-class Game with GameMappable {
+class Game {
   final int boardSize;
   final List<int> permutation;
   final List<IntPoint> rotation;
-  final int moveCount;
 
   Game({
     required this.boardSize,
     required this.permutation,
     required this.rotation,
-    required this.moveCount,
   });
 
   static Game createNew() => Game(
         boardSize: 0,
         permutation: [],
         rotation: [],
-        moveCount: 0,
       );
 
   static Game _fromLen(int len) {
@@ -35,7 +28,6 @@ class Game with GameMappable {
       boardSize: len,
       permutation: [for (var i = 0; i < len; i++) i],
       rotation: [for (var i = 0; i < len; i++) IntPoint.up],
-      moveCount: 0,
     );
   }
 
@@ -97,11 +89,11 @@ class Game with GameMappable {
       boardSize: boardSize,
       permutation: newPermutation,
       rotation: newDirs,
-      moveCount: moveCount,
     );
   }
 
-  Game tapAtIndex(Board board, int index) {
+  /// returns the game after doing the move, or null when the tap isn't a move.
+  Game? tapAtIndex(Board board, int index) {
     final Coord? c = board.getCoord(index);
     if (c != null) {
       for (IntPoint dir in IntPoint.dirs) {
@@ -109,15 +101,11 @@ class Game with GameMappable {
         if (result != null) {
           int resultIndex = board.getIndex(result.coord);
           if (isSpace(resultIndex)) {
-            return move(index, resultIndex, result.dir).incrementMoveCount();
+            return move(index, resultIndex, result.dir);
           }
         }
       }
     }
-    return this;
+    return null;
   }
-
-  Game incrementMoveCount() => copyWith(
-        moveCount: moveCount + 1,
-      );
 }

@@ -87,7 +87,7 @@ class BoardBuilderPageState extends State<BoardBuilderPage> {
   }
 
   void undo() {
-    assert(history.isEmpty);
+    assert(history.isNotEmpty);
     if (history.isEmpty) return;
     setState(() {
       history.removeLast();

@@ -20,7 +20,7 @@ class AnnoyingAdsEnabledCheckboxState
               "Interstitial Ads${preferences.annoyingAdsEnabled ? ' <3' : ''}",
             ),
             subtitle: const Text(
-              "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way",
+              "Showing an interstitial ad pays about 40x more than showing a banner. Each one you see goes a long way.",
             ),
             value: preferences.annoyingAdsEnabled,
             onChanged: (newAnnoyingAdsEnabled) {

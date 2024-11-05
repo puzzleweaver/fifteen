@@ -37,6 +37,8 @@ class _GamePageState extends State<GamePage> {
   Timer? timer;
   DateTime initialTime = DateTime.now(), currentTime = DateTime.now();
 
+  int moveCount = 0;
+
   Game game = Game.createNew();
 
   @override
@@ -115,7 +117,7 @@ class _GamePageState extends State<GamePage> {
             Expanded(
               flex: 2,
               child: GameStatusWidget(
-                moveCount: game.moveCount,
+                moveCount: moveCount,
                 time: time,
                 children: [
                   GamePreviewButton(
@@ -193,12 +195,16 @@ class _GamePageState extends State<GamePage> {
   }
 
   void tapSquare(int index) {
-    setState(() {
-      game = game.tapAtIndex(
-        widget.board,
-        index,
-      );
+    Game? newGame = game.tapAtIndex(
+      widget.board,
+      index,
+    );
+    if (newGame != null) {
+      setState(() {
+        game = newGame;
+        moveCount++;
+      });
       checkIfSolved();
-    });
+    }
   }
 }

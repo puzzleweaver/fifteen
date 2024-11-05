@@ -7,15 +7,15 @@ import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:flutter/material.dart';
 
 class DebugPageBoardButton extends StatelessWidget {
-  final String asset;
+  final String boardAsset;
 
-  const DebugPageBoardButton({super.key, required this.asset});
+  const DebugPageBoardButton({super.key, required this.boardAsset});
 
   @override
   Widget build(BuildContext context) {
     const double dimension = 75;
     return JsonWidget(
-      asset: asset,
+      asset: boardAsset,
       getObject: (contents) => Board.fromJson(contents),
       builder: (context, board) => ElevatedButton(
         style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
@@ -28,7 +28,7 @@ class DebugPageBoardButton extends StatelessWidget {
                   dimension: dimension,
                   child: LevelWidget(
                     board: board,
-                    imageAsset: Assets.defaultImage,
+                    imageAsset: null,
                     locked: false,
                   ),
                 ),
@@ -38,7 +38,7 @@ class DebugPageBoardButton extends StatelessWidget {
                 ),
               ],
             ),
-            Text(asset.split("/")[2].replaceAll(".json", "")),
+            Text(boardAsset.split("/")[2].replaceAll(".json", "")),
           ],
         ),
       ),

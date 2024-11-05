@@ -18,12 +18,23 @@ class NextPuzzleButton extends StatelessWidget {
     );
   }
 
-  void goToNext(BuildContext context, PreferencesData preferences) {
-    Navigator.of(context).push(
+  void goToNext(BuildContext context, PreferencesData preferences) async {
+    NavigatorState navigator = Navigator.of(context);
+
+    String boardAsset = Assets.boards
+        .where((asset) => !preferences.solvedBoards.contains(asset))
+        .first;
+
+    String data = await DefaultAssetBundle.of(context).loadString(boardAsset);
+    Board nextBoard = Board.fromJson(data);
+
+    String imageAsset = Assets.images[Assets.boards.indexOf(boardAsset)];
+
+    navigator.push(
       MaterialPageRoute(
         builder: (context) => GamePage(
-          board: Board.createNew(),
-          imageAsset: Assets.defaultImage,
+          board: nextBoard,
+          imageAsset: imageAsset,
         ),
       ),
     );

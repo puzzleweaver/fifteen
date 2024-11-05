@@ -42,7 +42,7 @@ class DebugPage extends StatelessWidget {
                 child: const Text("Board Builder"),
               ),
               for (int i = 0; i < Assets.boards.length; i++) ...[
-                DebugPageBoardButton(asset: Assets.boards[i]),
+                DebugPageBoardButton(boardAsset: Assets.boards[i]),
                 Text("$i"),
               ],
             ],
