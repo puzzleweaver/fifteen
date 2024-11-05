@@ -12,9 +12,27 @@ class DebugPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<FifteenAppState>();
+
+    int count = 1;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("DEBUG (go away)"),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text("DEBUG"),
+            ...[
+              Colors.green,
+              Colors.black,
+              Colors.red,
+              Colors.yellow,
+              Colors.purple,
+              Colors.orange,
+            ].map(
+              (color) => Text("${count++}", style: TextStyle(color: color)),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -27,9 +45,10 @@ class DebugPage extends StatelessWidget {
                 onPressed: () => goToBuilder(context, appState),
                 child: const Text("Board Builder"),
               ),
-              ...Assets.boards.map(
-                (asset) => DebugPageBoardButton(asset: asset),
-              )
+              for (int i = 0; i < Assets.boards.length; i++) ...[
+                DebugPageBoardButton(asset: Assets.boards[i]),
+                Text("$i"),
+              ],
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/board_painter.dart';
+import 'package:fifteen/shared/ui/preview_widget_painter.dart';
+import 'package:fifteen/shared/ui/custom_canvas.dart';
 import 'package:flutter/material.dart';
 
 class PreviewWidget extends StatelessWidget {
@@ -26,11 +27,14 @@ class PreviewWidget extends StatelessWidget {
               level.image,
               fit: BoxFit.fill,
             ),
-          CustomPaint(
-            painter: BoardPreviewPainter(
+          FifteenCanvas(
+            getPainter: (shader, image) => PreviewWidgetPainter(
               board: level.board,
               locked: locked,
+              shader: shader,
+              image: image,
             ),
+            imagePath: 'assets/images/photos/desert.jpg',
           ),
         ],
       ),

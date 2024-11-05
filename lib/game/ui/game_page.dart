@@ -1,14 +1,15 @@
 import 'dart:async';
 
+import 'package:fifteen/game/ui/game_preview_button.dart';
 import 'package:fifteen/game/ui/solved_game_page.dart';
 import 'package:fifteen/game/ui/game_page_popup_menu.dart';
 import 'package:fifteen/game/ui/game_widget.dart';
+import 'package:fifteen/level/ui/level_builder_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/level.dart';
 import 'package:fifteen/shared/ui/banner_ad_widget.dart';
 import 'package:fifteen/shared/ui/preferences_data.dart';
 import 'package:fifteen/shared/ui/preferences_widget.dart';
-import 'package:fifteen/shared/ui/preview_widget.dart';
 import 'package:fifteen/shared/ui/interstitial_ad_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class _GamePageState extends State<GamePage> {
   void _loadTimer() {
     initialTime = DateTime.now();
     timer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
-      setState(() => currentTime = DateTime.now());
+      if (mounted) setState(() => currentTime = DateTime.now());
     });
   }
 
@@ -52,12 +53,14 @@ class _GamePageState extends State<GamePage> {
     if (boardAsset == null) return;
     final prefs = await SharedPreferences.getInstance();
     PreferencesData preferences = PreferencesData(preferences: prefs);
-    setState(() {
-      preferences.solvedBoards = [
-        ...preferences.solvedBoards,
-        boardAsset,
-      ];
-    });
+    if (mounted) {
+      setState(() {
+        preferences.solvedBoards = [
+          ...preferences.solvedBoards,
+          boardAsset,
+        ];
+      });
+    }
   }
 
   @override
@@ -86,6 +89,7 @@ class _GamePageState extends State<GamePage> {
               appState.solveGame();
               setState(() {});
             },
+            boardBuild: () => goToBuilder(context),
           ),
         ],
       ),
@@ -114,19 +118,16 @@ class _GamePageState extends State<GamePage> {
                   children: [
                     ...(preferences.timerEnabled
                         ? [
-                            Expanded(child: Container()),
+                            // Expanded(child: Container()),
                             Text(displayTime,
                                 style: const TextStyle(fontSize: 14 * 3)),
-                            Expanded(child: Container()),
+                            // Expanded(child: Container()),
                           ]
                         : []),
-                    GestureDetector(
-                      onTapDown: (details) => setState(() => previewing = true),
-                      onTapUp: (details) => setState(() => previewing = false),
-                      onTapCancel: () => setState(() => previewing = false),
-                      child: PreviewWidget(
-                        level: widget.level,
-                        locked: false,
+                    GamePreviewButton(
+                      level: widget.level,
+                      setPreviewing: (newPreviewing) => setState(
+                        () => previewing = newPreviewing,
                       ),
                     ),
                   ],
@@ -159,16 +160,17 @@ class _GamePageState extends State<GamePage> {
     return "$hourStr$minuteStr$secondStr";
   }
 
-  void _checkForDialog(FifteenAppState appState) {
+  void _checkForDialog(FifteenAppState appState) async {
     if (appState.game.isSolved && !dialogShown) {
+      NavigatorState navigator = Navigator.of(context);
       setState(() => dialogShown = true);
       Level level = widget.level;
-      _saveLevelSolved(widget.boardAsset);
+      await _saveLevelSolved(widget.boardAsset);
       InterstitialAdWidget.load();
       timer?.cancel();
       timer = null;
 
-      Navigator.of(context).pushReplacement(
+      navigator.pushReplacement(
         PageRouteBuilder(
           transitionDuration: const Duration(seconds: 1),
           transitionsBuilder: (context, a1, a2, child) => FadeTransition(
@@ -186,5 +188,16 @@ class _GamePageState extends State<GamePage> {
         ),
       );
     }
+  }
+
+  void goToBuilder(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LevelBuilderPage(
+          initialLevel: widget.level,
+        ),
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/debug/ui/graph_widget/graph_widget.dart';
 import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/math/level.dart';
@@ -14,6 +15,7 @@ class DebugPageBoardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double dimension = 150;
     return JsonWidget(
       asset: asset,
       getObject: (contents) => Level(
@@ -25,13 +27,24 @@ class DebugPageBoardButton extends StatelessWidget {
         onPressed: () => goToGamePage(context, level),
         child: Column(
           children: [
-            SizedBox.square(
-              dimension: 50.0,
-              child: PreviewWidget(
-                level: level,
-                locked: false,
-                showImage: false,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox.square(
+                  dimension: dimension,
+                  child: PreviewWidget(
+                    level: level,
+                    locked: false,
+                    showImage: false,
+                  ),
+                ),
+                SizedBox.square(
+                  dimension: dimension,
+                  child: GraphWidget(
+                    board: level.board,
+                  ),
+                ),
+              ],
             ),
             Text(asset.split("/")[2].replaceAll(".json", "")),
           ],

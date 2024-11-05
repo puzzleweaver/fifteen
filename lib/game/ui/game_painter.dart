@@ -5,15 +5,13 @@ import 'package:fifteen/math/level.dart';
 import 'package:fifteen/shared/ui/custom_canvas.dart';
 import 'package:flutter/material.dart';
 
-class GamePainter extends FifteenPainter {
+class GameWidgetPainter extends FifteenPainter {
   final Game game;
   final Level level;
-  final bool previewing;
 
-  GamePainter({
+  GameWidgetPainter({
     required this.game,
     required this.level,
-    required this.previewing,
     required super.shader,
     required super.image,
   });
@@ -34,29 +32,20 @@ class GamePainter extends FifteenPainter {
       shape: Quad.unit(),
     );
 
-    if (!previewing) {
-      renderer.setFill(color: Colors.black);
-      List<Quad> quads = level.board.subquads;
-      for (int i = 0; i < quads.length; i++) {
-        Quad q = quads[i], from, to;
-        from = q;
-        to = game.getQuad(quads, i);
-        if (game.isSpace(i)) {
-          renderer.drawQuad(q, renderer.fillPaint);
-        } else {
-          renderer.drawQuadWithShader(from: from, to: to, shape: q);
-        }
+    renderer.setFill(color: Colors.black);
+    List<Quad> quads = level.board.subquads;
+    for (int i = 0; i < quads.length; i++) {
+      Quad q = quads[i], from, to;
+      from = q;
+      to = game.getQuad(quads, i);
+      if (game.isSpace(i)) {
+        renderer.drawQuad(q, renderer.fillPaint);
+      } else {
+        renderer.drawQuadWithShader(from: from, to: to, shape: q);
       }
     }
 
     renderer.drawSubquadOutlines(level.board);
-
-    if (previewing) {
-      renderer.drawQuad(
-        level.board.subquads[game.space],
-        renderer.fillPaint,
-      );
-    }
   }
 
   @override

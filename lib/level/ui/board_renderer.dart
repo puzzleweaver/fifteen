@@ -1,29 +1,29 @@
-import 'dart:ui';
-import 'dart:ui' as ui;
-
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 import 'package:flutter/material.dart';
 
-class LevelRenderer {
+class BoardRenderer {
+  static const bgColors = {
+    -2: Colors.transparent,
+    -1: Colors.grey,
+    0: Color(0xff8b4513),
+    1: Color(0xffdeb887),
+    2: Color(0xffb47e4d),
+    3: Color(0xff762800),
+    4: Color(0xff9f6130),
+    5: Color(0xffc99b6a),
+    null: Colors.grey,
+  };
+
   final Size size;
   final Canvas canvas;
-  final FragmentShader shader;
-  final ui.Image image;
 
-  LevelRenderer({
+  BoardRenderer({
     required this.canvas,
     required this.size,
-    required this.shader,
-    required this.image,
-  }) {
-    shader.setImageSampler(0, image);
-    shader.setFloat(0, size.width);
-    shader.setFloat(1, size.height);
-    shaderPaint.shader = shader;
-  }
+  });
 
   final Paint fillPaint = Paint()..style = PaintingStyle.fill,
       strokePaint = Paint()
@@ -54,31 +54,6 @@ class LevelRenderer {
     Offset offset = Offset(point.x * size.width, point.y * size.height);
     canvas.drawCircle(offset, size.width * radius, fillPaint);
     canvas.drawCircle(offset, size.width * radius, strokePaint);
-  }
-
-  void drawQuadWithShader({
-    required Quad from,
-    required Quad to,
-    required Quad shape,
-  }) {
-    int index = 2;
-    shader.setFloat(index++, from.p1.x);
-    shader.setFloat(index++, from.p1.y);
-    shader.setFloat(index++, from.p2.x);
-    shader.setFloat(index++, from.p2.y);
-    shader.setFloat(index++, from.p3.x);
-    shader.setFloat(index++, from.p3.y);
-    shader.setFloat(index++, from.p4.x);
-    shader.setFloat(index++, from.p4.y);
-    shader.setFloat(index++, to.p1.x);
-    shader.setFloat(index++, to.p1.y);
-    shader.setFloat(index++, to.p2.x);
-    shader.setFloat(index++, to.p2.y);
-    shader.setFloat(index++, to.p3.x);
-    shader.setFloat(index++, to.p3.y);
-    shader.setFloat(index++, to.p4.x);
-    shader.setFloat(index++, to.p4.y);
-    drawQuad(shape, shaderPaint);
   }
 
   void drawQuad(Quad quad, Paint paint) {

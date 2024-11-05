@@ -1,5 +1,3 @@
-import 'package:fifteen/level/ui/level_builder_page.dart';
-import 'package:fifteen/math/level.dart';
 import 'package:fifteen/settings/ui/settings_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +5,12 @@ import 'package:flutter/material.dart';
 class GamePagePopupMenu extends StatelessWidget {
   final void Function() shuffle;
   final void Function() solve;
+  final void Function() boardBuild;
   const GamePagePopupMenu({
     super.key,
     required this.shuffle,
     required this.solve,
+    required this.boardBuild,
   });
 
   @override
@@ -44,7 +44,7 @@ class GamePagePopupMenu extends StatelessWidget {
       case 'Solve':
         solve();
       case 'Build':
-        goToBuilder(context);
+        boardBuild();
     }
   }
 
@@ -52,17 +52,6 @@ class GamePagePopupMenu extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SettingsPage()),
-    );
-  }
-
-  void goToBuilder(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LevelBuilderPage(
-          initialLevel: Level.createNew(),
-        ),
-      ),
     );
   }
 }

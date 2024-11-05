@@ -51,9 +51,7 @@ class LevelBuilderPageState extends State<LevelBuilderPage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 255, 0, 255),
-        unselectedItemColor: Colors.white,
-        selectedItemColor: const Color(0x44000000),
+        useLegacyColorScheme: false,
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         items: LevelBuilderTabs.items,

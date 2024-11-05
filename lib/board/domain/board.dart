@@ -34,6 +34,15 @@ class Board with BoardMappable {
     );
   }
 
+  List<Coord> get coords => [
+        for (int a = 0; a < charts.length; a++)
+          ...charts[a].coords.map(
+                (hk) => Coord(a, hk),
+              ),
+      ];
+
+  Quad getQuad(Coord c) => charts[c.a].getSubquad(c.hk);
+
   List<Quad> get subquads => [
         for (int a = 0; a < charts.length; a++) ...charts[a].subquads,
       ];

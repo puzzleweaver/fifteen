@@ -44,9 +44,9 @@ class LevelListButton extends StatelessWidget {
   }
 
   void goToGame(BuildContext context, Level level) {
-    Provider.of<FifteenAppState>(context, listen: false)
-      ..rerollAds()
-      ..setLevel(level);
+    FifteenAppState appState = Provider.of(context, listen: false);
+    appState.rerollAds();
+    appState.setLevel(level);
     Navigator.push(
       context,
       MaterialPageRoute(

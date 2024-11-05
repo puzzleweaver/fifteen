@@ -2,6 +2,7 @@ import 'package:fifteen/game/ui/game_painter.dart';
 import 'package:fifteen/main.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
+import 'package:fifteen/math/game.dart';
 import 'package:fifteen/shared/ui/custom_canvas.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,11 +21,10 @@ class GameWidget extends StatelessWidget {
 
     return FifteenCanvas(
       imagePath: appState.level.image,
-      getPainter: (shader, image) => GamePainter(
+      getPainter: (shader, image) => GameWidgetPainter(
         shader: shader,
         image: image,
-        game: appState.game,
-        previewing: previewing,
+        game: previewing ? Game.fromBoard(appState.board) : appState.game,
         level: appState.level,
       ),
       onTap: (pos) => onWidgetTap(pos, appState),
