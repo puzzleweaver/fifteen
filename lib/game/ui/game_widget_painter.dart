@@ -1,17 +1,17 @@
+import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/level/ui/level_renderer.dart';
-import 'package:fifteen/math/game.dart';
+import 'package:fifteen/game/domain/game.dart';
 import 'package:fifteen/board/domain/quad.dart';
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/custom_canvas.dart';
+import 'package:fifteen/app/ui/custom_canvas.dart';
 import 'package:flutter/material.dart';
 
 class GameWidgetPainter extends FifteenPainter {
   final Game game;
-  final Level level;
+  final Board board;
 
   GameWidgetPainter({
     required this.game,
-    required this.level,
+    required this.board,
     required super.shader,
     required super.image,
   });
@@ -33,7 +33,7 @@ class GameWidgetPainter extends FifteenPainter {
     );
 
     renderer.setFill(color: Colors.black);
-    List<Quad> quads = level.board.subquads;
+    List<Quad> quads = board.subquads;
     for (int i = 0; i < quads.length; i++) {
       Quad q = quads[i], from, to;
       from = q;
@@ -45,7 +45,7 @@ class GameWidgetPainter extends FifteenPainter {
       }
     }
 
-    renderer.drawSubquadOutlines(level.board);
+    renderer.drawSubquadOutlines(board);
   }
 
   @override

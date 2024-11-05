@@ -1,4 +1,4 @@
-import 'package:fifteen/debug/ui/debug_icon_button.dart';
+import 'package:fifteen/debug/ui/debug_page/debug_icon_button.dart';
 import 'package:fifteen/home/ui/all_puzzles_button.dart';
 import 'package:fifteen/home/ui/home_page_header_icon.dart';
 import 'package:fifteen/home/ui/next_puzzle_button.dart';

@@ -1,22 +1,19 @@
 import 'dart:io';
+import 'dart:math';
 
-import 'package:fifteen/main.dart';
-import 'package:fifteen/shared/ui/preferences_widget.dart';
+import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
 
 class BannerAdWidget extends StatefulWidget {
   final AdSize adSize;
   final bool padded;
-  final int adIndex;
 
   final String adUnitId = Platform.isAndroid
       ? 'ca-app-pub-9631185147473049/3648411751' // android
       : 'ca-app-pub-9631185147473049/1022248415'; // ios
 
-  BannerAdWidget(
-    this.adIndex, {
+  BannerAdWidget({
     super.key,
     this.adSize = AdSize.banner,
     this.padded = false,
@@ -28,6 +25,7 @@ class BannerAdWidget extends StatefulWidget {
 
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
+  double adRoll = Random().nextDouble();
 
   @override
   void initState() {
@@ -43,10 +41,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = Provider.of<FifteenAppState>(context);
     return PreferencesWidget(
       builder: (context, preferences) {
-        if (appState.adRolls[widget.adIndex] < preferences.adChance) {
+        if (adRoll < preferences.adChance) {
           // DO show an ad
           if (widget.padded) {
             return Padding(

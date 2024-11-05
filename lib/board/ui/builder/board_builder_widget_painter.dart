@@ -1,22 +1,19 @@
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/level/ui/level_renderer.dart';
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/custom_canvas.dart';
+import 'package:fifteen/app/ui/custom_canvas.dart';
 import 'package:flutter/material.dart';
 
-class BoardBuilderPainter extends FifteenPainter {
-  final Level level;
+class BoardBuilderWidgetPainter extends FifteenPainter {
+  final Board board;
   final List<Coord> selectedCoords;
 
-  BoardBuilderPainter({
+  BoardBuilderWidgetPainter({
     required super.image,
     required super.shader,
-    required this.level,
+    required this.board,
     required this.selectedCoords,
   });
-
-  Board get board => level.board;
 
   @override
   void paint(Canvas canvas, Size size) {

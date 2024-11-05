@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:fifteen/level/ui/level_list_button.dart';
-import 'package:fifteen/shared/data/assets.dart';
-import 'package:fifteen/shared/ui/preferences_widget.dart';
+import 'package:fifteen/level/ui/level_list_page/level_list_button.dart';
+import 'package:fifteen/app/data/assets.dart';
+import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
 
 class LevelListPage extends StatelessWidget {

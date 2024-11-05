@@ -1,5 +1,5 @@
 import 'package:fifteen/settings/ui/confirmation_dialog.dart';
-import 'package:fifteen/shared/ui/preferences_data.dart';
+import 'package:fifteen/app/domain/preferences_data.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

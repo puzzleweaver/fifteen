@@ -1,11 +1,8 @@
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/game/ui/game_page.dart';
-import 'package:fifteen/main.dart';
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/json_widget.dart';
-import 'package:fifteen/shared/ui/preview_widget.dart';
+import 'package:fifteen/app/ui/json_widget.dart';
+import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LevelListButton extends StatelessWidget {
   final bool isLocked;
@@ -25,34 +22,30 @@ class LevelListButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return JsonWidget(
       asset: boardAsset,
-      getObject: (content) => Level(
-        board: Board.fromJson(content),
-        image: imageAsset,
-      ),
-      builder: (context, level) => ElevatedButton(
-        onPressed: isLocked ? null : () => goToGame(context, level),
+      getObject: (content) => Board.fromJson(content),
+      builder: (context, board) => ElevatedButton(
+        onPressed: isLocked ? null : () => goToGame(context, board, imageAsset),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(8.0),
           backgroundColor: isSolved ? Colors.green : Colors.blue,
         ),
-        child: PreviewWidget(
-          level: level,
+        child: LevelWidget(
+          board: board,
+          imageAsset: imageAsset,
           locked: isLocked,
         ),
       ),
     );
   }
 
-  void goToGame(BuildContext context, Level level) {
-    FifteenAppState appState = Provider.of(context, listen: false);
-    appState.rerollAds();
-    appState.setLevel(level);
+  void goToGame(BuildContext context, Board board, String imageAsset) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
           return GamePage(
-            level: level,
+            board: board,
+            imageAsset: imageAsset,
             boardAsset: boardAsset,
           );
         },

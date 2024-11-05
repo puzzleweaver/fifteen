@@ -1,23 +1,24 @@
+import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/game/ui/game_page.dart';
-import 'package:fifteen/main.dart';
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/interstitial_ad_widget.dart';
-import 'package:fifteen/shared/ui/preview_widget.dart';
+import 'package:fifteen/app/data/assets.dart';
+import 'package:fifteen/app/ui/ads/interstitial_ad_widget.dart';
+import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/level/ui/level_widget/level_widget.dart';
+import 'package:fifteen/app/ui/time_display.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SolvedGamePage extends StatelessWidget {
-  final Level level;
+  final Board board;
+  final String imageAsset;
   final bool hasNext;
-  final String time;
-  final bool timerEnabled;
+  final Duration time;
 
   const SolvedGamePage({
     super.key,
-    required this.level,
+    required this.board,
+    required this.imageAsset,
     required this.hasNext,
     required this.time,
-    required this.timerEnabled,
   });
 
   @override
@@ -34,12 +35,23 @@ class SolvedGamePage extends StatelessWidget {
                 left: size.width * 0.2,
                 right: size.width * 0.2,
               ),
-              child: PreviewWidget(
-                level: level,
+              child: LevelWidget(
+                board: board,
+                imageAsset: imageAsset,
                 locked: false,
               ),
             ),
-            if (timerEnabled) Text("Your time was $time."),
+            PreferencesWidget(
+              builder: (context, preferences) {
+                if (!preferences.timerEnabled) return Container();
+                return TimeDisplay(
+                  time: time,
+                  builder: (context, timeString) => Text(
+                    "Your time was $timeString.",
+                  ),
+                );
+              },
+            ),
             Wrap(
               spacing: 5,
               runSpacing: 5,
@@ -71,32 +83,30 @@ class SolvedGamePage extends StatelessWidget {
   }
 
   void onAgain(BuildContext context) {
-    FifteenAppState appState = Provider.of<FifteenAppState>(
-      context,
-      listen: false,
-    );
     InterstitialAdWidget.show();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) {
-          appState.setLevel(level);
-          return GamePage(level: level);
-        },
+        builder: (context) => GamePage(
+          board: board,
+          imageAsset: imageAsset,
+        ),
       ),
     );
   }
 
   void onNext(BuildContext context) {
-    FifteenAppState appState = Provider.of(context);
     InterstitialAdWidget.show();
-    Level next = Level.createNew();
+
+    Board board = Board.createNew();
+    String imageAsset = Assets.randomImage;
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) {
-          appState.setLevel(next);
-          return GamePage(level: next);
-        },
+        builder: (context) => GamePage(
+          board: board,
+          imageAsset: imageAsset,
+        ),
       ),
     );
   }

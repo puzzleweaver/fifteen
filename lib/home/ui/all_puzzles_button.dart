@@ -1,4 +1,4 @@
-import 'package:fifteen/level/ui/level_list_page.dart';
+import 'package:fifteen/level/ui/level_list_page/level_list_page.dart';
 import 'package:flutter/material.dart';
 
 class AllPuzzlesButton extends StatelessWidget {

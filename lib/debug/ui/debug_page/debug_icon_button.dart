@@ -1,4 +1,4 @@
-import 'package:fifteen/debug/ui/debug_page.dart';
+import 'package:fifteen/debug/ui/debug_page/debug_page.dart';
 import 'package:flutter/material.dart';
 
 class DebugIconButton extends StatelessWidget {

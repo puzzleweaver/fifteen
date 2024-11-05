@@ -2,7 +2,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:fifteen/shared/ui/preferences_data.dart';
+import 'package:fifteen/app/domain/preferences_data.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

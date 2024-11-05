@@ -1,33 +1,41 @@
 import 'dart:math';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/domain/oriented_coord.dart';
 import 'package:fifteen/board/domain/coord.dart';
 import 'package:fifteen/board/domain/int_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 
-class Game {
-  final int len;
+part 'game.mapper.dart';
+
+@MappableClass()
+class Game with GameMappable {
+  final int boardSize;
   final List<int> permutation;
   final List<IntPoint> rotation;
+  final int moveCount;
 
   Game({
-    required this.len,
+    required this.boardSize,
     required this.permutation,
     required this.rotation,
+    required this.moveCount,
   });
 
   static Game createNew() => Game(
-        len: 0,
+        boardSize: 0,
         permutation: [],
         rotation: [],
+        moveCount: 0,
       );
 
   static Game _fromLen(int len) {
     return Game(
-      len: len,
+      boardSize: len,
       permutation: [for (var i = 0; i < len; i++) i],
       rotation: [for (var i = 0; i < len; i++) IntPoint.up],
+      moveCount: 0,
     );
   }
 
@@ -36,7 +44,7 @@ class Game {
   }
 
   Game solve() {
-    return _fromLen(len);
+    return _fromLen(boardSize);
   }
 
   Game shuffle(Board board) {
@@ -60,23 +68,19 @@ class Game {
   }
 
   bool get isSolved {
-    return [for (int i = 0; i < len; i++) i].every(isInPlace);
+    return [for (int i = 0; i < boardSize; i++) i].every(isInPlace);
   }
 
   Quad getQuad(List<Quad> subquads, int index) {
     return subquads[permutation[index]].rel(rotation[index]);
   }
 
-  Quad getQuadRelless(List<Quad> subquads, int index) {
-    return subquads[permutation[index]];
-  }
-
   bool isSpace(int index) {
-    return permutation[index] == len - 1;
+    return permutation[index] == boardSize - 1;
   }
 
   int get space {
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < boardSize; i++) {
       if (isSpace(i)) return i;
     }
     return -1; // ERROR!
@@ -90,9 +94,10 @@ class Game {
     newDirs[i] = rotation[j] * dir;
     newDirs[j] = rotation[i].invrel(dir);
     return Game(
-      len: len,
+      boardSize: boardSize,
       permutation: newPermutation,
       rotation: newDirs,
+      moveCount: moveCount,
     );
   }
 
@@ -104,11 +109,15 @@ class Game {
         if (result != null) {
           int resultIndex = board.getIndex(result.coord);
           if (isSpace(resultIndex)) {
-            return move(index, resultIndex, result.dir);
+            return move(index, resultIndex, result.dir).incrementMoveCount();
           }
         }
       }
     }
     return this;
   }
+
+  Game incrementMoveCount() => copyWith(
+        moveCount: moveCount + 1,
+      );
 }

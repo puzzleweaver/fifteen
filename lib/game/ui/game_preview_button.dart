@@ -1,15 +1,17 @@
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/preview_widget.dart';
+import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:flutter/material.dart';
 
 class GamePreviewButton extends StatelessWidget {
-  final Level level;
+  final Board board;
+  final String imageAsset;
   final void Function(bool previewing) setPreviewing;
 
   const GamePreviewButton({
     super.key,
     required this.setPreviewing,
-    required this.level,
+    required this.board,
+    required this.imageAsset,
   });
 
   @override
@@ -18,8 +20,9 @@ class GamePreviewButton extends StatelessWidget {
       onTapDown: (details) => setPreviewing(true),
       onTapUp: (details) => setPreviewing(false),
       onTapCancel: () => setPreviewing(false),
-      child: PreviewWidget(
-        level: level,
+      child: LevelWidget(
+        board: board,
+        imageAsset: imageAsset,
         locked: false,
       ),
       // child: ElevatedButton(

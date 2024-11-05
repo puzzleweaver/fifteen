@@ -1,7 +1,8 @@
+import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/game/ui/game_page.dart';
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/preferences_data.dart';
-import 'package:fifteen/shared/ui/preferences_widget.dart';
+import 'package:fifteen/app/data/assets.dart';
+import 'package:fifteen/app/domain/preferences_data.dart';
+import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
 
 class NextPuzzleButton extends StatelessWidget {
@@ -21,7 +22,8 @@ class NextPuzzleButton extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => GamePage(
-          level: Level.createNew(),
+          board: Board.createNew(),
+          imageAsset: Assets.defaultImage,
         ),
       ),
     );

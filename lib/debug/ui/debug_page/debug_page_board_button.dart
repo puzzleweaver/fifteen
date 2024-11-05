@@ -1,12 +1,10 @@
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/debug/ui/graph_widget/graph_widget.dart';
 import 'package:fifteen/game/ui/game_page.dart';
-import 'package:fifteen/main.dart';
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/json_widget.dart';
-import 'package:fifteen/shared/ui/preview_widget.dart';
+import 'package:fifteen/app/data/assets.dart';
+import 'package:fifteen/app/ui/json_widget.dart';
+import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class DebugPageBoardButton extends StatelessWidget {
   final String asset;
@@ -15,34 +13,28 @@ class DebugPageBoardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double dimension = 150;
+    const double dimension = 75;
     return JsonWidget(
       asset: asset,
-      getObject: (contents) => Level(
-        board: Board.fromJson(contents),
-        image: "assets/images/photos/animal.jpg",
-      ),
-      builder: (context, level) => ElevatedButton(
+      getObject: (contents) => Board.fromJson(contents),
+      builder: (context, board) => ElevatedButton(
         style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
-        onPressed: () => goToGamePage(context, level),
+        onPressed: () => goToGamePage(context, board),
         child: Column(
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
+            Stack(
               children: [
                 SizedBox.square(
                   dimension: dimension,
-                  child: PreviewWidget(
-                    level: level,
+                  child: LevelWidget(
+                    board: board,
+                    imageAsset: Assets.defaultImage,
                     locked: false,
-                    showImage: false,
                   ),
                 ),
                 SizedBox.square(
                   dimension: dimension,
-                  child: GraphWidget(
-                    board: level.board,
-                  ),
+                  child: GraphWidget(board: board),
                 ),
               ],
             ),
@@ -53,16 +45,15 @@ class DebugPageBoardButton extends StatelessWidget {
     );
   }
 
-  void goToGamePage(BuildContext context, Level level) {
+  void goToGamePage(BuildContext context, Board board) {
+    String imageAsset = Assets.randomImage;
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) {
-          Provider.of<FifteenAppState>(context, listen: false).setLevel(level);
-          return GamePage(
-            level: level,
-          );
-        },
+        builder: (context) => GamePage(
+          board: board,
+          imageAsset: imageAsset,
+        ),
       ),
     );
   }

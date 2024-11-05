@@ -2,8 +2,9 @@ import 'package:fifteen/settings/ui/ad_chance_slider.dart';
 import 'package:fifteen/settings/ui/clear_data_tile.dart';
 import 'package:fifteen/settings/ui/annoying_ads_enabled_checkbox.dart';
 import 'package:fifteen/settings/ui/feedback_tile.dart';
+import 'package:fifteen/settings/ui/move_count_enabled_checkbox.dart';
 import 'package:fifteen/settings/ui/timer_enabled_checkbox.dart';
-import 'package:fifteen/shared/ui/preferences_widget.dart';
+import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Column(
               children: [
                 card(const TimerEnabledCheckbox()),
+                card(const MoveCountEnabledCheckbox()),
                 card(
                   const ExpansionTile(
                     leading: Icon(Icons.attach_money),

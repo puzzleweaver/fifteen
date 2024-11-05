@@ -1,9 +1,8 @@
 import 'dart:math';
 
 class Assets {
-  static String randomImage() {
-    return images[Random().nextInt(images.length)];
-  }
+  static String get defaultImage => images.first;
+  static String get randomImage => images[Random().nextInt(images.length)];
 
   static final boards = [
     "assets/boards/4-example.json",

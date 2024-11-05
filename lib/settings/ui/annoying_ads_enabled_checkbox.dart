@@ -1,4 +1,4 @@
-import 'package:fifteen/shared/ui/preferences_widget.dart';
+import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
 
 class AnnoyingAdsEnabledCheckbox extends StatefulWidget {

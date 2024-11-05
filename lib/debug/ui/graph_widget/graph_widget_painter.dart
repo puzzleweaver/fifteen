@@ -7,7 +7,7 @@ import 'package:fifteen/board/domain/int_point.dart';
 import 'package:fifteen/board/domain/oriented_coord.dart';
 import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/level/ui/level_renderer.dart';
-import 'package:fifteen/shared/ui/custom_canvas.dart';
+import 'package:fifteen/app/ui/custom_canvas.dart';
 import 'package:flutter/material.dart';
 
 class GraphWidgetPainter extends FifteenPainter {
@@ -62,7 +62,7 @@ class GraphWidgetPainter extends FifteenPainter {
     }
     List<Cycle> cycles = nullableCycles.whereType<Cycle>().toSet().toList();
     renderer.setFill(color: Colors.white);
-    renderer.setStroke(color: Colors.black);
+    renderer.setStroke(color: Colors.white, strokeWidth: 1);
     for (int i = 0; i < cycles.length; i++) {
       for (int j = i + 1; j < cycles.length; j++) {
         Cycle a = cycles[i];
@@ -83,8 +83,7 @@ class GraphWidgetPainter extends FifteenPainter {
         Colors.purple,
         Colors.orange,
       ][cycle.order - 1]);
-      renderer.setStroke(color: Colors.transparent);
-      renderer.drawVertex(cycle.point, 0.02);
+      renderer.drawVertex(cycle.point, 0.04);
     }
   }
 

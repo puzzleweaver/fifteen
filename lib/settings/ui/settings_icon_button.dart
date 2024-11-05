@@ -1,7 +1,5 @@
-import 'package:fifteen/main.dart';
 import 'package:fifteen/settings/ui/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SettingsIconButton extends StatelessWidget {
   const SettingsIconButton({super.key});
@@ -15,10 +13,11 @@ class SettingsIconButton extends StatelessWidget {
   }
 
   void goToSettings(BuildContext context) {
-    Provider.of<FifteenAppState>(context, listen: false).rerollAds();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SettingsPage()),
+      MaterialPageRoute(
+        builder: (context) => const SettingsPage(),
+      ),
     );
   }
 }

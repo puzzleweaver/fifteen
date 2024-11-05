@@ -1,28 +1,30 @@
 import 'dart:async';
 
+import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/game/domain/game.dart';
 import 'package:fifteen/game/ui/game_preview_button.dart';
+import 'package:fifteen/game/ui/game_status_pane.dart';
 import 'package:fifteen/game/ui/solved_game_page.dart';
 import 'package:fifteen/game/ui/game_page_popup_menu.dart';
 import 'package:fifteen/game/ui/game_widget.dart';
-import 'package:fifteen/level/ui/level_builder_page.dart';
-import 'package:fifteen/main.dart';
-import 'package:fifteen/math/level.dart';
-import 'package:fifteen/shared/ui/banner_ad_widget.dart';
-import 'package:fifteen/shared/ui/preferences_data.dart';
-import 'package:fifteen/shared/ui/preferences_widget.dart';
-import 'package:fifteen/shared/ui/interstitial_ad_widget.dart';
+import 'package:fifteen/board/ui/builder/board_builder_page.dart';
+import 'package:fifteen/app/ui/ads/banner_ad_widget.dart';
+import 'package:fifteen/app/domain/preferences_data.dart';
+import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/app/ui/ads/interstitial_ad_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
   final String? boardAsset;
-  final Level level;
+  final Board board;
+  final String imageAsset;
 
   const GamePage({
     super.key,
-    required this.level,
     this.boardAsset,
+    required this.imageAsset,
+    required this.board,
   });
 
   @override
@@ -31,25 +33,39 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   bool previewing = false;
-  bool dialogShown = false;
 
   Timer? timer;
-  DateTime? initialTime, currentTime;
+  DateTime initialTime = DateTime.now(), currentTime = DateTime.now();
+
+  Game game = Game.createNew();
 
   @override
   void initState() {
+    game = Game.fromBoard(widget.board).shuffle(widget.board);
     _loadTimer();
     super.initState();
   }
 
-  void _loadTimer() {
-    initialTime = DateTime.now();
-    timer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
-      if (mounted) setState(() => currentTime = DateTime.now());
-    });
+  @override
+  void dispose() {
+    timer?.cancel();
+    timer = null;
+    super.dispose();
   }
 
-  Future<void> _saveLevelSolved(String? boardAsset) async {
+  void _loadTimer() {
+    timer = Timer.periodic(
+      const Duration(milliseconds: 100),
+      (Timer t) {
+        setState(() => currentTime = DateTime.now());
+      },
+    );
+  }
+
+  Duration get time => currentTime.difference(initialTime);
+
+  Future<void> saveLevelSolved() async {
+    String? boardAsset = widget.boardAsset;
     if (boardAsset == null) return;
     final prefs = await SharedPreferences.getInstance();
     PreferencesData preferences = PreferencesData(preferences: prefs);
@@ -64,111 +80,74 @@ class _GamePageState extends State<GamePage> {
   }
 
   @override
-  void dispose() {
-    timer?.cancel();
-    timer = null;
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<FifteenAppState>(context);
-    appState.addListener(
-      () => _checkForDialog(appState),
-    );
     return Scaffold(
       appBar: AppBar(
-        title: BannerAdWidget(0),
+        title: BannerAdWidget(),
         actions: [
           GamePagePopupMenu(
-            shuffle: () {
-              appState.shuffle();
-              setState(() {});
-            },
-            solve: () {
-              appState.solveGame();
-              setState(() {});
-            },
+            shuffle: shuffle,
+            solve: solve,
             boardBuild: () => goToBuilder(context),
           ),
         ],
       ),
-      body: PreferencesWidget(
-        builder: (context, preferences) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 1,
-                child: BannerAdWidget(1, padded: true),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 1,
+              child: BannerAdWidget(padded: true),
+            ),
+            Expanded(
+              flex: 6,
+              child: Center(
+                child: GameWidget(
+                  game: game,
+                  board: widget.board,
+                  imageAsset: widget.imageAsset,
+                  previewing: previewing,
+                  tapSquare: tapSquare,
+                ),
               ),
-              Expanded(
-                flex: 6,
-                child: Center(
-                  child: GameWidget(
-                    previewing: previewing,
+            ),
+            Expanded(
+              flex: 2,
+              child: GameStatusWidget(
+                moveCount: game.moveCount,
+                time: time,
+                children: [
+                  GamePreviewButton(
+                    board: widget.board,
+                    imageAsset: widget.imageAsset,
+                    setPreviewing: setPreviewing,
                   ),
-                ),
+                ],
               ),
-              Expanded(
-                flex: 2,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ...(preferences.timerEnabled
-                        ? [
-                            // Expanded(child: Container()),
-                            Text(displayTime,
-                                style: const TextStyle(fontSize: 14 * 3)),
-                            // Expanded(child: Container()),
-                          ]
-                        : []),
-                    GamePreviewButton(
-                      level: widget.level,
-                      setPreviewing: (newPreviewing) => setState(
-                        () => previewing = newPreviewing,
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+            Expanded(
+              flex: 1,
+              child: SafeArea(
+                top: false,
+                child: BannerAdWidget(),
               ),
-              Expanded(
-                flex: 1,
-                child: SafeArea(
-                  top: false,
-                  child: BannerAdWidget(2),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  String get displayTime {
-    DateTime? t0 = initialTime, t1 = currentTime;
-    if (t0 == null || t1 == null) return "XX:XX";
-    Duration delta = t1.difference(t0);
-    int hours = delta.inHours,
-        minutes = delta.inMinutes.remainder(60),
-        seconds = delta.inSeconds.remainder(60);
-    String hourStr = hours == 0 ? "" : "${hours.toString().padLeft(2, "0")}:",
-        minuteStr = "${minutes.toString().padLeft(2, '0')}:",
-        secondStr = seconds.toString().padLeft(2, '0');
-    return "$hourStr$minuteStr$secondStr";
+  void setPreviewing(bool newPreviewing) {
+    setState(() => previewing = newPreviewing);
   }
 
-  void _checkForDialog(FifteenAppState appState) async {
-    if (appState.game.isSolved && !dialogShown) {
+  void checkIfSolved() async {
+    if (game.isSolved) {
       NavigatorState navigator = Navigator.of(context);
-      setState(() => dialogShown = true);
-      Level level = widget.level;
-      await _saveLevelSolved(widget.boardAsset);
+      await saveLevelSolved();
       InterstitialAdWidget.load();
-      timer?.cancel();
-      timer = null;
 
       navigator.pushReplacement(
         PageRouteBuilder(
@@ -179,10 +158,10 @@ class _GamePageState extends State<GamePage> {
           ),
           pageBuilder: (context, a1, a2) => PreferencesWidget(
             builder: (context, preferences) => SolvedGamePage(
-              level: level,
-              time: displayTime,
+              board: widget.board,
+              imageAsset: widget.imageAsset,
+              time: time,
               hasNext: false,
-              timerEnabled: preferences.timerEnabled,
             ),
           ),
         ),
@@ -194,10 +173,32 @@ class _GamePageState extends State<GamePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LevelBuilderPage(
-          initialLevel: widget.level,
+        builder: (context) => BoardBuilderPage(
+          initialBoard: widget.board,
         ),
       ),
     );
+  }
+
+  void shuffle() {
+    setState(
+      () => game = game.shuffle(widget.board),
+    );
+  }
+
+  void solve() {
+    setState(
+      () => game = game.solve(),
+    );
+  }
+
+  void tapSquare(int index) {
+    setState(() {
+      game = game.tapAtIndex(
+        widget.board,
+        index,
+      );
+      checkIfSolved();
+    });
   }
 }

@@ -2,14 +2,14 @@ import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/level/ui/level_renderer.dart';
-import 'package:fifteen/shared/ui/custom_canvas.dart';
+import 'package:fifteen/app/ui/custom_canvas.dart';
 import 'package:flutter/material.dart';
 
-class PreviewWidgetPainter extends FifteenPainter {
+class LevelWidgetPainter extends FifteenPainter {
   final Board board;
   final bool locked;
 
-  PreviewWidgetPainter({
+  LevelWidgetPainter({
     required this.board,
     required this.locked,
     required super.shader,
@@ -50,7 +50,6 @@ class PreviewWidgetPainter extends FifteenPainter {
           DoublePoint(1.0, i / n),
         );
       }
-      // TODO draw the outer square
       renderer.drawQuad(Quad.unit(), renderer.strokePaint);
     }
   }
