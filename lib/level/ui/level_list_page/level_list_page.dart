@@ -39,12 +39,13 @@ class LevelListPage extends StatelessWidget {
                     crossAxisSpacing: 5.0,
                     children: [
                       for (int i = 0; i < boardSequence.length; i++)
-                        LevelListButton(
-                          isLocked: completions.isLocked(
+                        streamLevelButton(
+                          isLockedStream: completions.isLocked(
                             boardSequence.map((board) => board.id).toList(),
                             boardSequence[i].id,
                           ),
-                          isSolved: completions.isSolved(boardSequence[i].id),
+                          isSolvedStream:
+                              completions.isSolved(boardSequence[i].id),
                           imageAsset: Assets.images[i],
                           board: boardSequence[i],
                         ),
@@ -58,4 +59,30 @@ class LevelListPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget streamLevelButton({
+    required Stream<bool> isSolvedStream,
+    required Stream<bool> isLockedStream,
+    required Board board,
+    required String imageAsset,
+  }) =>
+      StreamBuilder(
+        stream: isLockedStream,
+        builder: (context, isLockedSnapshot) => StreamBuilder(
+          stream: isSolvedStream,
+          builder: (context, isSolvedSnapshot) {
+            bool? isLocked = isLockedSnapshot.data;
+            bool? isSolved = isSolvedSnapshot.data;
+            if (isSolved == null || isLocked == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return LevelListButton(
+              isLocked: isLocked,
+              isSolved: isSolved,
+              imageAsset: imageAsset,
+              board: board,
+            );
+          },
+        ),
+      );
 }

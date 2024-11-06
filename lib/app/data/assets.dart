@@ -37,6 +37,7 @@ class Assets {
     "assets/boards/24-starbox.json",
   ];
 
+  // TODO separate into image packs.
   static final images = [
     "assets/images/photos/desert.jpg",
     "assets/images/photos/mean-leash.jpg",
@@ -47,7 +48,6 @@ class Assets {
     "assets/images/photos/dahlia2.jpg",
     "assets/images/photos/cat2.jpg",
     "assets/images/photos/eurasian-squirrel.jpg",
-    "assets/images/photos/plaid.jpg",
     "assets/images/photos/cat3.jpg",
     "assets/images/photos/field.jpg",
     "assets/images/photos/cat6.jpg",
