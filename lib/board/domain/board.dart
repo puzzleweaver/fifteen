@@ -14,12 +14,14 @@ part 'board.mapper.dart';
 @MappableClass()
 class Board with BoardMappable {
   final String id;
+  final String name;
   final List<Chart> charts;
   final List<Connection> connections;
   final ConstraintSet constraints;
 
   Board({
     required this.id,
+    required this.name,
     required this.charts,
     required this.connections,
     required this.constraints,
@@ -28,6 +30,7 @@ class Board with BoardMappable {
   static Board createNew() {
     return Board(
       id: const Uuid().v1(),
+      name: "NO NAME ENTERED",
       charts: [],
       connections: [],
       constraints: ConstraintSet.createNew(),

@@ -1,7 +1,7 @@
+import 'package:fifteen/board/data/boards.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/debug/ui/debug_page/debug_page_board_button.dart';
 import 'package:fifteen/board/ui/builder/board_builder_page.dart';
-import 'package:fifteen/app/data/assets.dart';
 import 'package:flutter/material.dart';
 
 class DebugPage extends StatelessWidget {
@@ -33,18 +33,33 @@ class DebugPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Wrap(
-            spacing: 5,
-            runSpacing: 5,
+          child: Column(
             children: [
-              ElevatedButton(
-                onPressed: () => goToBuilder(context),
-                child: const Text("Board Builder"),
+              Wrap(
+                children: [
+                  ElevatedButton(
+                    onPressed: () => goToBuilder(context),
+                    child: const Text("Board Builder"),
+                  ),
+                ],
               ),
-              for (int i = 0; i < Assets.boards.length; i++) ...[
-                DebugPageBoardButton(boardAsset: Assets.boards[i]),
-                Text("$i"),
-              ],
+              FutureBuilder(
+                future: Boards.getAll(context),
+                builder: (context, snapshot) {
+                  List<Board>? boards = snapshot.data;
+                  if (boards == null) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return Wrap(
+                    runSpacing: 5,
+                    spacing: 5,
+                    children: [
+                      for (Board board in boards)
+                        DebugPageBoardButton(board: board),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),

@@ -25,6 +25,8 @@ class BoardMapper extends ClassMapperBase<Board> {
 
   static String _$id(Board v) => v.id;
   static const Field<Board, String> _f$id = Field('id', _$id);
+  static String _$name(Board v) => v.name;
+  static const Field<Board, String> _f$name = Field('name', _$name);
   static List<Chart> _$charts(Board v) => v.charts;
   static const Field<Board, List<Chart>> _f$charts = Field('charts', _$charts);
   static List<Connection> _$connections(Board v) => v.connections;
@@ -37,6 +39,7 @@ class BoardMapper extends ClassMapperBase<Board> {
   @override
   final MappableFields<Board> fields = const {
     #id: _f$id,
+    #name: _f$name,
     #charts: _f$charts,
     #connections: _f$connections,
     #constraints: _f$constraints,
@@ -45,6 +48,7 @@ class BoardMapper extends ClassMapperBase<Board> {
   static Board _instantiate(DecodingData data) {
     return Board(
         id: data.dec(_f$id),
+        name: data.dec(_f$name),
         charts: data.dec(_f$charts),
         connections: data.dec(_f$connections),
         constraints: data.dec(_f$constraints));
@@ -102,6 +106,7 @@ abstract class BoardCopyWith<$R, $In extends Board, $Out>
   ConstraintSetCopyWith<$R, ConstraintSet, ConstraintSet> get constraints;
   $R call(
       {String? id,
+      String? name,
       List<Chart>? charts,
       List<Connection>? connections,
       ConstraintSet? constraints});
@@ -128,11 +133,13 @@ class _BoardCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Board, $Out>
   @override
   $R call(
           {String? id,
+          String? name,
           List<Chart>? charts,
           List<Connection>? connections,
           ConstraintSet? constraints}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,
+        if (name != null) #name: name,
         if (charts != null) #charts: charts,
         if (connections != null) #connections: connections,
         if (constraints != null) #constraints: constraints
@@ -140,6 +147,7 @@ class _BoardCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Board, $Out>
   @override
   Board $make(CopyWithData data) => Board(
       id: data.get(#id, or: $value.id),
+      name: data.get(#name, or: $value.name),
       charts: data.get(#charts, or: $value.charts),
       connections: data.get(#connections, or: $value.connections),
       constraints: data.get(#constraints, or: $value.constraints));

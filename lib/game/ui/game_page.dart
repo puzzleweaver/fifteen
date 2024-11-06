@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:fifteen/board/domain/board.dart';
+import 'package:fifteen/completion/data/completions.dart';
+import 'package:fifteen/completion/data/preferences_completions.dart';
+import 'package:fifteen/completion/domain/completion.dart';
 import 'package:fifteen/game/domain/game.dart';
 import 'package:fifteen/game/ui/game_preview_button.dart';
 import 'package:fifteen/game/ui/game_status_pane.dart';
@@ -16,13 +19,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
-  final String? boardAsset;
   final Board board;
   final String imageAsset;
 
   const GamePage({
     super.key,
-    this.boardAsset,
     required this.imageAsset,
     required this.board,
   });
@@ -67,17 +68,20 @@ class _GamePageState extends State<GamePage> {
   Duration get time => currentTime.difference(initialTime);
 
   Future<void> saveLevelSolved() async {
-    String? boardAsset = widget.boardAsset;
-    if (boardAsset == null) return;
     final prefs = await SharedPreferences.getInstance();
     PreferencesData preferences = PreferencesData(preferences: prefs);
     if (mounted) {
-      setState(() {
-        preferences.solvedBoards = [
-          ...preferences.solvedBoards,
-          boardAsset,
-        ];
-      });
+      Completions completions = PreferencesCompletions(
+        preferences: preferences,
+      );
+      completions.save(
+        Completion.createNew(
+          boardId: widget.board.id,
+          time: time,
+          moveCount: moveCount,
+        ),
+      );
+      setState(() {});
     }
   }
 
