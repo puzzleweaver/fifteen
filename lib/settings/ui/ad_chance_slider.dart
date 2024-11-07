@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -23,14 +25,14 @@ class AdChanceSliderState extends State<AdChanceSlider> {
                   preferences.adChance = newAdChance;
                   setState(() {});
                 },
-                min: 1.0 / 3.0,
-                max: 1.0,
+                min: min(0.4, preferences.adChance),
+                max: max(0.8, preferences.adChance),
               ),
             ),
           ],
         ),
         subtitle: const Text(
-          "Banner Ads are shown with a certain probability. More ads means more money for the developer :)",
+          "Ads are shown with a random chance, and showing more means more money for the developer. Either way, thank you!",
         ),
       ),
     );

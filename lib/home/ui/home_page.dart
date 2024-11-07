@@ -46,7 +46,10 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               HomePageHeaderIcon(alpha: _alpha),
-              const NextPuzzleButton(),
+              const NextPuzzleButton(
+                pushReplace: false,
+                child: Text("Play Next Puzzle"),
+              ),
               const AllPuzzlesButton(),
             ],
           ),

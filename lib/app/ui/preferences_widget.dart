@@ -1,4 +1,5 @@
 import 'package:fifteen/app/domain/preferences_data.dart';
+import 'package:fifteen/app/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,9 +18,7 @@ class PreferencesWidgetState extends State<PreferencesWidget> {
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
         SharedPreferences? preferences = snapshot.data;
-        if (preferences == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        if (preferences == null) return const LoadingWidget();
         return widget.builder(
           context,
           PreferencesData(preferences: preferences),

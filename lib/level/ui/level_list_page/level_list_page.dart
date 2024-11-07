@@ -1,4 +1,6 @@
+import 'package:fifteen/app/ui/loading_widget.dart';
 import 'package:fifteen/board/data/boards.dart';
+import 'package:fifteen/board/data/file_boards.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/completion/data/completions.dart';
 import 'package:fifteen/completion/data/preferences_completions.dart';
@@ -12,17 +14,16 @@ class LevelListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Boards boards = FileBoards(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("All Levels"),
       ),
       body: FutureBuilder(
-        future: Boards.getSequence(context),
+        future: boards.sequence(),
         builder: (context, snapshot) {
           List<Board>? boardSequence = snapshot.data;
-          if (boardSequence == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
+          if (boardSequence == null) return const LoadingWidget();
           return PreferencesWidget(
             builder: (context, preferences) {
               Completions completions =
@@ -41,7 +42,7 @@ class LevelListPage extends StatelessWidget {
                       for (int i = 0; i < boardSequence.length; i++)
                         streamLevelButton(
                           isLockedStream: completions.isLocked(
-                            boardSequence.map((board) => board.id).toList(),
+                            boardSequence,
                             boardSequence[i].id,
                           ),
                           isSolvedStream:
@@ -74,7 +75,7 @@ class LevelListPage extends StatelessWidget {
             bool? isLocked = isLockedSnapshot.data;
             bool? isSolved = isSolvedSnapshot.data;
             if (isSolved == null || isLocked == null) {
-              return const Center(child: CircularProgressIndicator());
+              return const LoadingWidget();
             }
             return LevelListButton(
               isLocked: isLocked,

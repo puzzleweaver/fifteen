@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:fifteen/app/domain/preferences_data.dart';
+import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/completion/data/completions.dart';
 import 'package:fifteen/completion/domain/completion.dart';
+import 'package:fifteen/completion/domain/completion_calculations.dart';
 
 class PreferencesCompletions extends Completions {
   final PreferencesData preferences;
@@ -19,25 +21,24 @@ class PreferencesCompletions extends Completions {
         Stream.value(getValue()),
       ]).distinct();
 
-  // TODO move this logic into domain layer?
   bool isSolvedOnce(String boardId) =>
       preferences.solvedBoards.contains(boardId);
-  bool isLockedOnce(List<String> boardSequenceIds, String boardId) {
-    int furthestSolved = boardSequenceIds
-        .map((id) => isSolvedOnce(id))
-        .toList()
-        .lastIndexOf(true);
-    int index = boardSequenceIds.indexOf(boardId);
-    return index > furthestSolved + 1;
-  }
 
   @override
   Stream<bool> isSolved(String boardId) =>
       returnOnChanges(() => isSolvedOnce(boardId));
 
   @override
-  Stream<bool> isLocked(List<String> boardSequenceIds, String boardId) =>
-      returnOnChanges(() => isLockedOnce(boardSequenceIds, boardId));
+  Stream<bool> isLocked(List<Board> boardSequence, String boardId) =>
+      returnOnChanges(
+        () => CompletionLogic(isSolved: isSolvedOnce)
+            .isLocked(boardSequence, boardId),
+      );
+
+  @override
+  Stream<Board?> next(List<Board> boardSequence) => returnOnChanges(
+        () => CompletionLogic(isSolved: isSolvedOnce).next(boardSequence),
+      );
 
   @override
   void save(Completion newCompletion) {

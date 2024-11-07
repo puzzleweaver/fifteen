@@ -42,12 +42,14 @@ class Game {
   Game shuffle(Board board) {
     Game ret = this;
     int len = board.subquads.length * 60;
+    Coord? previous;
     for (int i = 0; i < len; i++) {
       int spaceIndex = ret.space;
       Coord spaceCoord = board.getCoord(spaceIndex)!;
       IntPoint dir = IntPoint.randomDir(Random());
       OrientedCoord? result = board.step(spaceCoord, dir);
-      if (result != null) {
+      if (result != null && result.coord != previous) {
+        previous = result.coord;
         int resultIndex = board.getIndex(result.coord);
         ret = ret.move(spaceIndex, resultIndex, result.dir);
       }

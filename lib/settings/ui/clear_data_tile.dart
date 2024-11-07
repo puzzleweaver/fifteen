@@ -1,7 +1,9 @@
+import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/completion/data/completions.dart';
+import 'package:fifteen/completion/data/preferences_completions.dart';
 import 'package:fifteen/settings/ui/confirmation_dialog.dart';
 import 'package:fifteen/app/domain/preferences_data.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ClearDataTile extends StatelessWidget {
   const ClearDataTile({super.key});
@@ -15,19 +17,21 @@ class ClearDataTile extends StatelessWidget {
       title: const Text("Reset Data"),
       onTap: () => showDialog(
         context: context,
-        builder: (context) => ConfirmationDialog(
-          onConfirm: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            deleteAdventure();
-          },
+        builder: (context) => PreferencesWidget(
+          builder: (context, preferences) => ConfirmationDialog(
+            onConfirm: () {
+              deleteAdventure(preferences);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          ),
         ),
       ),
     );
   }
 
-  void deleteAdventure() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    PreferencesData(preferences: prefs).solvedBoards = [];
+  void deleteAdventure(PreferencesData preferences) {
+    Completions completions = PreferencesCompletions(preferences: preferences);
+    completions.deleteAll();
   }
 }

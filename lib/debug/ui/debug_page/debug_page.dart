@@ -1,4 +1,6 @@
+import 'package:fifteen/app/ui/loading_widget.dart';
 import 'package:fifteen/board/data/boards.dart';
+import 'package:fifteen/board/data/file_boards.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/debug/ui/debug_page/debug_page_board_button.dart';
 import 'package:fifteen/board/ui/builder/board_builder_page.dart';
@@ -10,6 +12,8 @@ class DebugPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int count = 1;
+
+    Boards boards = FileBoards(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -44,12 +48,10 @@ class DebugPage extends StatelessWidget {
                 ],
               ),
               FutureBuilder(
-                future: Boards.getAll(context),
+                future: boards.sequence(),
                 builder: (context, snapshot) {
                   List<Board>? boards = snapshot.data;
-                  if (boards == null) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                  if (boards == null) return const LoadingWidget();
                   return Wrap(
                     runSpacing: 5,
                     spacing: 5,

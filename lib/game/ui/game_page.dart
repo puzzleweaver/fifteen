@@ -167,7 +167,6 @@ class _GamePageState extends State<GamePage> {
               board: widget.board,
               imageAsset: widget.imageAsset,
               time: time,
-              hasNext: false,
             ),
           ),
         ),

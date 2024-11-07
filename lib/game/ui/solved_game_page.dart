@@ -1,8 +1,8 @@
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/game/ui/game_page.dart';
-import 'package:fifteen/app/data/assets.dart';
 import 'package:fifteen/app/ui/ads/interstitial_ad_widget.dart';
 import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/home/ui/next_puzzle_button.dart';
 import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:fifteen/app/ui/time_display.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +10,12 @@ import 'package:flutter/material.dart';
 class SolvedGamePage extends StatelessWidget {
   final Board board;
   final String imageAsset;
-  final bool hasNext;
   final Duration time;
 
   const SolvedGamePage({
     super.key,
     required this.board,
     required this.imageAsset,
-    required this.hasNext,
     required this.time,
   });
 
@@ -53,22 +51,21 @@ class SolvedGamePage extends StatelessWidget {
               },
             ),
             Wrap(
-              spacing: 5,
+              spacing: size.width * 0.1,
               runSpacing: 5,
               children: [
                 ElevatedButton(
-                  onPressed: () => onHome(context),
-                  child: const Text("Home"),
+                  onPressed: () => onBack(context),
+                  child: const Text("Back"),
                 ),
                 ElevatedButton(
                   onPressed: () => onAgain(context),
                   child: const Text("Again"),
                 ),
-                if (hasNext)
-                  ElevatedButton(
-                    onPressed: () => onNext(context),
-                    child: const Text("Next"),
-                  ),
+                const NextPuzzleButton(
+                  pushReplace: true,
+                  child: Text("Next"),
+                ),
               ],
             ),
           ],
@@ -77,7 +74,7 @@ class SolvedGamePage extends StatelessWidget {
     );
   }
 
-  void onHome(BuildContext context) {
+  void onBack(BuildContext context) {
     Navigator.pop(context);
     InterstitialAdWidget.show();
   }
@@ -85,23 +82,6 @@ class SolvedGamePage extends StatelessWidget {
   void onAgain(BuildContext context) {
     InterstitialAdWidget.show();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => GamePage(
-          board: board,
-          imageAsset: imageAsset,
-        ),
-      ),
-    );
-  }
-
-  void onNext(BuildContext context) {
-    InterstitialAdWidget.show();
-
-    Board board = Board.createNew();
-    String imageAsset = Assets.randomImage;
-
-    Navigator.pushReplacement(
-      context,
       MaterialPageRoute(
         builder: (context) => GamePage(
           board: board,
