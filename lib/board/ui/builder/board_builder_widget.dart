@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:fifteen/app/ui/orienter.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
@@ -35,47 +36,60 @@ class BoardBuilderWidgetState extends State<BoardBuilderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Builders.container(
-      body: AspectRatio(
-        aspectRatio: 1.0,
-        child: FifteenCanvas(
-          imagePath: Assets.defaultImage,
-          getPainter: (shader, image) => BoardBuilderWidgetPainter(
-            shader: shader,
-            image: image,
-            board: widget.board,
-            selectedCoords: selectedCoords,
+    return Flex(
+      direction: Orienter(context).columnDirection,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        AspectRatio(
+          aspectRatio: 1.0,
+          child: FifteenCanvas(
+            imagePath: Assets.defaultImage,
+            getPainter: (shader, image) => BoardBuilderWidgetPainter(
+              shader: shader,
+              image: image,
+              board: widget.board,
+              selectedCoords: selectedCoords,
+            ),
+            onTap: onTap,
           ),
-          onTap: onTap,
         ),
-      ),
-      actions: [
-        Builders.button(Icons.add, () => addChart(1, 1)),
-        Builders.button(Icons.emergency, addChartDialog),
-        Builders.button(Icons.calculate, solve),
-        Builders.button(Icons.rotate_right, () => rotate(-math.pi / 8)),
-        Builders.button(Icons.rotate_left, () => rotate(math.pi / 8)),
-        Builders.button(
-          Icons.vertical_align_center,
-          (selectedCoords.length < 2) ? null : align,
+        Expanded(
+          child: Wrap(
+            spacing: 5.0,
+            runSpacing: 5.0,
+            children: [
+              Builders.button(Icons.add, () => addChart(1, 1)),
+              Builders.button(Icons.emergency, addChartDialog),
+              Builders.button(Icons.calculate, solve),
+              Builders.button(Icons.rotate_right, () => rotate(-math.pi / 8)),
+              Builders.button(Icons.rotate_left, () => rotate(math.pi / 8)),
+              Builders.button(
+                Icons.vertical_align_center,
+                (selectedCoords.length < 2) ? null : align,
+              ),
+              Builders.button(Icons.zoom_out_map, () => scale(1.1)),
+              Builders.button(Icons.zoom_in_map, () => scale(1.0 / 1.1)),
+              Builders.button(
+                Icons.link,
+                selectedCoords.length < 2 ? null : linkCoords,
+              ),
+              Builders.button(
+                Icons.reorder,
+                selectedCoords.length < 4
+                    ? null
+                    : () => addEquidistants(alternatingPairs),
+              ),
+              Builders.button(
+                Icons.show_chart,
+                selectedCoords.length < 4
+                    ? null
+                    : () => addEquidistants(pathPairs),
+              ),
+              Builders.button(Icons.cancel, resetSelection),
+            ],
+          ),
         ),
-        Builders.button(Icons.zoom_out_map, () => scale(1.1)),
-        Builders.button(Icons.zoom_in_map, () => scale(1.0 / 1.1)),
-        Builders.button(
-          Icons.link,
-          selectedCoords.length < 2 ? null : linkCoords,
-        ),
-        Builders.button(
-          Icons.reorder,
-          selectedCoords.length < 4
-              ? null
-              : () => addEquidistants(alternatingPairs),
-        ),
-        Builders.button(
-          Icons.show_chart,
-          selectedCoords.length < 4 ? null : () => addEquidistants(pathPairs),
-        ),
-        Builders.button(Icons.cancel, resetSelection),
       ],
     );
   }

@@ -1,12 +1,14 @@
 import 'dart:async';
 
+import 'package:fifteen/app/ui/orienter.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/completion/data/completions.dart';
 import 'package:fifteen/completion/data/preferences_completions.dart';
 import 'package:fifteen/completion/domain/completion.dart';
 import 'package:fifteen/game/domain/game.dart';
+import 'package:fifteen/game/ui/game_move_count_widget.dart';
 import 'package:fifteen/game/ui/game_preview_button.dart';
-import 'package:fifteen/game/ui/game_status_pane.dart';
+import 'package:fifteen/game/ui/game_time_widget.dart';
 import 'package:fifteen/game/ui/solved_game_page.dart';
 import 'package:fifteen/game/ui/game_page_popup_menu.dart';
 import 'package:fifteen/game/ui/game_widget.dart';
@@ -98,50 +100,65 @@ class _GamePageState extends State<GamePage> {
           ),
         ],
       ),
-      body: Center(
+      body: pageLayout(
+        context,
+        gameWidget: GameWidget(
+          game: game,
+          board: widget.board,
+          imageAsset: widget.imageAsset,
+          previewing: previewing,
+          tapSquare: tapSquare,
+        ),
+        infoWidgets: [
+          GameTimeWidget(time: time),
+          GameMoveCountWidget(moveCount: moveCount),
+          GamePreviewButton(
+            board: widget.board,
+            imageAsset: widget.imageAsset,
+            setPreviewing: setPreviewing,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget pageLayout(
+    BuildContext context, {
+    required Widget gameWidget,
+    required List<Widget> infoWidgets,
+  }) {
+    if (Orienter(context).isTall) {
+      return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              flex: 1,
-              child: BannerAdWidget(padded: true),
-            ),
-            Expanded(
-              flex: 6,
-              child: Center(
-                child: GameWidget(
-                  game: game,
-                  board: widget.board,
-                  imageAsset: widget.imageAsset,
-                  previewing: previewing,
-                  tapSquare: tapSquare,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: GameStatusWidget(
-                moveCount: moveCount,
-                time: time,
-                children: [
-                  GamePreviewButton(
-                    board: widget.board,
-                    imageAsset: widget.imageAsset,
-                    setPreviewing: setPreviewing,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: SafeArea(
-                top: false,
-                child: BannerAdWidget(),
-              ),
-            ),
+            BannerAdWidget(),
+            const Text(""),
+            Expanded(child: gameWidget),
+            const Text(""),
+            ...infoWidgets,
+            const Text(""),
+            BannerAdWidget(),
           ],
         ),
-      ),
+      );
+    }
+
+    return Row(
+      children: [
+        gameWidget,
+        Column(
+          children: [
+            BannerAdWidget(padded: true),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: infoWidgets,
+              ),
+            ),
+            BannerAdWidget(padded: true),
+          ],
+        ),
+      ],
     );
   }
 

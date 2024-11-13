@@ -1,4 +1,4 @@
-package com.example.fifteen
+package com.waeaves.fifteen
 
 import io.flutter.embedding.android.FlutterActivity
 

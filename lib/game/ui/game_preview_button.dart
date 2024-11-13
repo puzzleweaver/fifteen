@@ -1,5 +1,4 @@
 import 'package:fifteen/board/domain/board.dart';
-import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:flutter/material.dart';
 
 class GamePreviewButton extends StatelessWidget {
@@ -20,15 +19,23 @@ class GamePreviewButton extends StatelessWidget {
       onTapDown: (details) => setPreviewing(true),
       onTapUp: (details) => setPreviewing(false),
       onTapCancel: () => setPreviewing(false),
-      child: LevelWidget(
-        board: board,
-        imageAsset: imageAsset,
-        locked: false,
-      ),
-      // child: ElevatedButton(
-      //   onPressed: () => {},
-      //   child: const Text("View Solution"),
+      // child: LevelWidget(
+      //   board: board,
+      //   imageAsset: imageAsset,
+      //   locked: false,
       // ),
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Text(
+          "View Solution",
+          textScaler: TextScaler.linear(1.5),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 }

@@ -8,22 +8,4 @@ class Builders {
       icon: Icon(icon),
     );
   }
-
-  static Widget container({
-    required Widget body,
-    required List<Widget> actions,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        body,
-        Wrap(
-          spacing: 5.0,
-          runSpacing: 5.0,
-          children: actions,
-        ),
-      ],
-    );
-  }
 }

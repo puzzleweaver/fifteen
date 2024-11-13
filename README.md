@@ -2,14 +2,12 @@
 
 Wacky sliding puzzles as a cross-platform app.
 
-## Code Generation
+## Important Commands
 
-Run this to generate mappable classes. Nothing else right now.
+Code/Asset Generators:
+ - Dart code generators: `dart run build_runner build`
+ - Generate app icons: `dart run flutter_launcher_icons`
 
-```dart run build_runner build```
-
-## Generate App Icons
-
-Generates app icons for android, iOS, and web versions.
-
-```dart run dart run flutter_launcher_icons```.
+Production App Generation:
+ - Android: `flutter build appbundle`
+ - iOS: `flutter build ipa`

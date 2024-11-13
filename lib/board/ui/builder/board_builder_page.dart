@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:developer' as dev;
 
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/ui/builder/board_builder_widget.dart';
@@ -58,16 +58,12 @@ class BoardBuilderPageState extends State<BoardBuilderPage> {
             getChild: (index) => Text("($index) ${history[index].description}"),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              primary: true,
-              child: BoardBuilderWidget(
-                board: board,
-                setBoard: (newBoard, description) => set(
-                  context,
-                  newBoard,
-                  description,
-                ),
+            child: BoardBuilderWidget(
+              board: board,
+              setBoard: (newBoard, description) => set(
+                context,
+                newBoard,
+                description,
               ),
             ),
           ),
@@ -97,7 +93,7 @@ class BoardBuilderPageState extends State<BoardBuilderPage> {
   }
 
   void submit() {
-    log(
+    dev.log(
       board.toJson(),
     );
   }

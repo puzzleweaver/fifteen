@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/game/ui/game_page.dart';
 import 'package:fifteen/app/ui/ads/interstitial_ad_widget.dart';
@@ -22,17 +24,16 @@ class SolvedGamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final minor = min(size.width, size.height);
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text("You Solved This Board!"),
-            Padding(
-              padding: EdgeInsets.only(
-                left: size.width * 0.2,
-                right: size.width * 0.2,
-              ),
+            SizedBox.square(
+              dimension: minor * 0.6,
               child: LevelWidget(
                 board: board,
                 imageAsset: imageAsset,

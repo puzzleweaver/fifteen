@@ -26,20 +26,18 @@ class _SettingsPageState extends State<SettingsPage> {
           builder: (context, preferences) => Center(
             child: Column(
               children: [
-                card(const TimerEnabledCheckbox()),
-                card(const MoveCountEnabledCheckbox()),
-                card(
-                  const ExpansionTile(
-                    leading: Icon(Icons.attach_money),
-                    title: Text("Support the Dev"),
-                    children: [
-                      AnnoyingAdsEnabledCheckbox(),
-                      AdChanceSlider(),
-                    ],
-                  ),
+                const TimerEnabledCheckbox(),
+                const MoveCountEnabledCheckbox(),
+                const ExpansionTile(
+                  leading: Icon(Icons.attach_money),
+                  title: Text("Support the Dev"),
+                  children: [
+                    AnnoyingAdsEnabledCheckbox(),
+                    AdChanceSlider(),
+                  ],
                 ),
-                card(const FeedbackTile()),
-                card(const ClearDataTile()),
+                const FeedbackTile(),
+                const ClearDataTile(),
               ],
             ),
           ),

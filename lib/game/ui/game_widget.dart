@@ -24,15 +24,18 @@ class GameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FifteenCanvas(
-      imagePath: imageAsset,
-      getPainter: (shader, image) => GameWidgetPainter(
-        shader: shader,
-        image: image,
-        game: previewing ? Game.fromBoard(board) : game,
-        board: board,
+    return AspectRatio(
+      aspectRatio: 1,
+      child: FifteenCanvas(
+        imagePath: imageAsset,
+        getPainter: (shader, image) => GameWidgetPainter(
+          shader: shader,
+          image: image,
+          game: previewing ? Game.fromBoard(board) : game,
+          board: board,
+        ),
+        onTap: (pos) => onWidgetTap(pos),
       ),
-      onTap: (pos) => onWidgetTap(pos),
     );
   }
 

@@ -6,26 +6,32 @@ import 'package:flutter/material.dart';
 class FileBoards extends Boards {
   final AssetBundle bundle;
 
+  List<Board>? cachedSequence;
+
   FileBoards(BuildContext context) : bundle = DefaultAssetBundle.of(context);
 
   Future<Board> readOne(String boardAsset) => bundle
       .loadString(boardAsset)
       .then((contents) => Board.fromJson(contents));
 
-  Future<List<Board>> readAll() {
+  Future<List<Board>> readSequence(List<String> assets) {
+    if (cachedSequence != null) return Future.value(cachedSequence);
     Future<List<Board>> ret = Future(() => []);
-    for (String asset in Assets.boards) {
-      ret = ret.then((previousBoards) {
+    for (String asset in assets) {
+      ret = ret.then((previousSequence) {
         return readOne(asset)
             .then(
-              (board) => [...previousBoards, board],
+              (board) => [...previousSequence, board],
             )
-            .catchError((error) => previousBoards);
+            .catchError((error) => previousSequence);
       });
     }
-    return ret;
+    return ret.then((sequence) {
+      cachedSequence = sequence;
+      return sequence;
+    });
   }
 
   @override
-  Future<List<Board>> sequence() => readAll();
+  Future<List<Board>> sequence() => readSequence(Assets.boards);
 }

@@ -30,31 +30,29 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          actions: const [
-            if (kDebugMode) DebugIconButton(),
-            SettingsIconButton(),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        actions: const [
+          if (kDebugMode) DebugIconButton(),
+          SettingsIconButton(),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            HomePageHeaderIcon(alpha: _alpha),
+            const NextPuzzleButton(
+              pushReplace: false,
+              child: Text("Play Next Puzzle"),
+            ),
+            const AllPuzzlesButton(),
           ],
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              HomePageHeaderIcon(alpha: _alpha),
-              const NextPuzzleButton(
-                pushReplace: false,
-                child: Text("Play Next Puzzle"),
-              ),
-              const AllPuzzlesButton(),
-            ],
-          ),
-        ),
-      );
-    });
+      ),
+    );
   }
 }
