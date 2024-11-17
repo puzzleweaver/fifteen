@@ -5,62 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d74bb8b9-230c-4bd1-840e-567e7d07f057" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/kotlin/com/waeaves/fifteen/MainActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../assets/images/launch_image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/launch_image 1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/launch_image 2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/launch_image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/build/XCBuildData/d12ed3851d8dcdac7af8ca5c3f287b70.xcbuilddata/build-request.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/build/XCBuildData/d12ed3851d8dcdac7af8ca5c3f287b70.xcbuilddata/description.msgpack" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/build/XCBuildData/d12ed3851d8dcdac7af8ca5c3f287b70.xcbuilddata/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/build/XCBuildData/d12ed3851d8dcdac7af8ca5c3f287b70.xcbuilddata/target-graph.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ios/build/XCBuildData/d12ed3851d8dcdac7af8ca5c3f287b70.xcbuilddata/task-store.msgpack" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/app/ui/orienter.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/game/ui/game_move_count_widget.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lib/game/ui/game_time_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.metadata" beforeDir="false" afterPath="$PROJECT_DIR$/../.metadata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/kotlin/com/example/fifteen/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_adaptive_back.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_adaptive_fore.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher_adaptive_back.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher_adaptive_fore.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher_adaptive_back.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher_adaptive_fore.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher_adaptive_back.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher_adaptive_fore.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher_adaptive_back.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher_adaptive_fore.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/Contents.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/board/data/file_boards.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/board/data/file_boards.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/board/ui/builder/board_builder_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/board/ui/builder/board_builder_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/board/ui/builder/board_builder_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/board/ui/builder/board_builder_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/board/ui/builder/builders.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/board/ui/builder/builders.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/game/ui/game_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/game/ui/game_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/game/ui/game_preview_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/game/ui/game_preview_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/game/ui/game_status_pane.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/game/ui/game_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/game/ui/game_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/game/ui/solved_game_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/game/ui/solved_game_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/home/ui/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/home/ui/home_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/settings/ui/settings_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/settings/ui/settings_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,11 +19,28 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/aweaver/.android/avd/Nexus_10_API_VanillaIceCream_10in_tablet_.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=2ede2e28)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="android" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -114,9 +80,10 @@
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
       <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
       <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
