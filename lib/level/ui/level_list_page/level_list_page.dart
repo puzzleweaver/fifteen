@@ -1,4 +1,5 @@
 import 'package:fifteen/app/ui/loading_widget.dart';
+import 'package:fifteen/app/ui/orienter.dart';
 import 'package:fifteen/board/data/boards.dart';
 import 'package:fifteen/board/data/file_boards.dart';
 import 'package:fifteen/board/domain/board.dart';
@@ -34,7 +35,7 @@ class LevelListPage extends StatelessWidget {
                   child: GridView.count(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    crossAxisCount: 3,
+                    crossAxisCount: Orienter(context).isTall ? 3 : 5,
                     padding: const EdgeInsets.all(5.0),
                     mainAxisSpacing: 5.0,
                     crossAxisSpacing: 5.0,

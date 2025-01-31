@@ -4,6 +4,7 @@ import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/game/domain/game.dart';
 import 'package:fifteen/app/ui/custom_canvas.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class GameWidget extends StatelessWidget {
@@ -24,18 +25,22 @@ class GameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: FifteenCanvas(
-        imagePath: imageAsset,
-        getPainter: (shader, image) => GameWidgetPainter(
-          shader: shader,
-          image: image,
-          game: previewing ? Game.fromBoard(board) : game,
-          board: board,
+    return Stack(
+      children: [
+        if (kDebugMode) Container(color: ColorScheme.of(context).primary),
+        Center(
+          child: FifteenCanvas(
+            imagePath: imageAsset,
+            getPainter: (shader, image) => GameWidgetPainter(
+              shader: shader,
+              image: image,
+              game: previewing ? Game.fromBoard(board) : game,
+              board: board,
+            ),
+            onTap: (pos) => onWidgetTap(pos),
+          ),
         ),
-        onTap: (pos) => onWidgetTap(pos),
-      ),
+      ],
     );
   }
 

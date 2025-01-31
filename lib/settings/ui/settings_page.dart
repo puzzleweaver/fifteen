@@ -1,8 +1,7 @@
-import 'package:fifteen/settings/ui/ad_chance_slider.dart';
 import 'package:fifteen/settings/ui/clear_data_tile.dart';
-import 'package:fifteen/settings/ui/annoying_ads_enabled_checkbox.dart';
 import 'package:fifteen/settings/ui/feedback_tile.dart';
 import 'package:fifteen/settings/ui/move_count_enabled_checkbox.dart';
+import 'package:fifteen/settings/ui/support_widget.dart';
 import 'package:fifteen/settings/ui/timer_enabled_checkbox.dart';
 import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,19 +22,17 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: SingleChildScrollView(
         child: PreferencesWidget(
-          builder: (context, preferences) => Center(
+          builder: (context, preferences) => Container(
+            padding: EdgeInsets.all(20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Text("Gameplay Options"),
                 const TimerEnabledCheckbox(),
                 const MoveCountEnabledCheckbox(),
-                const ExpansionTile(
-                  leading: Icon(Icons.attach_money),
-                  title: Text("Support the Dev"),
-                  children: [
-                    AnnoyingAdsEnabledCheckbox(),
-                    AdChanceSlider(),
-                  ],
-                ),
+                const Text(""),
+                const Text("Other"),
+                const SupportWidget(),
                 const FeedbackTile(),
                 const ClearDataTile(),
               ],

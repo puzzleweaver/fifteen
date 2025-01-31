@@ -8,11 +8,13 @@ class FeedbackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.mail),
-      title: const Text("Send Feedback"),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: sendFeedback,
+    return Card(
+      child: ListTile(
+        leading: const Icon(Icons.mail),
+        title: const Text("Send Feedback"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: sendFeedback,
+      ),
     );
   }
 

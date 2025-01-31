@@ -5,7 +5,7 @@ import 'package:fifteen/app/domain/preferences_data.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/completion/data/completions.dart';
 import 'package:fifteen/completion/domain/completion.dart';
-import 'package:fifteen/completion/domain/completion_calculations.dart';
+import 'package:fifteen/completion/domain/completion_logic.dart';
 
 class PreferencesCompletions extends Completions {
   final PreferencesData preferences;

@@ -145,7 +145,7 @@ class _GamePageState extends State<GamePage> {
 
     return Row(
       children: [
-        gameWidget,
+        Expanded(child: gameWidget),
         Column(
           children: [
             BannerAdWidget(padded: true),

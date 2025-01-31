@@ -10,20 +10,21 @@ class ClearDataTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      textColor: Colors.red,
-      iconColor: Colors.red,
-      leading: const Icon(Icons.cancel),
-      title: const Text("Reset Data"),
-      onTap: () => showDialog(
-        context: context,
-        builder: (context) => PreferencesWidget(
-          builder: (context, preferences) => ConfirmationDialog(
-            onConfirm: () {
-              deleteAdventure(preferences);
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
+    return Card(
+      color: Colors.red,
+      child: ListTile(
+        leading: const Icon(Icons.cancel),
+        title: const Text("Reset Data"),
+        onTap: () => showDialog(
+          context: context,
+          builder: (context) => PreferencesWidget(
+            builder: (context, preferences) => ConfirmationDialog(
+              onConfirm: () {
+                deleteAdventure(preferences);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
           ),
         ),
       ),
