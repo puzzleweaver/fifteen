@@ -1,0 +1,2 @@
+/Users/aweaver/Documents/GitHub/fifteen/android/app/.cxx/Debug/5r1047r5/x86/CMakeFiles/edit_cache.dir
+/Users/aweaver/Documents/GitHub/fifteen/android/app/.cxx/Debug/5r1047r5/x86/CMakeFiles/rebuild_cache.dir

@@ -2,14 +2,14 @@ name: fifteen
 description: "Wacky puzzles as a cross-platform app."
 publish_to: 'none'
 
-version: 2.0.3+5
+version: 2.0.4+6
 
 environment:
   sdk: ^3.5.0
+
 dependencies:
   flutter:
     sdk: flutter
-
   provider: ^6.1.2
   google_mobile_ads: ^5.2.0
   shared_preferences: ^2.3.2
@@ -21,17 +21,18 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.14.1
-  build_runner: ^2.4.13
+  build_runner: ^2.4.12
   dart_mappable_builder: ^4.2.3
-
   flutter_lints: ^5.0.0
-
+  flutter_launcher_icons: ^0.14.1
+  
 flutter_launcher_icons:
-  android: true
+  android: "launcher_icon"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/icon512x512.png"
   ios: true
+  remove_alpha_ios: true
   image_path: "assets/images/icon512x512.png"
-  min_sdk_android: 21
 
 flutter:
   uses-material-design: true
