@@ -27,6 +27,8 @@ class LevelRenderer {
 
   final Paint fillPaint = Paint()..style = PaintingStyle.fill,
       strokePaint = Paint()
+        ..strokeJoin = StrokeJoin.round
+        ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2
         ..color = Colors.black,

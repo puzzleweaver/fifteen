@@ -32,8 +32,16 @@ class GameWidgetPainter extends FifteenPainter {
       shape: Quad.unit(),
     );
 
-    renderer.setFill(color: Colors.black);
     List<Quad> quads = board.subquads;
+
+    // rounded outline
+    renderer.setStroke(strokeWidth: 5);
+    // for (Quad quad in quads) {
+    //   renderer.drawQuad(quad, renderer.strokePaint);
+    // }
+    renderer.drawSubquadOutlines(board);
+
+    renderer.setFill(color: Colors.black);
     for (int i = 0; i < quads.length; i++) {
       Quad q = quads[i], from, to;
       from = q;
@@ -45,6 +53,8 @@ class GameWidgetPainter extends FifteenPainter {
       }
     }
 
+    // draw subquad divisions
+    renderer.setStroke(strokeWidth: 0.5);
     renderer.drawSubquadOutlines(board);
   }
 
