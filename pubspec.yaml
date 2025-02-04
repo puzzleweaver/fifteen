@@ -2,7 +2,7 @@ name: fifteen
 description: "Wacky puzzles as a cross-platform app."
 publish_to: 'none'
 
-version: 2.1.0+7
+version: 2.1.1+8
 
 environment:
   sdk: ^3.5.0
