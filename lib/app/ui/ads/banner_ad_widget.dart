@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/app/domain/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 
 class BannerAdWidget extends StatefulWidget {
   final AdSize adSize;
@@ -41,24 +42,21 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return PreferencesWidget(
-      builder: (context, preferences) {
-        if (adRoll < preferences.adChance) {
-          // DO show an ad
-          if (widget.padded) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _ad(),
-            );
-          } else {
-            return _ad();
-          }
-        } else {
-          // DON'T show an ad
-          return Container();
-        }
-      },
-    );
+    Preferences prefs = Provider.of(context);
+    if (adRoll < prefs.adChance) {
+      // DO show an ad
+      if (widget.padded) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _ad(),
+        );
+      } else {
+        return _ad();
+      }
+    } else {
+      // DON'T show an ad
+      return Container();
+    }
   }
 
   Widget _ad() {

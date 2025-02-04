@@ -1,10 +1,8 @@
-import 'package:fifteen/app/ui/loading_widget.dart';
-import 'package:fifteen/board/data/boards.dart';
-import 'package:fifteen/board/data/file_boards.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/debug/ui/debug_page/debug_page_board_button.dart';
 import 'package:fifteen/board/ui/builder/board_builder_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
@@ -13,7 +11,7 @@ class DebugPage extends StatelessWidget {
   Widget build(BuildContext context) {
     int count = 1;
 
-    Boards boards = FileBoards(context);
+    List<Board> boards = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,20 +45,13 @@ class DebugPage extends StatelessWidget {
                   ),
                 ],
               ),
-              FutureBuilder(
-                future: boards.sequence(),
-                builder: (context, snapshot) {
-                  List<Board>? boards = snapshot.data;
-                  if (boards == null) return const LoadingWidget();
-                  return Wrap(
-                    runSpacing: 5,
-                    spacing: 5,
-                    children: [
-                      for (Board board in boards)
-                        DebugPageBoardButton(board: board),
-                    ],
-                  );
-                },
+              Wrap(
+                runSpacing: 5,
+                spacing: 5,
+                children: [
+                  for (Board board in boards)
+                    DebugPageBoardButton(board: board),
+                ],
               ),
             ],
           ),

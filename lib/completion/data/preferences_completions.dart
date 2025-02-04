@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:fifteen/app/domain/preferences_data.dart';
+import 'package:fifteen/app/domain/preferences.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/completion/data/completions.dart';
 import 'package:fifteen/completion/domain/completion.dart';
 import 'package:fifteen/completion/domain/completion_logic.dart';
 
 class PreferencesCompletions extends Completions {
-  final PreferencesData preferences;
+  final Preferences prefs;
 
-  PreferencesCompletions({required this.preferences});
+  PreferencesCompletions({required this.prefs});
 
   // stuff for keeping everything up-to-date: just emit to controller to refresh dependent UI.
   static StreamController<void> controller = StreamController.broadcast();
@@ -21,37 +21,30 @@ class PreferencesCompletions extends Completions {
         Stream.value(getValue()),
       ]).distinct();
 
-  bool isSolvedOnce(String boardId) =>
-      preferences.solvedBoards.contains(boardId);
+  @override
+  bool isSolved(String boardId) => prefs.solvedBoards.contains(boardId);
 
   @override
-  Stream<bool> isSolved(String boardId) =>
-      returnOnChanges(() => isSolvedOnce(boardId));
-
-  @override
-  Stream<bool> isLocked(List<Board> boardSequence, String boardId) =>
-      returnOnChanges(
-        () => CompletionLogic(isSolved: isSolvedOnce)
-            .isLocked(boardSequence, boardId),
+  bool isLocked(List<Board> boardSequence, String boardId) =>
+      CompletionLogic(isSolved: isSolved).isLocked(
+        boardSequence,
+        boardId,
       );
 
   @override
-  Stream<Board?> next(List<Board> boardSequence) => returnOnChanges(
-        () => CompletionLogic(isSolved: isSolvedOnce).next(boardSequence),
-      );
+  Board? next(List<Board> boardSequence) =>
+      CompletionLogic(isSolved: isSolved).next(boardSequence);
 
   @override
   void save(Completion newCompletion) {
-    preferences.solvedBoards = {
-      ...preferences.solvedBoards,
+    prefs.solvedBoards = {
+      ...prefs.solvedBoards,
       newCompletion.boardId,
     }.toList();
-    controller.add(null);
   }
 
   @override
   void deleteAll() {
-    preferences.solvedBoards = [];
-    controller.add(null);
+    prefs.solvedBoards = [];
   }
 }

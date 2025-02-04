@@ -1,26 +1,18 @@
-import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/app/domain/preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MoveCountEnabledCheckbox extends StatefulWidget {
+class MoveCountEnabledCheckbox extends StatelessWidget {
   const MoveCountEnabledCheckbox({super.key});
 
   @override
-  State<StatefulWidget> createState() => MoveCountEnabledCheckboxState();
-}
-
-class MoveCountEnabledCheckboxState extends State<MoveCountEnabledCheckbox> {
-  @override
   Widget build(BuildContext context) {
-    return PreferencesWidget(
-      builder: (context, preferences) => CheckboxListTile(
-        controlAffinity: ListTileControlAffinity.leading,
-        value: preferences.moveCountEnabled,
-        onChanged: (newTimerEnabled) {
-          preferences.moveCountEnabled = newTimerEnabled ?? false;
-          setState(() {});
-        },
-        title: const Text("Move Counter Enabled"),
-      ),
+    Preferences prefs = Provider.of(context);
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      value: prefs.moveCountEnabled,
+      onChanged: (newValue) => prefs.moveCountEnabled = newValue ?? false,
+      title: const Text("Move Counter Enabled"),
     );
   }
 }

@@ -1,13 +1,14 @@
 import 'dart:math';
 
+import 'package:fifteen/app/domain/preferences.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/game/ui/game_page/game_page.dart';
 import 'package:fifteen/app/ui/ads/interstitial_ad_widget.dart';
-import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:fifteen/home/ui/next_puzzle_button.dart';
 import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:fifteen/app/ui/time_display.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SolvedGamePage extends StatelessWidget {
   final Board board;
@@ -23,6 +24,7 @@ class SolvedGamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Preferences prefs = Provider.of(context);
     final size = MediaQuery.of(context).size;
     final minor = min(size.width, size.height);
 
@@ -40,17 +42,15 @@ class SolvedGamePage extends StatelessWidget {
                 locked: false,
               ),
             ),
-            PreferencesWidget(
-              builder: (context, preferences) {
-                if (!preferences.timerEnabled) return Container();
-                return TimeDisplay(
-                  time: time,
-                  builder: (context, timeString) => Text(
-                    "Your time was $timeString.",
-                  ),
-                );
-              },
-            ),
+            if (!prefs.timerEnabled)
+              Container()
+            else
+              TimeDisplay(
+                time: time,
+                builder: (context, timeString) => Text(
+                  "Your time was $timeString.",
+                ),
+              ),
             Wrap(
               spacing: size.width * 0.1,
               runSpacing: 5,

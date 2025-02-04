@@ -134,6 +134,17 @@ class GameWidgetPainter extends FifteenPainter {
       transQuadWas.rel(dirWas).p4,
     ).rel(dirWas.inv());
 
+    // debuggy quads
+    // renderer.setFill(color: Colors.red.withAlpha(100));
+    // renderer.drawQuad(aPrime, renderer.fillPaint);
+    // renderer.setFill(color: Colors.green.withAlpha(100));
+    // renderer.drawQuad(bPrime, renderer.fillPaint);
+
+    // renderer.setFill(color: Colors.orange.withAlpha(100));
+    // renderer.drawQuad(a, renderer.fillPaint);
+    // renderer.setFill(color: Colors.blue.withAlpha(100));
+    // renderer.drawQuad(b, renderer.fillPaint);
+
     renderer.drawQuadWithShader(
       from: aPrime,
       to: a,

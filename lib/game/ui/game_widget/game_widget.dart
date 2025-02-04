@@ -4,7 +4,6 @@ import 'package:fifteen/game/ui/game_widget/game_widget_painter.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/app/ui/custom_canvas.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class GameWidget extends StatelessWidget {
@@ -29,7 +28,7 @@ class GameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (kDebugMode) Container(color: ColorScheme.of(context).primary),
+        Container(color: ColorScheme.of(context).primary),
         Center(
           child: FifteenCanvas(
             imagePath: imageAsset,

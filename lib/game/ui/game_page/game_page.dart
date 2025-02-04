@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fifteen/app/domain/preferences.dart';
 import 'package:fifteen/app/ui/orienter.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/board/domain/quad.dart';
@@ -16,18 +17,15 @@ import 'package:fifteen/game/ui/game_page_popup_menu.dart';
 import 'package:fifteen/game/ui/game_widget/game_widget.dart';
 import 'package:fifteen/board/ui/builder/board_builder_page.dart';
 import 'package:fifteen/app/ui/ads/banner_ad_widget.dart';
-import 'package:fifteen/app/domain/preferences_data.dart';
-import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:fifteen/app/ui/ads/interstitial_ad_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class GamePage extends StatefulWidget {
   final Board board;
   final String imageAsset;
 
   const GamePage({
-    super.key,
     required this.imageAsset,
     required this.board,
   });
@@ -55,10 +53,7 @@ class _GamePageState extends State<GamePage>
   @override
   void initState() {
     gameplayState = GameplayState.fromBoard(board).shuffled;
-    controller = AnimationController(
-      duration: const Duration(milliseconds: 100),
-      vsync: this,
-    );
+    controller = AnimationController(duration: Duration.zero, vsync: this);
     _loadTimer();
     super.initState();
   }
@@ -81,11 +76,16 @@ class _GamePageState extends State<GamePage>
 
   @override
   Widget build(BuildContext context) {
+    Preferences prefs = Provider.of(context);
+    List<Board> boards = Provider.of(context);
+
     AnimationController? controller = this.controller;
-    if (controller == null) return Text("Wumpus");
+    if (controller == null) return Center(child: CircularProgressIndicator());
+    controller.duration = Duration(milliseconds: prefs.animationSpeed);
+
     return Scaffold(
       appBar: AppBar(
-        title: BannerAdWidget(),
+        title: Text("Level ${boards.indexOf(board) + 1}"),
         actions: [
           GamePagePopupMenu(
             shuffle: shuffle,
@@ -167,19 +167,16 @@ class _GamePageState extends State<GamePage>
     setState(() => previewing = newPreviewing);
   }
 
-  void checkIfSolved() {
+  void checkIfSolved(BuildContext context) {
     if (!gameplayState.isSolved) return;
 
+    Preferences prefs = Provider.of(context, listen: false);
+    PreferencesCompletions(prefs: prefs).save(completion);
+
     NavigatorState navigator = Navigator.of(context);
-    SharedPreferences.getInstance().then(
-      (sharedPreferences) {
-        PreferencesCompletions(
-          preferences: PreferencesData(
-            preferences: sharedPreferences,
-          ),
-        ).save(completion);
-        goToNextLevel(navigator);
-      },
+    Duration waitTime = Duration(milliseconds: prefs.animationSpeed + 50);
+    Future.delayed(waitTime).then(
+      (_) => goToNextLevel(navigator),
     );
   }
 
@@ -198,12 +195,10 @@ class _GamePageState extends State<GamePage>
           opacity: a1,
           child: child,
         ),
-        pageBuilder: (context, a1, a2) => PreferencesWidget(
-          builder: (context, preferences) => SolvedGamePage(
-            board: board,
-            imageAsset: imageAsset,
-            time: time,
-          ),
+        pageBuilder: (context, a1, a2) => SolvedGamePage(
+          board: board,
+          imageAsset: imageAsset,
+          time: time,
         ),
       ),
     );
@@ -230,6 +225,6 @@ class _GamePageState extends State<GamePage>
   void solve() => setGameplayState(gameplayState.solved);
   void tapSquare(int index) {
     setGameplayState(gameplayState.tap(index));
-    checkIfSolved();
+    checkIfSolved(context);
   }
 }

@@ -28,7 +28,14 @@ class PreferencesData {
         newMoveCountEnabled,
       );
 
-  static const String annoyingAdsEnabledLabel = 'annoying_ads';
+  static const String animationSpeedLabel = 'animation_speed';
+  int get animationSpeed => preferences.getInt(animationSpeedLabel) ?? 100;
+  set animationSpeed(int newAnimationSpeed) => preferences.setInt(
+        animationSpeedLabel,
+        newAnimationSpeed,
+      );
+
+  static const String annoyingAdsEnabledLabel = 'annoying_ads_enabled';
   bool get annoyingAdsEnabled =>
       preferences.getBool(annoyingAdsEnabledLabel) ?? false;
   set annoyingAdsEnabled(bool newAnnoyingAdsEnabled) => preferences.setBool(
@@ -37,11 +44,13 @@ class PreferencesData {
       );
 
   static const String solvedBoardsLabel = 'adventure_progress';
-  List<String> get solvedBoards => List<String>.from(jsonDecode(
-        preferences.getString(solvedBoardsLabel) ?? "[]",
-      ));
-  set solvedBoards(List<String> newSolvedBoards) {
-    String solvedBoards = jsonEncode(newSolvedBoards.toList());
-    preferences.setString(solvedBoardsLabel, solvedBoards);
-  }
+  List<String> get solvedBoards => List<String>.from(
+        jsonDecode(
+          preferences.getString(solvedBoardsLabel) ?? "[]",
+        ),
+      );
+  set solvedBoards(List<String> newSolvedBoards) => preferences.setString(
+        solvedBoardsLabel,
+        jsonEncode(newSolvedBoards.toList()),
+      );
 }

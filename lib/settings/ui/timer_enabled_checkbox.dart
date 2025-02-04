@@ -1,26 +1,19 @@
-import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/app/domain/preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TimerEnabledCheckbox extends StatefulWidget {
+class TimerEnabledCheckbox extends StatelessWidget {
   const TimerEnabledCheckbox({super.key});
 
   @override
-  State<StatefulWidget> createState() => TimerEnabledCheckboxState();
-}
-
-class TimerEnabledCheckboxState extends State<TimerEnabledCheckbox> {
-  @override
   Widget build(BuildContext context) {
-    return PreferencesWidget(
-      builder: (context, preferences) => CheckboxListTile(
-        controlAffinity: ListTileControlAffinity.leading,
-        value: preferences.timerEnabled,
-        onChanged: (newTimerEnabled) {
-          preferences.timerEnabled = newTimerEnabled ?? false;
-          setState(() {});
-        },
-        title: const Text("Timer Enabled"),
-      ),
+    Preferences prefs = Provider.of(context);
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      value: prefs.timerEnabled,
+      onChanged: (newTimerEnabled) =>
+          prefs.timerEnabled = newTimerEnabled ?? false,
+      title: const Text("Timer Enabled"),
     );
   }
 }

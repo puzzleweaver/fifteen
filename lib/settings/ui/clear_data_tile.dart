@@ -1,9 +1,9 @@
-import 'package:fifteen/app/ui/preferences_widget.dart';
+import 'package:fifteen/app/domain/preferences.dart';
 import 'package:fifteen/completion/data/completions.dart';
 import 'package:fifteen/completion/data/preferences_completions.dart';
 import 'package:fifteen/settings/ui/confirmation_dialog.dart';
-import 'package:fifteen/app/domain/preferences_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ClearDataTile extends StatelessWidget {
   const ClearDataTile({super.key});
@@ -17,22 +17,21 @@ class ClearDataTile extends StatelessWidget {
         title: const Text("Reset Data"),
         onTap: () => showDialog(
           context: context,
-          builder: (context) => PreferencesWidget(
-            builder: (context, preferences) => ConfirmationDialog(
-              onConfirm: () {
-                deleteAdventure(preferences);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
+          builder: (context) => ConfirmationDialog(
+            onConfirm: () {
+              deleteAdventure(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
           ),
         ),
       ),
     );
   }
 
-  void deleteAdventure(PreferencesData preferences) {
-    Completions completions = PreferencesCompletions(preferences: preferences);
+  void deleteAdventure(BuildContext context) {
+    Preferences prefs = Provider.of(context, listen: false);
+    Completions completions = PreferencesCompletions(prefs: prefs);
     completions.deleteAll();
   }
 }
