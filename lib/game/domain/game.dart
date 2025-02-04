@@ -17,7 +17,7 @@ class Game {
     required this.rotation,
   });
 
-  static Game createNew() => Game(
+  static Game get empty => Game(
         boardSize: 0,
         permutation: [],
         rotation: [],

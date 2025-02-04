@@ -1,5 +1,5 @@
 import 'package:fifteen/board/domain/board.dart';
-import 'package:fifteen/game/ui/game_page.dart';
+import 'package:fifteen/game/ui/game_page/game_page.dart';
 import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:flutter/material.dart';
 

@@ -1,6 +1,6 @@
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/debug/ui/graph_widget/graph_widget.dart';
-import 'package:fifteen/game/ui/game_page.dart';
+import 'package:fifteen/game/ui/game_page/game_page.dart';
 import 'package:fifteen/app/data/assets.dart';
 import 'package:fifteen/level/ui/level_widget/level_widget.dart';
 import 'package:flutter/material.dart';

@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:fifteen/app/ui/orienter.dart';
 import 'package:fifteen/board/domain/board.dart';
-import 'package:fifteen/completion/data/completions.dart';
+import 'package:fifteen/board/domain/quad.dart';
 import 'package:fifteen/completion/data/preferences_completions.dart';
 import 'package:fifteen/completion/domain/completion.dart';
-import 'package:fifteen/game/domain/game.dart';
 import 'package:fifteen/game/ui/game_move_count_widget.dart';
+import 'package:fifteen/game/ui/game_page/gameplay_animation.dart';
+import 'package:fifteen/game/ui/game_page/slide_state.dart';
 import 'package:fifteen/game/ui/game_preview_button.dart';
 import 'package:fifteen/game/ui/game_time_widget.dart';
+import 'package:fifteen/game/ui/game_page/gameplay_state.dart';
 import 'package:fifteen/game/ui/solved_game_page.dart';
 import 'package:fifteen/game/ui/game_page_popup_menu.dart';
-import 'package:fifteen/game/ui/game_widget.dart';
+import 'package:fifteen/game/ui/game_widget/game_widget.dart';
 import 'package:fifteen/board/ui/builder/board_builder_page.dart';
 import 'package:fifteen/app/ui/ads/banner_ad_widget.dart';
 import 'package:fifteen/app/domain/preferences_data.dart';
@@ -34,19 +36,29 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> {
+class _GamePageState extends State<GamePage>
+    with SingleTickerProviderStateMixin {
+  // state for gamepage (ui/app ONLY)
   bool previewing = false;
-
   Timer? timer;
   DateTime initialTime = DateTime.now(), currentTime = DateTime.now();
+  AnimationController? controller;
 
-  int moveCount = 0;
+  // gameplay state (which handles itself)
+  GameplayState gameplayState = GameplayState.empty;
 
-  Game game = Game.createNew();
+  // derived stuff / getters
+  get board => widget.board;
+  get imageAsset => widget.imageAsset;
+  Duration get time => currentTime.difference(initialTime);
 
   @override
   void initState() {
-    game = Game.fromBoard(widget.board).shuffle(widget.board);
+    gameplayState = GameplayState.fromBoard(board).shuffled;
+    controller = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
     _loadTimer();
     super.initState();
   }
@@ -67,28 +79,10 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  Duration get time => currentTime.difference(initialTime);
-
-  Future<void> saveLevelSolved() async {
-    final prefs = await SharedPreferences.getInstance();
-    PreferencesData preferences = PreferencesData(preferences: prefs);
-    if (mounted) {
-      Completions completions = PreferencesCompletions(
-        preferences: preferences,
-      );
-      completions.save(
-        Completion.createNew(
-          boardId: widget.board.id,
-          time: time,
-          moveCount: moveCount,
-        ),
-      );
-      setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    AnimationController? controller = this.controller;
+    if (controller == null) return Text("Wumpus");
     return Scaffold(
       appBar: AppBar(
         title: BannerAdWidget(),
@@ -102,19 +96,26 @@ class _GamePageState extends State<GamePage> {
       ),
       body: pageLayout(
         context,
-        gameWidget: GameWidget(
-          game: game,
-          board: widget.board,
-          imageAsset: widget.imageAsset,
-          previewing: previewing,
-          tapSquare: tapSquare,
+        gameWidget: GameplayAnimation(
+          controller: controller,
+          builder: (context, value) => GameWidget(
+            gameplayState: gameplayState,
+            imageAsset: imageAsset,
+            previewing: previewing,
+            tapSquare: tapSquare,
+            slideState: SlideState(
+              q: Quad.unit(),
+              r: Quad.unit(),
+              value: value,
+            ),
+          ),
         ),
         infoWidgets: [
           GameTimeWidget(time: time),
-          GameMoveCountWidget(moveCount: moveCount),
+          GameMoveCountWidget(moveCount: gameplayState.moveCount),
           GamePreviewButton(
-            board: widget.board,
-            imageAsset: widget.imageAsset,
+            board: board,
+            imageAsset: imageAsset,
             setPreviewing: setPreviewing,
           ),
         ],
@@ -166,29 +167,46 @@ class _GamePageState extends State<GamePage> {
     setState(() => previewing = newPreviewing);
   }
 
-  void checkIfSolved() async {
-    if (game.isSolved) {
-      NavigatorState navigator = Navigator.of(context);
-      await saveLevelSolved();
-      InterstitialAdWidget.load();
+  void checkIfSolved() {
+    if (!gameplayState.isSolved) return;
 
-      navigator.pushReplacement(
-        PageRouteBuilder(
-          transitionDuration: const Duration(seconds: 1),
-          transitionsBuilder: (context, a1, a2, child) => FadeTransition(
-            opacity: a1,
-            child: child,
+    NavigatorState navigator = Navigator.of(context);
+    SharedPreferences.getInstance().then(
+      (sharedPreferences) {
+        PreferencesCompletions(
+          preferences: PreferencesData(
+            preferences: sharedPreferences,
           ),
-          pageBuilder: (context, a1, a2) => PreferencesWidget(
-            builder: (context, preferences) => SolvedGamePage(
-              board: widget.board,
-              imageAsset: widget.imageAsset,
-              time: time,
-            ),
+        ).save(completion);
+        goToNextLevel(navigator);
+      },
+    );
+  }
+
+  Completion get completion => Completion.createNew(
+        boardId: board.id,
+        time: time,
+        moveCount: gameplayState.moveCount,
+      );
+
+  void goToNextLevel(NavigatorState navigator) {
+    InterstitialAdWidget.load();
+    navigator.pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: const Duration(seconds: 1),
+        transitionsBuilder: (context, a1, a2, child) => FadeTransition(
+          opacity: a1,
+          child: child,
+        ),
+        pageBuilder: (context, a1, a2) => PreferencesWidget(
+          builder: (context, preferences) => SolvedGamePage(
+            board: board,
+            imageAsset: imageAsset,
+            time: time,
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 
   void goToBuilder(BuildContext context) {
@@ -196,35 +214,22 @@ class _GamePageState extends State<GamePage> {
       context,
       MaterialPageRoute(
         builder: (context) => BoardBuilderPage(
-          initialBoard: widget.board,
+          initialBoard: board,
         ),
       ),
     );
   }
 
-  void shuffle() {
-    setState(
-      () => game = game.shuffle(widget.board),
-    );
+  void setGameplayState(GameplayState? newState) {
+    if (newState == null) return;
+    setState(() => gameplayState = newState);
+    controller?.forward(from: 0);
   }
 
-  void solve() {
-    setState(
-      () => game = game.solve(),
-    );
-  }
-
+  void shuffle() => setGameplayState(gameplayState.shuffled);
+  void solve() => setGameplayState(gameplayState.solved);
   void tapSquare(int index) {
-    Game? newGame = game.tapAtIndex(
-      widget.board,
-      index,
-    );
-    if (newGame != null) {
-      setState(() {
-        game = newGame;
-        moveCount++;
-      });
-      checkIfSolved();
-    }
+    setGameplayState(gameplayState.tap(index));
+    checkIfSolved();
   }
 }

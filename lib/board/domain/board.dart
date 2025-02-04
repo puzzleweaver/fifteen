@@ -27,15 +27,13 @@ class Board with BoardMappable {
     required this.constraints,
   });
 
-  static Board createNew() {
-    return Board(
-      id: const Uuid().v1(),
-      name: "NO NAME ENTERED",
-      charts: [],
-      connections: [],
-      constraints: ConstraintSet.createNew(),
-    );
-  }
+  static Board get empty => Board(
+        id: const Uuid().v1(),
+        name: "NO NAME ENTERED",
+        charts: [],
+        connections: [],
+        constraints: ConstraintSet.createNew(),
+      );
 
   List<Coord> get coords => [
         for (int a = 0; a < charts.length; a++)

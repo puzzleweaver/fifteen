@@ -1,27 +1,29 @@
-import 'package:fifteen/board/domain/board.dart';
-import 'package:fifteen/game/ui/game_widget_painter.dart';
+import 'package:fifteen/game/ui/game_page/gameplay_state.dart';
+import 'package:fifteen/game/ui/game_page/slide_state.dart';
+import 'package:fifteen/game/ui/game_widget/game_widget_painter.dart';
 import 'package:fifteen/board/domain/double_point.dart';
 import 'package:fifteen/board/domain/quad.dart';
-import 'package:fifteen/game/domain/game.dart';
 import 'package:fifteen/app/ui/custom_canvas.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class GameWidget extends StatelessWidget {
   final bool previewing;
-  final Board board;
-  final Game game;
+  final GameplayState gameplayState;
   final String imageAsset;
   final void Function(int index) tapSquare;
+  final SlideState slideState;
 
   const GameWidget({
     super.key,
     required this.previewing,
-    required this.board,
-    required this.game,
+    required this.gameplayState,
     required this.imageAsset,
     required this.tapSquare,
+    required this.slideState,
   });
+
+  get board => gameplayState.board;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +36,9 @@ class GameWidget extends StatelessWidget {
             getPainter: (shader, image) => GameWidgetPainter(
               shader: shader,
               image: image,
-              game: previewing ? Game.fromBoard(board) : game,
-              board: board,
+              gameplayState:
+                  previewing ? gameplayState.previewing : gameplayState,
+              slideState: slideState,
             ),
             onTap: (pos) => onWidgetTap(pos),
           ),

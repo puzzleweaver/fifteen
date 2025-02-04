@@ -70,11 +70,12 @@ class DebugPage extends StatelessWidget {
   }
 
   void goToBuilder(BuildContext context) {
-    Board board = Board.createNew();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BoardBuilderPage(initialBoard: board),
+        builder: (context) => BoardBuilderPage(
+          initialBoard: Board.empty,
+        ),
       ),
     );
   }

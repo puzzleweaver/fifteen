@@ -24,7 +24,7 @@ class BoardBuilderHistoryItem {
 }
 
 class BoardBuilderPageState extends State<BoardBuilderPage> {
-  Board board = Board.createNew();
+  Board board = Board.empty;
   List<BoardBuilderHistoryItem> history = [];
   bool unsavedChanges = false;
 

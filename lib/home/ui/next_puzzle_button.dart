@@ -4,7 +4,7 @@ import 'package:fifteen/board/data/file_boards.dart';
 import 'package:fifteen/board/domain/board.dart';
 import 'package:fifteen/completion/data/completions.dart';
 import 'package:fifteen/completion/data/preferences_completions.dart';
-import 'package:fifteen/game/ui/game_page.dart';
+import 'package:fifteen/game/ui/game_page/game_page.dart';
 import 'package:fifteen/app/data/assets.dart';
 import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:flutter/material.dart';

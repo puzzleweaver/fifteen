@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:fifteen/board/domain/board.dart';
-import 'package:fifteen/game/ui/game_page.dart';
+import 'package:fifteen/game/ui/game_page/game_page.dart';
 import 'package:fifteen/app/ui/ads/interstitial_ad_widget.dart';
 import 'package:fifteen/app/ui/preferences_widget.dart';
 import 'package:fifteen/home/ui/next_puzzle_button.dart';
