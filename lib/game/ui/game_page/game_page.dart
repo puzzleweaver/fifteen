@@ -26,6 +26,7 @@ class GamePage extends StatefulWidget {
   final String imageAsset;
 
   const GamePage({
+    super.key,
     required this.imageAsset,
     required this.board,
   });
